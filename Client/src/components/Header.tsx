@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import {Link} from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { DARKMODE, LIGHTMODE,themeState } from '../store/state/theme'
-import logo from './logo.png'
+// import logo from './images/logo.png'
+import ToggleSwitch from './ToggleSwitch'
 
 const Wrapper = styled.div`
   
@@ -38,11 +39,9 @@ const ToggleTop = styled.div`
     width: 100px;
     color: ${props => props.theme.fontColor};
     padding-top: 20px;
-    font-weight: 600;
     position: fixed;
     top: 100px;
-    right: 30px;
-    background-color: #63fa86f5;
+    right: 0;
     z-index: 1;
 `
 
@@ -52,11 +51,9 @@ const ToggleBot = styled.div`
     width: 100px;
     color: ${props => props.theme.fontColor};
     padding-top: 20px;
-    font-weight: 600;
     position: fixed;
     bottom: 100px;
-    right: 30px;
-    background-color: #63fa86f5;
+    right: 0;
 `
 const FooterNav = styled.div`
   background-color: ${props => props.theme.navColor}; 
@@ -93,14 +90,11 @@ const Header = () => {
         <Link to='/'>MY LAUNDRY</Link>
         <Link to='/main'>OKAY LAUNDRY</Link>
         <Link to='/Example'>NEAR</Link>
-        <img src={logo} alt='logo'/>
+        <img src='https://cdn-icons-png.flaticon.com/512/3238/3238630.png' alt='logo'/>
         <Link to='/Hong'>COMMUNITY</Link>
         <Link to='/Moon'>PROFILE</Link>
         <Link to='/Jin'>LOGOUT</Link>
-        {theme ===DARKMODE &&
-        <ToggleTop onClick={()=>{setTheme(LIGHTMODE)}}>라이트모드</ToggleTop>}
-        {theme ===LIGHTMODE &&
-        <ToggleTop onClick={()=>{setTheme(DARKMODE)}}>다크모드</ToggleTop>}
+        <ToggleTop ><ToggleSwitch/></ToggleTop>
       </HeaderNav>
       <FooterNav>
           <Link to='/'><img src='https://cdn-icons-png.flaticon.com/512/821/821528.png' alt='그림'/></Link>
@@ -109,10 +103,7 @@ const Header = () => {
           <Link to='/Hong'><img src='https://cdn-icons-png.flaticon.com/512/821/821528.png' alt='그림'/></Link>
           <Link to='/Moon'><img src='https://cdn-icons-png.flaticon.com/512/821/821528.png' alt='그림'/></Link>
           <Link to='/Jin'><img src='https://cdn-icons-png.flaticon.com/512/821/821528.png' alt='그림'/></Link>
-          {theme ===DARKMODE &&
-          <ToggleBot onClick={()=>{setTheme(LIGHTMODE)}}>라이트모드</ToggleBot>}
-          {theme ===LIGHTMODE &&
-          <ToggleBot onClick={()=>{setTheme(DARKMODE)}}>다크모드</ToggleBot>}
+          <ToggleBot onClick={()=>{setTheme(LIGHTMODE)}}><ToggleSwitch/></ToggleBot>
       </FooterNav>
     </Wrapper>
   )

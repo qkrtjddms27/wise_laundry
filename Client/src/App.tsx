@@ -20,15 +20,15 @@ const Wrapper = styled.div`
   @font-face {
     font-family: 'twayair';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_tway@1.0/twayair.woff') format('woff');
-    font-weight: 500;
+    font-weight: normal;
     font-style: normal;
   } 
   *{  
     font-family: 'twayair';
-    font-weight: 300;
     }
   h1{
     margin-top: 0;
+    padding-top:10px;
   }
 `
 

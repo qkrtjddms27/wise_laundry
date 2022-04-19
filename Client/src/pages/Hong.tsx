@@ -16,7 +16,6 @@ const Wrapper = styled.div`
       left: 50%;
       top:50%;
       transform: translate(-50%, -50%);
-      font-weight: 600;
       font-size: 1.5rem;
       color: white;
     }
