@@ -4,6 +4,20 @@ import SearchIcon from '@mui/icons-material/Search';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { dataall } from './data';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { themeState } from '../../store/state/theme';
+
+interface Istate {
+  board: {
+    boardId: number,
+    userId: number,
+    userNick: string,
+    userImg: string,
+    boardName: string,
+    boardDate: string,
+    commentCnt: number
+  }
+}
 
 const Wrapper = styled.article`
   padding: 2.5rem;
@@ -12,6 +26,15 @@ const Wrapper = styled.article`
     color: #4E7DDA;
     text-align: center;
     font-size: 2rem;
+    position: relative;
+    button {
+      position: absolute;
+      right: .5rem;
+      height: 2rem;
+      border: none;
+      border-radius: 4px;
+      background-color: ${props => props.theme.activeBtnColor};
+    }
   }
   section {
     padding: 0.8rem;
@@ -106,7 +129,6 @@ const Pagenation = styled.section`
       }
       &.active {
         font-weight: bold;
-        background-color: #f3f3f3;
       }
       p {
         position: absolute;
@@ -118,24 +140,12 @@ const Pagenation = styled.section`
   }
 `
 
-interface Istate {
-  board: {
-    boardId: number,
-    userId: number,
-    userNick: string,
-    userImg: string,
-    boardName: string,
-    boardDate: string,
-    commentCnt: number
-  }
-}
-
 const CommunityAll = () => {
+  const [theme, setTheme] = useRecoilState(themeState)
   const [inputText, setInputText] = useState('')
   const [boards, setboards] = useState<Istate["board"][]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPage, setTotalPage] = useState(5)
-  const boardColor = ['#E9F2FF', '#C1D9FB', '#C3DCFF']
 
   const navigate = useNavigate()
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -176,7 +186,7 @@ const CommunityAll = () => {
 
   return (
     <Wrapper>
-      <p className='title'>질문 게시판</p>
+      <p className='title'>질문 게시판<button onClick={() => navigate('/board')}>질문하기</button></p>
       <SearchBar>
         <SearchIcon
           fontSize ='large'
@@ -190,7 +200,7 @@ const CommunityAll = () => {
         <EachBoard key={i} onClick={() => navigate(`/community/${board.boardId}`)}>
           <img src={board.userImg} alt='사진' />
           <p className='nick'>{board.userNick}</p>
-          <div className='board' style={{ backgroundColor: `${boardColor[i%3]}`}}>
+          <div className='board' style={{ backgroundColor: `${theme.listBgColor[i%3]}`}}>
             <div className='name'>{board.boardName}</div>
             <p className='comment'><ChatBubbleOutlineIcon /><span>{board.commentCnt}</span></p>
           </div>
