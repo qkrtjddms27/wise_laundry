@@ -2,6 +2,7 @@ package com.ssafy.wiselaundry.domain.board.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssafy.wiselaundry.domain.laundry.db.entity.Laundry;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
@@ -11,7 +12,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
