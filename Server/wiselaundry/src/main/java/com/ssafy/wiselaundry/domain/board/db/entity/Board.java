@@ -1,6 +1,5 @@
 package com.ssafy.wiselaundry.domain.board.db.entity;
 
-
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
