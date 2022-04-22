@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @Table(name = "comments")
 @ApiModel(value = "Comments", description = "댓글")
 public class Comments {
-
     @ApiModelProperty(value = "댓글번호", example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +23,14 @@ public class Comments {
     private int commentId;
 
     @ManyToOne
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @Column(name = "board_id")
+    @JoinColumn(name = "board_id")
     private Board board;
 
-    @ApiModelProperty(value = "댓글내용", required = true, example = " 내용입니다")
+    @ApiModelProperty(value = "댓글 내용", required = true, example = " 내용입니다")
     @Column(name = "comment_content")
     private String commentContent;
 

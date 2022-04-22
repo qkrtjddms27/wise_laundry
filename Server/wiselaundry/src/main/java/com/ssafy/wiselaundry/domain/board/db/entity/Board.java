@@ -9,8 +9,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
-
 
 @Entity
 @Getter
@@ -25,24 +23,10 @@ public class Board{
     @Column(name = "board_id")
     private int boardId;
 
-    /**
-     * Todo :
-     * Board - User 단방향 관계
-     */
-
     @ApiModelProperty(value = "유저 정보", example = "")
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    /**
-     * Todo :
-     * Board - Comments 단방향 관계
-     * Comments 추가는 해야됨
-     */
-    @ApiModelProperty(value = "댓글 목록", example = "")
-    @OneToMany()
-    private List<Comments> commentsList;
 
     @ApiModelProperty(value = "게시글 제목", required = true, example = "글 제목입니다.")
     @Column(name = "board_name")

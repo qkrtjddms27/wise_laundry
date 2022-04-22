@@ -15,16 +15,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/community")
 public class BoardController {
-    @ApiOperation(value = "로그인", notes = "모든 게시글을 가져다 준다.")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "성공", response = List.class),
-            @ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
-            @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
-            @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
-    })
-    @GetMapping("/all")
-    public ResponseEntity<List<BoardSearchAllRes>> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginPostReq loginInfo) {
-
-        return ;
-    }
+//    @ApiOperation(value = "로그인", notes = "모든 게시글을 가져다 준다.")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "성공", response = List.class),
+//            @ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+//            @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+//            @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+//    })
+//    @GetMapping("/all")
+//    public ResponseEntity<List<BoardSearchAllRes>> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginPostReq loginInfo) {
+//
+//        return ;
+//    }
 }

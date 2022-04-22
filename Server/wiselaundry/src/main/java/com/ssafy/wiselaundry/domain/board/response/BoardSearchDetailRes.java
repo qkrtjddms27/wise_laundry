@@ -1,11 +1,13 @@
 package com.ssafy.wiselaundry.domain.board.response;
 
 import com.ssafy.wiselaundry.domain.board.db.entity.Board;
+import com.ssafy.wiselaundry.domain.board.db.entity.Comments;
 import com.ssafy.wiselaundry.global.model.response.BaseResponseBody;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
@@ -13,6 +15,9 @@ import java.util.List;
 @Getter
 @ApiModel("게시글 상세 res")
 public class BoardSearchDetailRes extends BaseResponseBody {
+//    @Autowired
+//    CommentsService commentsService;
+
     @ApiModelProperty(value = "게시글 id", required = true, example = "게시글 id")
     private int boardId;
 
@@ -49,7 +54,9 @@ public class BoardSearchDetailRes extends BaseResponseBody {
         this.comments = comments;
     }
 
-    public BoardSearchDetailRes of(Board board, List<CommentDetailRes> comments){
+    public BoardSearchDetailRes of(Board board){
+//        List<Comments> comments = commentsService.board(board.getBoardId());
+
         return BoardSearchDetailRes.builder()
                 .userId(board.getUser().getUserId())
                 .userNick(board.getUser().getUserNick())
