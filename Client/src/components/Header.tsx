@@ -4,6 +4,7 @@ import {Link, useNavigate} from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { themeState } from '../store/state/theme'
 import ToggleSwitch from './ToggleSwitch'
+import MobileBack from './MobileBack'
 
 const Wrapper = styled.div`
   
@@ -30,12 +31,12 @@ const HeaderNav = styled.nav`
   /* @media screen and (max-width: 800px) {
     a {
     font-size: 10px;
-  } */
-  }
+  }} */
   @media screen and (max-width: 800px) {
     display: none;
   }
 `
+
 const ToggleTop = styled.div`
     flex:0.5;
     border: none;
@@ -77,8 +78,11 @@ const FooterNav = styled.nav`
 const Header = () => {
   const [theme,setTheme] = useRecoilState(themeState)
   const navigate = useNavigate()
+  if (window.location.pathname === '/start') 
+  return null;
   return (
     <Wrapper>
+      <MobileBack/>
       <HeaderNav>
         <Link to='/laundry'>MY LAUNDRY</Link>
         <Link to='/okaylaundry'>OKAY LAUNDRY</Link>
