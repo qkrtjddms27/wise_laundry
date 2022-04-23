@@ -7,7 +7,9 @@ import ToggleSwitch from './ToggleSwitch'
 import MobileBack from './MobileBack'
 
 const Wrapper = styled.div`
-  
+  .backIcon{
+    cursor: pointer;
+  }
 `
 const HeaderNav = styled.nav`
   background-color: ${props => props.theme.navColor}; 
@@ -27,11 +29,9 @@ const HeaderNav = styled.nav`
   img {
     margin-top: 5px;
     height: 6vh;
+    cursor: pointer;
   }
-  /* @media screen and (max-width: 800px) {
-    a {
-    font-size: 10px;
-  }} */
+ 
   @media screen and (max-width: 800px) {
     display: none;
   }
@@ -78,16 +78,18 @@ const FooterNav = styled.nav`
 const Header = () => {
   const [theme,setTheme] = useRecoilState(themeState)
   const navigate = useNavigate()
-  if (window.location.pathname === '/start') 
+  if (window.location.pathname === '/') 
   return null;
   return (
     <Wrapper>
-      <MobileBack/>
+      <div className='backIcon'>
+        <MobileBack/>
+      </div>
       <HeaderNav>
         <Link to='/laundry'>MY LAUNDRY</Link>
         <Link to='/okaylaundry'>OKAY LAUNDRY</Link>
         <Link to='/near'>NEAR</Link>
-        <img src='https://cdn-icons-png.flaticon.com/512/3238/3238630.png' onClick={() => navigate('/')} alt='logo'/>
+        <img src='https://cdn-icons-png.flaticon.com/512/3238/3238630.png' onClick={() => navigate('/home')} alt='logo'/>
         <Link to='/community'>COMMUNITY</Link>
         <Link to='/profile'>PROFILE</Link>
         <ToggleTop ><ToggleSwitch/></ToggleTop>

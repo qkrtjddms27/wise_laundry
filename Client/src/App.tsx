@@ -4,7 +4,7 @@ import styled,{ThemeProvider} from 'styled-components'
 import { useRecoilState } from 'recoil'
 import { themeState } from './store/state/theme'
 import Header from './components/Header'
-import Home from './pages/Home'
+import Home from './pages/main/Home'
 import Near from './pages/Near'
 import OkayLaundry from './pages/laundryBoard/OkayLaundry'
 import CommunityAll from './pages/communityBoard/CommunityAll'
@@ -47,8 +47,8 @@ const App= (props:any) => {
           <Wrapper>
           <Header/>
           <Routes>
-            <Route path='/' element={<Home />}/>
-            <Route path='/start' element={<Start />}/>
+            <Route path='/' element={<Start />}/>
+            <Route path='/home' element={<Home />}/>
             <Route path='/near' element={<Near />}/>
             <Route path='/okaylaundry' element={<OkayLaundry />}/>
             <Route path='/community' element={<CommunityAll />}/>

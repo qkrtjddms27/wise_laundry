@@ -11,9 +11,11 @@ import img2 from './images/2.jpg'
 import img3 from './images/3.jpg'
 import img4 from './images/4.jpg'
 import img5 from './images/5.jpg'
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.article`
-  background-color: #6274fd;
+  /* background-color: #6274fd; */
+  background:linear-gradient(#6274fd,#2f387c) ;
   height: 100vh;
   width: 100vw;
   .title{
@@ -22,17 +24,17 @@ const Wrapper = styled.article`
     color: white;
     position: fixed;
     left: 50%;
-    top:45%;
+    top:300px;
     transform: translate(-50%, 0);
     z-index: 2;
     @media screen and (max-width: 800px) {
       font-size: 40px;
       left: 54%;
-      top:45%;
+      top:300px;
     }
   }
   .up{
-    top:20%;
+    top:100px;
     transition: 1.5s;
     min-width: 200px;
     font-size: 5vw;
@@ -44,7 +46,7 @@ const Wrapper = styled.article`
     @media screen and (max-width: 800px) {
       font-size: 40px;
       left: 57%;
-      top:20%;
+      top:100px;
     }
   }
   img{
@@ -77,30 +79,26 @@ const Content = styled.div`
     width: 50vw;
     height: 30vh;
     left: 25%;
-    top:50%;
+    top:350px;
     color:white;
     text-align: center;
-    transition: 2s;
+    /* transition: 2s; */
+    visibility: hidden;
+    &.show{
+    visibility: visible;
+    transform: translateY(-10vh);
+    transition: 1.5s;
   }
-  .text{
-    height: 30px;
-    overflow-y: hidden ; 
-    display: block;
   }
   p{
     margin-top: 30px;
     font-size: 25px;
-    transform: translateY(30px);
-    line-height: 50px;
+    /* transform: translateY(30px); */
+    /* line-height: 50px; */
     transition: all 1s ease;
     @media screen and (max-width: 800px) {
       font-size: 16px;
     }
-  }
-  #show{
-    transform: translateY(-40px);
-    transition: all 1s ease;
-
   }
 
   @media screen and (max-width: 1300px) {
@@ -115,7 +113,7 @@ const LoginBox = styled.div`
     transition: 1s;
   }
   position: fixed;
-  top: 90vh;
+  top:650px;
   display: flex;
   width: 50vw;
   height: 50px;
@@ -153,6 +151,7 @@ const Start = () => {
   const [titleUp,setTitleUp ] = useState(false)
   const [showText,setShowText] = useState(false)
   const [showLogin,setShowLogin] = useState(false)
+  const navigate = useNavigate()
   useEffect(()=>{
     setTitleUp(false)
     setShowText(false)
@@ -202,25 +201,18 @@ const Start = () => {
       {showImg ===4 && <img alt='img' src={img4}/>}
       
         <Content >
-        <article >
-            <div className='text'  >
-              <p id={showText?"show":""}>슬기로운 세탁생활이 처음이신가요?</p>
-            </div>
-            <div className='text' >
-              <p id={showText?"show":""}>바로 가입하고 시작하세요</p>
-            </div>
-            <div className='text' >
-              <p id={showText?"show":""}>로그인 또는 가입하시고 </p>
-            </div>
-            <div className='text' >
-              <p id={showText?"show":""}>'슬세'만의 기능을 확인하세요. </p>
-            </div>
-          </article>
+        <article className={showText ?"show":""} >
+          <p >슬기로운 세탁생활이 처음이신가요?</p>
+          <p >바로 가입하고 시작하세요</p>
+          <p >로그인 또는 가입하시고 </p>
+          <p >'슬세'만의 기능을 확인하세요. </p>
+        </article>
+          <LoginBox className={showLogin ?"show":""}>
+            <button onClick={()=>{navigate('/signup')}} className='signup'>가입하기</button>
+            <button onClick={()=>{navigate('/login')}}className='login'>로그인</button>
+          </LoginBox>
         </Content>
-        <LoginBox className={showLogin ?"show":""}>
-          <button className='signup'>가입하기</button>
-          <button className='login'>로그인</button>
-        </LoginBox>
+        
     </Wrapper>
   )
 }
