@@ -1,7 +1,5 @@
 package com.ssafy.wiselaundry.domain.laundry.service;
 
-import com.ssafy.wiselaundry.domain.laundry.db.bean.CareLabelDetail;
-import com.ssafy.wiselaundry.domain.laundry.db.bean.InfoDetail;
 import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryAll;
 import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryDetails;
 import com.ssafy.wiselaundry.domain.laundry.request.LaundryModifyPostRep;
