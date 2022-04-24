@@ -1,6 +1,7 @@
 package com.ssafy.wiselaundry.domain.board.response;
 
 import com.ssafy.wiselaundry.domain.board.db.entity.Board;
+import com.ssafy.wiselaundry.domain.board.db.entity.BoardImg;
 import com.ssafy.wiselaundry.domain.board.db.entity.Comments;
 import com.ssafy.wiselaundry.global.model.response.BaseResponseBody;
 import io.swagger.annotations.ApiModel;
@@ -31,7 +32,7 @@ public class BoardSearchDetailRes extends BaseResponseBody {
     private String boardName;
 
     @ApiModelProperty(value = "게시글 사진", required = false, example = "board_img.jpg")
-    private String boardImg;
+    private List<BoardImg> boardImgs;
 
     @ApiModelProperty(value = "게시글 내용", required = true, example = "게시글 내용입니다")
     private String boardContent;
@@ -43,18 +44,19 @@ public class BoardSearchDetailRes extends BaseResponseBody {
     private List<CommentDetailRes> comments;
 
     @Builder
-    public BoardSearchDetailRes(int boardId, int userId, String userNick, String boardName, String boardImg, String boardContent, Date boardDt, List<CommentDetailRes> comments) {
+    public BoardSearchDetailRes(int boardId, int userId, String userNick, String boardName, List<BoardImg> boardImgs,
+                                String boardContent, Date boardDt, List<CommentDetailRes> comments) {
         this.boardId = boardId;
         this.userId = userId;
         this.userNick = userNick;
         this.boardName = boardName;
-        this.boardImg = boardImg;
+        this.boardImgs = boardImgs;
         this.boardContent = boardContent;
         this.boardDt = boardDt;
         this.comments = comments;
     }
 
-    public BoardSearchDetailRes of(Board board){
+    public BoardSearchDetailRes of(Board board, Integer statusCode, String message){
 //        List<Comments> comments = commentsService.board(board.getBoardId());
 
         return BoardSearchDetailRes.builder()
@@ -62,7 +64,7 @@ public class BoardSearchDetailRes extends BaseResponseBody {
                 .userNick(board.getUser().getUserNick())
                 .boardId(board.getBoardId())
                 .boardName(board.getBoardName())
-                .boardImg(board.getBoardImg())
+                .boardImgs(board.getBoardImgs())
                 .boardContent(board.getBoardContent())
                 .boardDt(board.getBoardDt())
                 .comments(comments)

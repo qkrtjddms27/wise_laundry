@@ -31,13 +31,15 @@ public class CommentDetailRes extends BaseResponseBody {
     private LocalDateTime commentDt;
 
     @Builder
-    public CommentDetailRes(int userId, String userImg, String userNick, int commentId, String commentContent, LocalDateTime commentDt){
+    public CommentDetailRes(int userId, String userImg, String userNick, int commentId, String commentContent,
+                            LocalDateTime commentDt){
         this.userId = userId;
         this.userImg = userImg;
         this.userNick = userNick;
         this.commentId = commentId;
         this.commentContent = commentContent;
         this.commentDt = commentDt;
+
     }
 
     public CommentDetailRes of(Comments comments){

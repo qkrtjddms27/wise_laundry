@@ -16,9 +16,7 @@ public class BoardCreateReq {
 
     @ApiModelProperty(value = "게시글 제목", required = true, example = "게시글 제목")
     private String boardName;
-    /**
-     * Todo 사진 한 장만 하는지 나중에 물어보기
-      */
+
     @ApiModelProperty(value = "게시글 이미지", required = true, example = "게시글 이미지")
     private String boardImg;
 
