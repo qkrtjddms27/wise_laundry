@@ -25,7 +25,7 @@ import java.util.List;
 public class LaundryController {
     @Autowired
     LaundryService laundryService;
-    //매핑
+
     @GetMapping("/{userId}/all")
     @ApiOperation(value = "내 옷장 전체 목록")
     public ResponseEntity<LaundryAllRes> userLaundryAll (@ApiParam(value = "유저번호") @PathVariable("userId") int userId){
@@ -39,7 +39,7 @@ public class LaundryController {
             return ResponseEntity.status(403).body(LaundryAllRes.of(403, "userId doesn't exist", null));
         }
     }
-    //적용
+
     @GetMapping("/{laundryId}")
     @ApiOperation(value = "옷 detail 조회")
     public ResponseEntity<LaundryDetailsRes> laundryDetails (@ApiParam(value = "옷 번호") @PathVariable("laundryId") int laundryId){
@@ -54,7 +54,7 @@ public class LaundryController {
         }
     }
 
-    //builder 적용
+
     @PostMapping("")
     @ApiOperation(value = "내 옷 등록")
     public ResponseEntity<? extends BaseResponseBody> userLaundryRegister (@RequestBody UserLaundryRegisterPostReq userLaundryRegisterPostReq){
@@ -68,7 +68,7 @@ public class LaundryController {
         }
     }
 
-    //builder 적용
+
     @PutMapping("/{laundryId}")
     @ApiOperation(value = "내 옷 수정")
     public ResponseEntity<LaundryDetailsRes> userLaundryDetailModify(@ApiParam(value = "옷 번호") @PathVariable("laundryId") int laundryId, @RequestBody LaundryModifyPostRep laundryModifyPostRep){
@@ -84,7 +84,7 @@ public class LaundryController {
 
 
     }
-    //노 필요
+
     @DeleteMapping("/{laundryId}")
     @ApiOperation(value = "내 옷 삭제")
     public ResponseEntity< ? extends BaseResponseBody> userLaundryDetailDelete(@PathVariable("laundryId") int laundryId){
@@ -98,7 +98,6 @@ public class LaundryController {
         }
 
     }
-
 
     @GetMapping("/all")
     @ApiOperation(value = "모든 옷장 전체 목록")

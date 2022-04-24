@@ -30,10 +30,9 @@ public class LaundryInfo {
     @ManyToOne
     @JoinColumn(name = "laundry_info_id")
     private Info laundryInfo;
-
-
+    
     @Builder
-    public LaundryInfo(int clothing_tag_id, Laundry laundry, Info laundryInfo) {
+    LaundryInfo(int clothing_tag_id, Laundry laundry, Info laundryInfo) {
         this.clothing_tag_id = clothing_tag_id;
         this.laundry = laundry;
         this.laundryInfo = laundryInfo;
