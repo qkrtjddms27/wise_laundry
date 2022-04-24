@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface LaundryService {
     List<LaundryAll> findUserLaundryAll(int userId);
-    List<CareLabelDetail> findCareLabelDetail(int laundryId);
-    List<LaundryDetails> findLaundryDetails(int laundryId);
-    List<InfoDetail> findInfoDetail(int laundryId);
+    List<String> findCareLabelDetail(int laundryId);
+    LaundryDetails findLaundryDetails(int laundryId);
+    List<String> findInfoDetail(int laundryId);
     int laundryRegisterByUser(UserLaundryRegisterPostReq userLaundryRegisterPostReq);
     int deleteLaundry(int laundryId);
     List<LaundryAll> findLaundryAll();
-    List<LaundryDetails> modifyLaundryDetails(int laundryId,LaundryModifyPostRep laundryModifyPostRep);
+    LaundryDetails modifyLaundryDetails(int laundryId,LaundryModifyPostRep laundryModifyPostRep);
 }
