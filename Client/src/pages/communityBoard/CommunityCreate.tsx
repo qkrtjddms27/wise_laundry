@@ -18,11 +18,10 @@ const Wrapper = styled.article`
   margin: 4vh;
   p {margin: 0;}
   input, textarea {
-    padding: .3rem;
+    padding: .5rem;
   }
 `
 const TitleInput = styled.label`
-  height: 5vh;
   line-height: 5vh;
   display: flex;
   padding: 1rem 10vw;
@@ -31,6 +30,10 @@ const TitleInput = styled.label`
   }
   input {
     width: 90%;
+    background-color: ${props => props.theme.bgColor};
+    color: ${props => props.theme.fontColor};
+    border: 2px solid #ACAAAA;
+    border-radius: 4px;
   }
   @media screen and (max-width: 800px) {
     padding: 1rem 0;
@@ -70,6 +73,10 @@ const ContentInput = styled.label`
   textarea {
     width: 90%;
     resize: none;
+    background-color: ${props => props.theme.bgColor};
+    color: ${props => props.theme.fontColor};
+    border: 2px solid #ACAAAA;
+    border-radius: 4px;
   }
   @media screen and (max-width: 800px) {
     padding: 1rem 0;
