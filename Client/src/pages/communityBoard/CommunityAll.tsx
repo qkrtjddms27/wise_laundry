@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import { dataall } from './data';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { themeState } from '../../store/state/theme';
+import { dataall } from './data';
 
 interface Istate {
   board: {
@@ -162,7 +163,7 @@ const CommunityAll = () => {
       setInputText('')
     }
   }
-  const makeNumList = () => {
+  const makePageList = () => {
     let arr = []
     if (totalPage < 5) {
       // 1부터 totalPage까지
@@ -179,6 +180,7 @@ const CommunityAll = () => {
     }
     return arr
   }
+
   const changePage = (num: number) => {
     const newPage = currentPage + num
     if (newPage < 1 || newPage > totalPage) {
@@ -219,7 +221,7 @@ const CommunityAll = () => {
       <Pagenation style={{margin: '0'}}>
         <div className='pagenation'>
           <div onClick={() => {changePage(-1)}}><p>&lt;</p></div>
-            {makeNumList().map((num, idx) => (
+            {makePageList().map((num, idx) => (
               <div className={currentPage === num ? 'active': ''} key={idx} 
                 onClick={() => setCurrentPage(num)}
                 style={{width: `${totalPage > 4 ? '15%' : `${75/totalPage}%`}`}}

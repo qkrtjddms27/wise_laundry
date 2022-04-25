@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -100,7 +101,6 @@ const Buttons = styled.div`
   }
 `
 
-
 const CommunityCreate = () => {
   const { boardId } = useParams()
   const [board, setBoard] = useState<Istate['board']>({
@@ -110,6 +110,7 @@ const CommunityCreate = () => {
     boardImg: 'https://i.ibb.co/jZwwWFk/2.jpg',
     boardContent: '',
   })
+
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     // BASE64
     let reader = new FileReader()
@@ -149,7 +150,6 @@ const CommunityCreate = () => {
       }
       setBoard(data)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
