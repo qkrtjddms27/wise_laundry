@@ -14,13 +14,41 @@ const apiClient = axios.create({
 export const getCommunityAll = async () => {
   const response = await apiClient.get<any>(
     '/community/all', 
-  );
+  )
+  console.log('getCommunityAll response: ', response)
   return response.data
 }
 
 export const getCommunityDetail = async (boardId: number) => {
   const response = await apiClient.get<any>(
-    '/community/all', 
-  );
+    `/community/${boardId}`,
+    )
+  console.log('getCommunityDetail response: ', response)
   return response.data
 }
+
+export const delBoard = async (boardId: number) => {
+  const response = await apiClient.delete<any>(
+    `/community/${boardId}`,
+    )
+  console.log('delBoard response: ', response)
+  return response
+}
+
+export const postComment = async (data: any) => {
+  const response = await apiClient.post<any>(
+    '/community/comment/create',
+    data
+  )
+  console.log('postComment response: ', response)
+  return response.data
+}
+
+export const delComment = async (commentId: number) => {
+  const response = await apiClient.delete<any>(
+    `/community/comment/${commentId}`,
+    )
+  console.log('delComment response: ', response)
+  return response
+}
+
