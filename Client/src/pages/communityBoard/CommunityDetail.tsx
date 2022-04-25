@@ -159,7 +159,8 @@ const CommunityDetail = () => {
         commentContent: '',
         commentDate: ''
       }
-    ]})
+    ]
+  })
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -177,6 +178,7 @@ const CommunityDetail = () => {
   useEffect(() => {
     setBoard(datadetail)
   }, [])
+
   return (
     <Wrapper>
       <Board>

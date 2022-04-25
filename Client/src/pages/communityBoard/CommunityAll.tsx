@@ -20,7 +20,12 @@ interface Istate {
 }
 
 const Wrapper = styled.article`
-  padding: .5rem 2.5rem;
+  width: 80vw;
+  margin: auto;
+  padding-top: 5vh;
+  @media screen and (max-width: 800px) {
+    padding: 0;
+  }
   p {margin: 0;}
   .title {
     color: #4E7DDA;
@@ -46,19 +51,22 @@ const SearchBar = styled.section`
   border: 2px solid #ACAAAA;
   border-radius: 10px;
   display: flex;
-  svg {
-    margin-top: -4px;
+  svg{
+    font-size: 1.8rem;
+    margin-top: -2px;
+    color: ${props => props.theme.fontColor};
   }
   div {
     height: 100%;
     width: 2.5px;
     background-color: #a9a9a9;
-    margin: 0 12px;
+    margin: 0 .8rem;
   }
   input {
     border: none;
     width: 100%;
     font-size: 1rem;
+    background-color: ${props => props.theme.bgColor};
     &:focus { outline: none; }
     &::placeholder { 
       font-size: 0.8rem;
