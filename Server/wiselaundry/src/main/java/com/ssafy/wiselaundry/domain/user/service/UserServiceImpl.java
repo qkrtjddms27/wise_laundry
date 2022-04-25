@@ -39,6 +39,8 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+
+
     @Override
     public User updateUser(UserUpdatePostReq userUpdateInfo){
         User user = userRepository.findByUserEmail(userUpdateInfo.getUserEmail());
@@ -54,5 +56,15 @@ public class UserServiceImpl implements UserService{
             return user;
         }
 
+    }
+
+    @Override
+    public User findByUserId(int userId) {
+        return userRepository.findByUserId(userId);
+    }
+
+    @Override
+    public User findByUserEmail(String userEmail) {
+        return userRepository.findByUserEmail(userEmail);
     }
 }
