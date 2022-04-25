@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,11 +32,6 @@ public class Board{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ApiModelProperty(value = "개시글 사진", required = false, example = "board_img.jpg")
-    @Column(name = "board_img")
-    @OneToMany(mappedBy = "board_img_id")
-    private List<BoardImg> boardImgs = new ArrayList<>();
-
     @ApiModelProperty(value = "게시글 제목", required = true, example = "글 제목입니다.")
     @Column(name = "board_name")
     private String boardName;
@@ -45,16 +41,24 @@ public class Board{
     private String boardContent;
 
     @ApiModelProperty(value = "게시글 날짜", required = true, example = "2020-01-23 13:33:33")
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "board_dt")
-    private Date boardDt;
+    private LocalDateTime boardDt;
+
+    @ApiModelProperty(value = "게시글 사진", required = false, example = "board_img.jpg")
+    @OneToMany(mappedBy = "board_img_id")
+    private List<BoardImg> boardImgs = new ArrayList<>();
+
+    @ApiModelProperty(value = "게시글 댓글", required = false, example = "게시글 댓글")
+    @OneToMany(mappedBy = "board_img_id")
+    private List<Comments> comments = new ArrayList<>();
 
     @Builder
-    Board(int boardId, User user, String boardName, List<BoardImg> boardImgs, String boardContent, Date boardDt) {
+    Board(int boardId, User user, String boardName, List<BoardImg> boardImgs, List<Comments> comments, String boardContent, LocalDateTime boardDt) {
         this.boardId = boardId;
         this.user = user;
         this.boardName = boardName;
         this.boardImgs = boardImgs;
+        this.comments = comments;
         this.boardContent = boardContent;
         this.boardDt = boardDt;
     }

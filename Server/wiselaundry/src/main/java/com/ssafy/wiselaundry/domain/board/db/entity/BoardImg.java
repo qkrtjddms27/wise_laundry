@@ -30,4 +30,9 @@ public class BoardImg {
     @ManyToOne
     @JoinColumn(name = "boardImg")
     private String boardImg;
+
+    public BoardImg(Board board, String boardImg) {
+        this.board = board;
+        this.boardImg = boardImg;
+    }
 }
