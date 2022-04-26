@@ -105,8 +105,8 @@ public class LaundryServiceImpl implements LaundryService{
         }
 
         List<MultipartFile> fileList = request.getFiles("file");
-        String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-        File uploadDir = new File(uploadPath + File.separator + uploadFolder+ "/laundry");
+
+        File uploadDir = new File(uploadPath + uploadFolder+ File.separator +"laundry");
 
         // recordimages 폴더 존재하지 않으면 생성
         if (!uploadDir.exists()) uploadDir.mkdir();
@@ -122,9 +122,9 @@ public class LaundryServiceImpl implements LaundryService{
             String extension = FilenameUtils.getExtension(fileName);
 
             // 난수로 지정한 파일명 + 확장자
-            String savingFileName = uuid + "." ;//+ extension;
+            String savingFileName = uuid + "." + extension;
 
-            File destFile = new File(uploadPath + File.separator, uploadFolder + File.separator+ "/laundry/" + savingFileName);
+            File destFile = new File(uploadPath, uploadFolder + File.separator+ "laundry" + File.separator + savingFileName);
 
             // 파일 저장
 
@@ -133,7 +133,7 @@ public class LaundryServiceImpl implements LaundryService{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            recordFileUrl = uploadPath +"/" + uploadFolder + "/" + savingFileName;
+            recordFileUrl = "laundry" + File.separator + savingFileName;
 
         }
 
