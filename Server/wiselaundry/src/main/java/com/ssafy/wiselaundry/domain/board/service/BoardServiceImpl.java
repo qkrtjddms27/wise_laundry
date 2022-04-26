@@ -53,13 +53,6 @@ public class BoardServiceImpl implements BoardService{
                 .user(user)
                 .build();
 
-        System.out.println("111111111111111111111");
-        System.out.println("111111111111111111111");
-        System.out.println("111111111111111111111");
-        System.out.println("111111111111111111111");
-        System.out.println("111111111111111111111");
-        System.out.println("111111111111111111111");
-
         boardRepository.save(board);
 
 
@@ -96,6 +89,9 @@ public class BoardServiceImpl implements BoardService{
 
     public List<BoardImg> boardImgUpdate(List<String> boardImgString, Board board) {
         List<BoardImg> boardImgList = board.getBoardImgs();
+        if(boardImgList == null){
+            boardImgList = new ArrayList<>();
+        }
 
         for(String img : boardImgString) {
             boardImgList.add(boardImgService.boardImgCreate(board, img));
