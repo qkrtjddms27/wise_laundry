@@ -61,13 +61,13 @@ public class BoardController {
             commentDetailResList.add(CommentDetailRes.builder()
                             .commentContent(comment.getCommentContent())
                             .commentId(comment.getCommentId())
-                            .commentDt(comment.getCommentDt())
+                            .commentDate(comment.getCommentDate())
                             .build());
         }
 
         BoardSearchDetailRes boardSearchDetailRes = BoardSearchDetailRes.builder()
                 .boardContent(board.getBoardContent())
-                .boardDt(board.getBoardDt())
+                .boardDate(board.getBoardDate())
                 .boardId(board.getBoardId())
                 .boardImgs(board.getBoardImgs())
                 .boardName(board.getBoardName())

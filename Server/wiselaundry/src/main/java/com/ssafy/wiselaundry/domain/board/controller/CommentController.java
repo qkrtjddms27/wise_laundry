@@ -34,7 +34,7 @@ public class CommentController {
     public ResponseEntity<CommentDetailRes> commentsCreate(@RequestBody CommentCreateReq body) {
         Comments comment = commentService.commentCreate(body);
         CommentDetailRes commentDetailRes = CommentDetailRes.builder()
-                .commentDt(comment.getCommentDt())
+                .commentDate(comment.getCommentDate())
                 .commentId(comment.getCommentId())
                 .commentContent(comment.getCommentContent())
                 .userNick(comment.getUser().getUserNick())
