@@ -18,6 +18,7 @@ import Login from './pages/user/Login'
 import RegisterLaundry from './pages/laundryBoard/RegisterLaundry'
 import Start from './pages/main/Start'
 import KakaoLogin from './pages/user/KakaoLogin'
+import NotFound from './pages/notfound/NotFound'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -69,6 +70,7 @@ const App= (props:any) => {
             <Route path='/login' element={<Login />}/>
             <Route path='/laundry/register' element={<RegisterLaundry />}/>
             <Route path="/oauth" element={<KakaoLogin />}/>
+            <Route path='/*' element={<NotFound />} />
           </Routes>
         </Wrapper>
       </ThemeProvider>
