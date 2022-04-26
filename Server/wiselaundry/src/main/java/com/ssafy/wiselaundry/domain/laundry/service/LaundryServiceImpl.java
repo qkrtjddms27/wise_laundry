@@ -215,7 +215,7 @@ public class LaundryServiceImpl implements LaundryService{
         List<MultipartFile> fileList = request.getFiles("file");
 
         String recordFileUrl = "";
-        if (fileList.size() > 0){
+        if (!fileList.isEmpty()){
             if(!laundry.getLaundryImg().equals(null)){
                 try {
                     File oldFile = new File("/images"+File.separator + laundry.getLaundryImg());
