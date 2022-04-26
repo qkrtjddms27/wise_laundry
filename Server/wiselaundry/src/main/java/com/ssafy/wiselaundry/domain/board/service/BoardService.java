@@ -10,7 +10,7 @@ import java.util.List;
 public interface BoardService {
     List<Board> boardSearchAll();
     Board boardSearchById(int boardId);
-    void boardCreate(BoardCreateReq body, MultipartHttpServletRequest request);
+    int boardCreate(BoardCreateReq body, MultipartHttpServletRequest request);
     void boardUpdate(BoardUpdateReq body, MultipartHttpServletRequest request);
     void boardDelete(int boardId);
 }

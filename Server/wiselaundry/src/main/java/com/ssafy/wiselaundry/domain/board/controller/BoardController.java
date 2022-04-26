@@ -4,6 +4,7 @@ import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import com.ssafy.wiselaundry.domain.board.db.entity.Comments;
 import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
+import com.ssafy.wiselaundry.domain.board.response.BoardCreateRes;
 import com.ssafy.wiselaundry.domain.board.response.BoardSearchAllRes;
 import com.ssafy.wiselaundry.domain.board.response.BoardSearchDetailRes;
 import com.ssafy.wiselaundry.domain.board.response.CommentDetailRes;
@@ -91,8 +92,8 @@ public class BoardController {
                                                                   MultipartHttpServletRequest file) {
         log.info("boardCreate-call");
 
-        boardService.boardCreate(body, file);
-        return ResponseEntity.status(201).body(new BaseResponseBody(201, "생성 완료"));
+        int boardId = boardService.boardCreate(body, file);
+        return ResponseEntity.status(201).body(BoardCreateRes.of(201, "Success", boardId));
     }
 
 

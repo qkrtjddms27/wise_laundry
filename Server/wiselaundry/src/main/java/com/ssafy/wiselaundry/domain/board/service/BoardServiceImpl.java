@@ -50,7 +50,7 @@ public class BoardServiceImpl implements BoardService{
 
 
     @Override
-    public void boardCreate(BoardCreateReq body, MultipartHttpServletRequest fileRequest) {
+    public int boardCreate(BoardCreateReq body, MultipartHttpServletRequest fileRequest) {
         User user = userService.findByUserId(body.getUserId());
 
         Board board = Board.builder()
@@ -67,6 +67,8 @@ public class BoardServiceImpl implements BoardService{
             board.setBoardImgs(boardImgList);
         }
         boardRepository.save(board);
+
+        return board.getBoardId();
     }
 
     @Override
