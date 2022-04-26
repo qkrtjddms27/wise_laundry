@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 // import NotImage from './404.png'
 import NotImage from './4043.png'
@@ -38,6 +39,7 @@ const Button = styled.button`
 `
 
 const NotFound = () => {
+  const navigate = useNavigate()
   return (
     <Wrapper>
       <Icon>
@@ -48,7 +50,7 @@ const NotFound = () => {
         <p className='desc'>원하시는 결과를 찾을 수 없습니다.</p>
         <p className='desc'>올바른 URL을 입력하였는지 확인하세요.</p>
       </Letter>
-      <Button>메인으로 돌아가기</Button>
+      <Button onClick={() => navigate('/home')}>메인으로 돌아가기</Button>
     </Wrapper>
   );
 };
