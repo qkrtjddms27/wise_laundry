@@ -61,13 +61,21 @@ public class UserServiceImpl implements UserService{
             return null;
         }else{
             user.setUserNick(userUpdateInfo.getUserNick());
-            if(!userUpdateInfo.getPassword().equals("")){
+            if(!userUpdateInfo.getPassword().equals("")||!userUpdateInfo.getPassword().equals(null)){
                 user.setPassword(passwordEncoder.encode(userUpdateInfo.getPassword()));
             }
-            //profile 수정만 추가.....
-            if(img!=null){
+            // 이미 이미지가 있을경우 삭제
+            if(img.getFile("file")!=null){
+                if(!user.getUserImg().equals(null)){
+                    try {
+                        File oldFile = new File("/images" + File.separator + user.getUserImg());
+                        oldFile.delete();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 MultipartFile file = img.getFile("file");
-                File uploadDir = new File(uploadPath + File.separator + uploadFolder + File.separator + "user");
+                File uploadDir = new File(uploadPath  + uploadFolder + File.separator + "user");
 
                 if(!uploadDir.exists()) uploadDir.mkdir();
                 String recordFileUrl = "";
@@ -79,15 +87,14 @@ public class UserServiceImpl implements UserService{
 
                 String savingFileName = uuid+"."+extension;
 
-                File destFile = new File(uploadPath + File.separator, uploadFolder+ File.separator + "user"+ File.separator + savingFileName);
-
+                File destFile = new File(uploadPath, uploadFolder+ File.separator + "user"+ File.separator + savingFileName);
 
                 try {
                     file.transferTo(destFile);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                recordFileUrl = "user/" + uploadFolder + "/" + savingFileName;
+                recordFileUrl = "user" + File.separator + savingFileName;
                 user.setUserImg(recordFileUrl);
             }
 
