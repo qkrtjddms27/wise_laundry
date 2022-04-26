@@ -9,7 +9,7 @@ import { getCommunityDetail, postComment, delComment, delBoard } from '../../sto
 import { useNavigate, useParams } from 'react-router-dom';
 import { datadetail } from './data'
 
-interface IState {
+interface Istate {
   board: {
     boardId: number,
     userId: number,
@@ -165,7 +165,7 @@ const CommunityDetail = () => {
   const navigate = useNavigate()
   const [theme, setTheme] = useRecoilState(themeState)
   const [inputText, setInputText] = useState('')
-  const [board, setBoard] = useState<IState['board']>({
+  const [board, setBoard] = useState<Istate['board']>({
     boardId: 0,
     userId: 0,
     userNick: '',
@@ -186,14 +186,20 @@ const CommunityDetail = () => {
     ]
   })
 
-  const deleteBoard = () => {
-    // delBoard(board.boardId)
-    console.log(`${boardId}번 글 삭제`);
-  }
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       createComment()
     }
+  }
+  const deleteBoard = () => {
+    // delBoard(board.boardId)
+    // .then(() => {
+    //   navigate('/community')
+    // })
+    // .catch(err => {
+    //   console.log('🎲deleteBoard error:', err)
+    // })
+    console.log(`${boardId}번 글 삭제`);
   }
   const createComment = () => {
     const data = {
@@ -203,6 +209,12 @@ const CommunityDetail = () => {
     }
     console.log(`댓글작성 보냅니다아🎷 ${data}`)
     // postComment(data)
+    // .then(res => {
+    //   setBoard({...board, comments: [...board.comments, res]})
+    // })
+    // .catch(err => {
+    //   console.log('🎲createComment error:', err)
+    // })
     setInputText('')
   }
   const deleteComment = (commentId: number) => {
@@ -216,7 +228,7 @@ const CommunityDetail = () => {
     //   setBoard(res)
     // })
     // .catch(err => {
-    //   console.log('🎲🎲getCommunityDetail🎲🎲')
+    //   console.log('🎲getCommunityDetail err:', err)
     // })
     setBoard(datadetail)
   }, [])

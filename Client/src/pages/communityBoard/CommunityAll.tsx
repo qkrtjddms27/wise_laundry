@@ -197,7 +197,7 @@ const CommunityAll = () => {
     //   setBoards(res)
     // })
     // .catch(err => {
-    //   console.log('🎲🎲getCommunityAll🎲🎲')
+    //   console.log('🎲getCommunityAll err:', err)
     // })
     setBoards(dataall)
   }, [])
