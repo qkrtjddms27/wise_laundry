@@ -19,10 +19,10 @@ public class BoardImgServiceImpl implements BoardImgService {
         return boardImgRepository.findAll();
     }
 
-//    @Override
-//    public List<BoardImg> boardImgSearchByBoardId(int boardId) {
-//        return boardImgRepository.findAllByBoard(boardService.boardSearchById(boardId));
-//    }
+    @Override
+    public BoardImg findById(int boardImgId) {
+        return boardImgRepository.findById(boardImgId).get();
+    }
 
     @Override
     public BoardImg boardImgCreate(Board board, String boardImg) {
