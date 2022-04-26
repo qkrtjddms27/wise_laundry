@@ -25,13 +25,10 @@ public class CommentsServiceImpl implements CommentsService{
     @Autowired
     BoardService boardService;
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Override
-    public List<Comments> commentSearchByBoardId(int boardId) {
-        return commentsRepository.findByBoardId(boardId);
-    }
+//    @Override
+//    public List<Comments> commentSearchByBoard(Board board) {
+//        return commentsRepository.findByBoardId(board);
+//    }
 
     @Override
     public Comments commentSearchById(int commentId) {
@@ -40,8 +37,7 @@ public class CommentsServiceImpl implements CommentsService{
 
     @Override
     public Comments commentCreate(CommentCreateReq body) {
-//        User user = userService;
-        User user = userRepository.findByUserId(body.getUserId());
+        User user = userService.findByUserId(body.getUserId());
         Board board = boardService.boardSearchById(body.getBoardId());
 
         Comments comments = body.toEntity(body,user,board);
@@ -51,7 +47,6 @@ public class CommentsServiceImpl implements CommentsService{
 
     @Override
     public void commentUpdate(CommentUpdateReq body) {
-//        commentsRepository.findById(body.)
     }
 
     @Override

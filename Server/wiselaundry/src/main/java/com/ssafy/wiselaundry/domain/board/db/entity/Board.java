@@ -44,13 +44,13 @@ public class Board{
     @Column(name = "board_dt")
     private LocalDateTime boardDt;
 
-    @ApiModelProperty(value = "게시글 사진", required = false, example = "board_img.jpg")
-    @OneToMany(mappedBy = "board_img_id")
-    private List<BoardImg> boardImgs = new ArrayList<>();
-
     @ApiModelProperty(value = "게시글 댓글", required = false, example = "게시글 댓글")
-    @OneToMany(mappedBy = "board_img_id")
-    private List<Comments> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "board")
+    private List<Comments> comments = new ArrayList<Comments>();
+
+    @ApiModelProperty(value = "게시글 사진", required = false, example = "board_img.jpg")
+    @OneToMany(mappedBy = "board")
+    private List<BoardImg> boardImgs = new ArrayList<BoardImg>();
 
     @Builder
     Board(int boardId, User user, String boardName, List<BoardImg> boardImgs, List<Comments> comments, String boardContent, LocalDateTime boardDt) {

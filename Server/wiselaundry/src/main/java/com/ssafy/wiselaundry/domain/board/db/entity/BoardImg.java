@@ -12,23 +12,22 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "board")
+@Table(name = "board_img")
 @ApiModel(value = "BoardImg", description = "게시글 이미지")
 public class BoardImg {
     @ApiModelProperty(value = "게시글 번호", example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "boardImgId")
+    @Column(name = "board_img_id")
     private int boardImgId;
 
     @ApiModelProperty(value = "게시판 정보", example = "")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @ApiModelProperty(value = "게시판 정보", example = "")
-    @ManyToOne
-    @JoinColumn(name = "boardImg")
+    @ApiModelProperty(value = "게시판 이미지", example = "")
+    @Column(name = "board_img")
     private String boardImg;
 
     public BoardImg(Board board, String boardImg) {

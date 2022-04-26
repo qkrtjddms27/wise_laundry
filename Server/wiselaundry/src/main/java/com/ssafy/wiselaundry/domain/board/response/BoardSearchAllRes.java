@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -25,10 +26,10 @@ public class BoardSearchAllRes extends BaseResponseBody {
     private String boardContent;
 
     @ApiModelProperty(value = "게시글 날짜", required = true, example = "2020-01-23 13:33:33")
-    private Date boardDt;
+    private LocalDateTime boardDt;
 
     @Builder
-    public BoardSearchAllRes(int userId, String userNick, String boardName, String boardContent, Date boardDt) {
+    public BoardSearchAllRes(int userId, String userNick, String boardName, String boardContent, LocalDateTime boardDt) {
         this.userId = userId;
         this.userNick = userNick;
         this.boardName = boardName;

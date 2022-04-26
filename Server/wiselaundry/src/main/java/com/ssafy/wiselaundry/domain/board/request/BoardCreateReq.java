@@ -16,7 +16,7 @@ public class BoardCreateReq {
     @ApiModelProperty(value = "게시글 제목", required = true, example = "게시글 제목")
     private String boardName;
 
-    @ApiModelProperty(value = "게시글 이미지", required = true, example = "게시글 이미지")
+    @ApiModelProperty(value = "게시글 이미지", required = true)
     private List<String> boardImgs;
 
     @ApiModelProperty(value = "게시글 내용", required = true, example = "게시글 내용")

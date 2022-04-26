@@ -19,14 +19,14 @@ public class BoardImgServiceImpl implements BoardImgService {
         return boardImgRepository.findAll();
     }
 
-    @Override
-    public List<BoardImg> boardImgSearchByBoardId(int boardId) {
-        return boardImgRepository.findAllByBoardId(boardId);
-    }
+//    @Override
+//    public List<BoardImg> boardImgSearchByBoardId(int boardId) {
+//        return boardImgRepository.findAllByBoard(boardService.boardSearchById(boardId));
+//    }
 
     @Override
     public BoardImg boardImgCreate(Board board, String boardImg) {
-        BoardImg img = boardImgRepository.findByBoardIdAndBoardImg(board.getBoardId(), boardImg);
+        BoardImg img = boardImgRepository.findByBoardAndBoardImg(board, boardImg);
         /**
          * BoardImg 가 Null 값일 경우 객체 생성.
          */
