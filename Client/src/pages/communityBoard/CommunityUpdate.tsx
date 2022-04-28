@@ -105,7 +105,7 @@ const CommunityUpdate = () => {
       </form>
       <Buttons>
         <button className='active' onClick={(e) => handleSubmit(e)}>등록</button>
-        <button className='inactive'>취소</button>
+        <button className='inactive' onClick={() => navigate(-1)}>취소</button>
       </Buttons>
     </Wrapper>
   );
