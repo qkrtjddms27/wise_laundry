@@ -20,6 +20,7 @@ const CommunityCreate = () => {
     boardContent: '',
   })
   const [viewImgs, setViewImgs] = useState<Istate['viewImgs']>([])
+  const [fileList, setFileList] = useState<FileList | undefined>()
   const navigate = useNavigate()
 
   const onChangeFiles= (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,19 +37,22 @@ const CommunityCreate = () => {
       setViewImgs(nowImageUrlList)
     }
   }
-  const [fileList, setFileList] = useState<FileList | undefined>()
   const makeFormData = () => {
     let formData = new FormData()
     const newData = {
       ...board,
-      userId: 10
+      userId: 36
     }
     formData.append(
       "body",
       new Blob([JSON.stringify(newData)], {type: "application/json"})
     )
     if (fileList != null) {
-      Array.from(fileList).forEach(f => formData.append("file", f))
+      Array.from(fileList).forEach((f, i) => {
+        if (i < 5) {
+          formData.append("file", f)
+        }
+      })
     }
     return formData
   }
@@ -64,8 +68,19 @@ const CommunityCreate = () => {
       console.log('postBoard err:💧', err)
     })
   }
+  const [newFileList, setNewFileList] = useState<File[]>()
   const throwImg = (idx: number) => {
     setViewImgs(viewImgs.filter((v, i) => i !== idx))
+    // const newFileList = new FileList()
+    if (fileList != null) {
+      console.log('도착은 했는데....왜 변하질 않니....')
+      const tmp: File[] = Array.from(fileList).filter((f, i) => i !== idx)
+      setNewFileList(tmp)
+    }
+    // setFileList(newFileList)
+    console.log('🎲viewImgs: ', viewImgs);
+    console.log('🎲fileList: ', fileList);
+    
   }
 
   return (
