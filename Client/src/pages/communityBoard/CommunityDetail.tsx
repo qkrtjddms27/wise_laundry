@@ -180,8 +180,10 @@ const CommunityDetail = () => {
       </Board>
       <Btns>
         <button className='active' onClick={() => navigate('/community')}>목록</button>
+        {board.userId === 10 && <>
         <button className='active' onClick={() => navigate(`/board/${board.boardId}`)}>수정</button>
         <button className='inactive' onClick={() => deleteBoard()}>삭제</button>
+        </>}
       </Btns>
     </Wrapper>
   );
@@ -220,9 +222,9 @@ const BoardContent = styled.div`
       /* aspect-ratio: 1/1; */
     }
     div {
+      cursor: pointer;
       position: absolute;
       top: 50%;
-      cursor: pointer;
       font-size: 1.5rem;
       &.left {
         left: -2rem;
