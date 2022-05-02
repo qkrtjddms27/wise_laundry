@@ -75,16 +75,23 @@ const Wrapper = styled.article`
 `
 const Content = styled.div`
   article{
+    background-color: #87878751;
     position:fixed;
-    width: 50vw;
-    height: 30vh;
-    left: 25%;
+    padding: 0 2vw;
+    width: 35vw;
+    /* height: 30vh; */
+    left: 30%;
     /* top:350px; */
     top:50vh;
     color:white;
     text-align: center;
     /* transition: 2s; */
     visibility: hidden;
+    @media screen and (max-width: 800px) {
+      width: 50vw;
+      left: 25%;
+
+    }
     &.show{
     visibility: visible;
     transform: translateY(-10vh);
@@ -94,12 +101,10 @@ const Content = styled.div`
   p{
     margin-top: 30px;
     font-size: 25px;
-    /* transform: translateY(30px); */
-    /* line-height: 50px; */
-    /* transition: all 1s ease; */
     transition: 1s;
     @media screen and (max-width: 800px) {
       font-size: 16px;
+
     }
   }
 
@@ -123,7 +128,6 @@ const LoginBox = styled.div`
   left: 25%;
   button{
     width: 20vw;
-    cursor: pointer;
       border-radius: 10px;
       border: none;
     &.login{
@@ -140,6 +144,7 @@ const LoginBox = styled.div`
     width: 90%;
     height: 50px;
     button{
+      font-weight: 700;
       width: 42vw;      
     }
   }

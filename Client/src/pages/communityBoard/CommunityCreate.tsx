@@ -1,70 +1,86 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+/* eslint-disable array-callback-return */
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { postBoard, putBoard, getCommunityDetail } from '../../store/api/community';
-import { datadetail } from './data';
+import { postBoard } from '../../store/api/community';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 interface Istate {
   board: {
-    userId: number,
     boardName: string,
-    boardImg: string[],
     boardContent: string,
-  }
+  },
+  viewImgs: string[]
 }
 
 const CommunityCreate = () => {
   const [board, setBoard] = useState<Istate['board']>({
-    userId: 0,
     boardName: '',
-    boardImg: [],
     boardContent: '',
   })
+  const [viewImgs, setViewImgs] = useState<Istate['viewImgs']>([])
+  const [fileList, setFileList] = useState<FileList | undefined>()
   const navigate = useNavigate()
 
-  const [fileList, setFileList] = useState<FileList | undefined>()
   const onChangeFiles= (e: React.ChangeEvent<HTMLInputElement>) => {
     const { target: { files } } = e
     if (files != null) {
       setFileList(files)
-      const nowImageUrlList = [...board.boardImg]
-      Array.from(files).map(file => {
-        console.log('🎲file: ', file);
-        const nowImageUrl = URL.createObjectURL(file)
-        nowImageUrlList.push(nowImageUrl)
+      const nowImageUrlList = [...viewImgs]
+      Array.from(files).map((file: File) => {
+        // console.log('🎲file: ', file);
+        if (nowImageUrlList.length < 5) {
+          nowImageUrlList.push(URL.createObjectURL(file))
+        }
       })
-      setBoard({...board, boardImg: nowImageUrlList})
+      setViewImgs(nowImageUrlList)
     }
   }
   const makeFormData = () => {
     let formData = new FormData()
-    const content = board.boardContent.replace(/(\n|\r\n)/g, '<br/>')
     const newData = {
-      userId: 1,
-      boardName: board.boardName,
-      boardContent: content
+      ...board,
+      userId: 36
     }
     formData.append(
-      "data",
+      "body",
       new Blob([JSON.stringify(newData)], {type: "application/json"})
     )
     if (fileList != null) {
-      Array.from(fileList).forEach(f => formData.append("file", f))
+      Array.from(fileList).forEach((f, i) => {
+        if (i < 5) {
+          formData.append("file", f)
+        }
+      })
     }
+    return formData
   }
   const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    makeFormData()
+    const form = makeFormData()
+    postBoard(form)
+    .then(res => {
+      console.log('🎲res: ', res);
+      navigate(`/community/${res.boardId}`)
+    })
+    .catch(err => {
+      console.log('postBoard err:💧', err)
+    })
+  }
+  const [newFileList, setNewFileList] = useState<File[]>()
+  const throwImg = (idx: number) => {
+    setViewImgs(viewImgs.filter((v, i) => i !== idx))
+    // const newFileList = new FileList()
+    if (fileList != null) {
+      console.log('도착은 했는데....왜 변하질 않니....')
+      const tmp: File[] = Array.from(fileList).filter((f, i) => i !== idx)
+      setNewFileList(tmp)
+    }
+    // setFileList(newFileList)
+    console.log('🎲viewImgs: ', viewImgs);
+    console.log('🎲fileList: ', fileList);
     
-    // postBoard({...data, userId: board.userId})
-    // .then(res => {
-    //   navigate(`/community/${board.boardId}`)
-    // })
-    // .catch(err => {
-    //   console.log('postBoard err:', err)
-    // })
   }
 
   return (
@@ -84,11 +100,14 @@ const CommunityCreate = () => {
           <ImgBox>
             <label htmlFor='image' className='imgbtn'>
               <CameraAltIcon />
-              <p className='imgcnt'>{board.boardImg.length}/5</p>
+              <p className='imgcnt'>{viewImgs.length}/5</p>
             </label>
-            {board.boardImg.map((url, idx) => (
-              <img src={url} alt='옷' key={idx} />
-              ))}
+            {viewImgs.map((url, idx) => 
+            <div className='img' key={idx}>
+              <img src={url} alt='옷' />
+              <RemoveCircleIcon onClick={() => throwImg(idx)} />
+            </div>
+            )}
           </ImgBox>
         </ImgInput>
         <ContentInput htmlFor='content'>
@@ -155,6 +174,17 @@ const ImgBox = styled.label`
   width: 90%;
   display: flex;
   align-items: center;
+
+  overflow-x: scroll;
+  overflow-y: hidden;
+  &::-webkit-scrollbar {
+    height: .5rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #D8D8D8;
+    border-radius: 10px;
+  }
+
   .imgbtn {
     height: 90%;
     aspect-ratio: 1/1;
@@ -172,9 +202,19 @@ const ImgBox = styled.label`
       width: auto;
     }
   }
-  img {
-    height: 100%;
+  .img {
+    height: 80%;
     margin-left: 1rem;
+    position: relative;
+    img {
+      height: 100%;
+    }
+    svg {
+      color: red;
+      position: absolute;
+      top: -0.7rem;
+      right: -0.7rem;
+    }
     @media screen and (max-width: 800px) {
       width: 80%;
     }

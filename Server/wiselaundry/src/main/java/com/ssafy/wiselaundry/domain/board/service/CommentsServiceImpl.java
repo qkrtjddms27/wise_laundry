@@ -12,6 +12,7 @@ import com.ssafy.wiselaundry.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 @Service
@@ -24,11 +25,6 @@ public class CommentsServiceImpl implements CommentsService{
 
     @Autowired
     BoardService boardService;
-
-//    @Override
-//    public List<Comments> commentSearchByBoard(Board board) {
-//        return commentsRepository.findByBoardId(board);
-//    }
 
     @Override
     public Comments commentSearchById(int commentId) {

@@ -6,7 +6,7 @@ import { themeState } from './store/state/theme'
 import Header from './components/Header'
 import Home from './pages/main/Home'
 import Near from './pages/Near/Near'
-import OkayLaundry from './pages/laundryBoard/OkayLaundry'
+import OkayLaundry from './pages/oklaundry/OkayLaundry'
 import CommunityAll from './pages/communityBoard/CommunityAll'
 import CommunityDetail from './pages/communityBoard/CommunityDetail'
 import CommunityCreate from './pages/communityBoard/CommunityCreate'
@@ -15,12 +15,14 @@ import LaundryDetail from './pages/laundryBoard/LaundryDetail'
 import Signup from './pages/user/Signup'
 import Profile from './pages/user/Profile'
 import Login from './pages/user/Login'
-import RegisterLaundry from './pages/laundryBoard/RegisterLaundry'
+import LaundryCreate from './pages/laundryBoard/LaundryCreate'
 import Start from './pages/main/Start'
 import KakaoLogin from './pages/user/KakaoLogin'
 import NotFound from './pages/notfound/NotFound'
 import Yas from './pages/Near/Yas'
 import Practice from './pages/Near/Practice'
+import CommunityUpdate from './pages/communityBoard/CommunityUpdate'
+import LaundryUpdate from './pages/laundryBoard/LaundryUpdate'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -34,10 +36,10 @@ const Wrapper = styled.div`
     font-weight: normal;
     font-style: normal;
   } 
-  *{  
+  * {  
     font-family: 'twayair';
-    }
-  h1{
+  }
+  h1 {
     margin-top: 0;
     padding-top:10px;
   }
@@ -46,6 +48,9 @@ const Wrapper = styled.div`
     &::placeholder {
       font-family: 'twayair';
     }
+  }
+  button {
+    cursor: pointer;
   }
 `
 declare global {
@@ -69,15 +74,16 @@ const App= (props:any) => {
             <Route path='/community' element={<CommunityAll />}/>
             <Route path='/community/:boardId' element={<CommunityDetail />}/>
             <Route path='/board' element={<CommunityCreate />}/>
-            <Route path='/board/:boardId' element={<CommunityCreate />}/>
+            <Route path='/board/:boardId' element={<CommunityUpdate />}/>
             <Route path='/laundry' element={<LaundryAll />}/>
             <Route path='/laundry/:laundryId' element={<LaundryDetail />}/>
             <Route path='/profile' element={<Profile />}/>
             <Route path='/signup' element={<Signup />}/>
             <Route path='/login' element={<Login />}/>
-            <Route path='/laundry/register' element={<RegisterLaundry />}/>
             <Route path="/oauth" element={<KakaoLogin />}/>
             <Route path='/*' element={<NotFound />} />
+            <Route path='/laundry/:laundryId/update' element={<LaundryUpdate />}/>
+            <Route path='/laundry/create' element={<LaundryCreate />}/>
           </Routes>
         </Wrapper>
       </ThemeProvider>

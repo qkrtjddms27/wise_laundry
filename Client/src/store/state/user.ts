@@ -2,19 +2,29 @@ import { atom } from "recoil";
 
 interface Istate{
   user:{
-    userId: number,
+    kakaoImg: string|null,
+    password: string|null,
     userEmail: string,
-    userNick: string
-    userImg: string
-  }
+    userId: number,
+    userImg: string|null,
+    userNick: string,
+  },
+  isLogin: boolean,
 }
 
 export const userState = atom<Istate['user']>({
   key : 'user',
   default: {
-    userId: 1,
+    kakaoImg: null,
+    password: null,
     userEmail: 'aaa@bbb.com',
+    userId: 1,
+    userImg: 'https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/944/eabb97e854d5e5927a69d311701cc211_res.jpeg',
     userNick: 'laun',
-    userImg: 'https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/944/eabb97e854d5e5927a69d311701cc211_res.jpeg'
   },
 })
+
+export const loginState = atom<Istate['isLogin']>({
+  key : 'isLogin',
+  default: false,
+}) 

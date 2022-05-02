@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from './images/logo2.png';
-import kakaoLogin from './images/kakaoImg.png';
-import { postLogin } from '../../store/api/user';
+// import kakaoLogin from './images/kakaoImg.png';
+import { getUserInfo, postLogin } from '../../store/api/user';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../store/state/user';
 
 
 const Wrapper = styled.div `
@@ -42,7 +44,6 @@ const SmallBox = styled.div `
     font-size: 1rem;
     color: white;
     background-color: ${props => props.theme.inactiveBtnColor};
-    cursor: pointer;
   }
 
   .LoginBtn {
@@ -53,7 +54,6 @@ const SmallBox = styled.div `
     font-size: 1rem;
     background-color: ${props => props.theme.activeBtnColor};
     color: white;
-    cursor: pointer;
   }
 
   .KakaoBtn {
@@ -64,7 +64,6 @@ const SmallBox = styled.div `
     font-size: 1rem;
     background-color: #ffde00;
     color: #181600;
-    cursor: pointer;
     margin-top: 2vh;
   }
 
@@ -199,38 +198,75 @@ const InputForm = styled.section`
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  
+  const [onLogin, setOnLogin] = useState(false)
+  const [user, setUser] = useRecoilState(userState)
 
   const navigate = useNavigate();
+  
 
   const onSubmit = () => {
     postLogin(email, password)
     .then((res) => {
       console.log('로그인 성공')
-      // navigate('/home')
       const token = res.accessToken;
-      sessionStorage.setItem("jwt", `${token}`);
-      console.log(token, 'jwt 토큰 확인')
+      sessionStorage.setItem("token", `${token}`);
+      // console.log(token, 'jwt 토큰 확인')
+      // window.history.forward()
+      setOnLogin(true)
+      
     })
 
     .catch((err) => {
       console.log(err)
     })
+    // eslint-disable-next-line no-restricted-globals
+    // history.go(1)
+    // 😢두번 누르면 다시 뒤로 돌아감;;😥
   }
+  
+  useEffect(() => {
+    setOnLogin(false)
+  },[])
+
+  useEffect(() => {
+    if (onLogin) {
+      console.log(onLogin, '여기 확인')
+      // sessionStorage
+      // console.log(, '토큰 확인')
+      getUserInfo(email)
+        .then((res) => {
+          console.log(res, '💐유저정보💐')
+          setUser(res.user)
+          navigate('/home')
+        })
+    }
+  },[onLogin])
+
+  
+
+  // 로그인 후 로그인 페이지로 뒤로가기 방지
+  // eslint-disable-next-line no-restricted-globals
+  history.go(1)
+
 
   const CLIENT_ID = "9c4b740a32c840080fcfd4249ec3b331";
-  //const REDIRECT_URI = "https://슬기로운세탁.com/oauth";
-  const REDIRECT_URI = "http://k6e104.p.ssafy.io:3000/oauth";
+  const REDIRECT_URI = "https://슬기로운세탁.com/oauth";
+  // const REDIRECT_URI = "http://k6e104.p.ssafy.io:3000/oauth";
   const KAKAO_AUTH_URL=`https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
   
 
-  
+  const submitKakao = () => {
+    sessionStorage.setItem('kakao', 'false')
+  }
+
   // const query = queryString.parse(window.location.search);
   
   // const goKakaoLogin = () => {
   //   navigate(KAKAO_AUTH_URL)
   // }
 
-
+  // ⭐getUserInfo 로 받아온 값 store에 user에 등록해주기⭐
 
   return (
     <Wrapper>
@@ -276,11 +312,9 @@ const Login = () => {
             <button className="SignupBtn" onClick={() => navigate('/signup')}>회원가입</button>
           </div>
         </div>
-        {/* <button>임시 카카오 로그인 자리</button> */}
 
         <div>
-          <a id="custom-login-btn" href={KAKAO_AUTH_URL}>
-          {/* <button >카카오</button> */}
+          <a id="custom-login-btn" href={KAKAO_AUTH_URL} onClick={() => submitKakao()}>
             <button id="custom-login-btn" className='KakaoBtn'>카카오로 시작하기</button>
           </a>
         </div>

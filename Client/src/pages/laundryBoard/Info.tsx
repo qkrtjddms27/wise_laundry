@@ -5,9 +5,8 @@ import styled from 'styled-components'
 const Wrapper = styled.div`
   margin-top: 10px;
   margin-left: 20px;
-  font-size: 1.3rem;  
+  font-size: 1.2rem;  
   cursor: pointer;
-
   input{
     font-size: 1rem;  
     background: none;
@@ -15,7 +14,7 @@ const Wrapper = styled.div`
     border: none;
     border-bottom: 2px solid gray;
     width: 100px;
-    margin-top: 20px;
+    /* margin-top: 10px; */
     margin-left: 5px;
     color: ${props => props.theme.fontColor};
     &:focus{
@@ -64,7 +63,8 @@ const Info:React.FC<Iprops>= ({info,infos,idx,setInfos}) => {
       onChange={(e)=>{setValue(e.target.value)}} 
       value={value}
       onKeyUp={e => handleEnter(e)} 
-      /></>:<p>#{value}</p>)}
+      autoFocus
+      /></>:<div>#{value}</div>)}
 
       {info==='' &&
       (inputMode ? 
@@ -72,8 +72,9 @@ const Info:React.FC<Iprops>= ({info,infos,idx,setInfos}) => {
       placeholder='press Enter'
       onChange={(e)=>{setValue(e.target.value)}} 
       value={value}
+      autoFocus
       onKeyUp={e => handleEnterNew(e)} 
-      /></>:<p>+</p>)}
+      /></>:<div>+</div>)}
     </Wrapper>
   )
 }

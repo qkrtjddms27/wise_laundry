@@ -2,7 +2,9 @@ package com.ssafy.wiselaundry.domain.board.service;
 
 import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import com.ssafy.wiselaundry.domain.board.db.entity.BoardImg;
+import com.ssafy.wiselaundry.domain.board.db.entity.Comments;
 import com.ssafy.wiselaundry.domain.board.db.repository.BoardRepository;
+import com.ssafy.wiselaundry.domain.board.db.repository.CommentsRepository;
 import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -50,18 +53,19 @@ public class BoardServiceImpl implements BoardService{
 
 
     @Override
-    public int boardCreate(BoardCreateReq body, MultipartHttpServletRequest fileRequest) {
+    public int boardCreate(BoardCreateReq body, MultipartHttpServletRequest request) {
         User user = userService.findByUserId(body.getUserId());
 
         Board board = Board.builder()
                 .boardContent(body.getBoardContent())
                 .boardName(body.getBoardName())
                 .user(user)
+                .boardDate(LocalDateTime.now())
                 .build();
 
         boardRepository.save(board);
 
-        List<BoardImg> boardImgList = fileRequestToBoardImg(fileRequest, board);
+        List<BoardImg> boardImgList = fileRequestToBoardImg(request, board);
 
         if(boardImgList.size() != 0) {
             board.setBoardImgs(boardImgList);
@@ -73,19 +77,26 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void boardUpdate(BoardUpdateReq body, MultipartHttpServletRequest request) {
-        // 수정할 파일 가져오기
+//        수정할 board 객체 가져오기
         Board board = boardRepository.findById(body.getBoardId()).get();
 
-        List<BoardImg> boardImgList = fileRequestToBoardImg(request, board);
+//        boardImg 다루는 곳 새롭게 추가.
+        List<BoardImg> addBoardImgList = fileRequestToBoardImg(request, board);
 
-        if(boardImgList.size() != 0) {
-            if(request.getFiles("file").size() != 0) {
-                boardImgDelete(board);
-            }
-
-            board.setBoardImgs(boardImgList);
+        for (BoardImg boardImg : addBoardImgList) {
+            board.getBoardImgs().add(boardImg);
         }
 
+//        삭제 이미지
+        for (String boardImgName : body.getDeleteImgs()) {
+            BoardImg boardImg = boardImgService.findByBoardImg(boardImgName);
+            boardImgService.boardImgDelete(boardImg.getBoardImgId());
+            
+//         매핑 된 리스트에서 삭제
+            board.getBoardImgs().remove(boardImg);
+        }
+
+//       내용 수정.
         board.setBoardContent(body.getBoardContent());
         board.setBoardName(body.getBoardName());
 
@@ -109,10 +120,9 @@ public class BoardServiceImpl implements BoardService{
 
         List<MultipartFile> fileList = fileRequest.getFiles("file");
         String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-        File uploadDir = new File(uploadPath + File.separator + uploadFolder + "/community");
+        File uploadDir = new File(uploadPath + uploadFolder + File.separator + "board");
 
         if (!uploadDir.exists()) uploadDir.mkdir();
-
         String recordFileUrl = "";
 
         for(MultipartFile file : fileList) {
@@ -127,9 +137,9 @@ public class BoardServiceImpl implements BoardService{
             // 파일 확장자
             String extension = FilenameUtils.getExtension(fileName);
 
-            String savingFileName = uuid + "." + extension;
+            String savingFileName =  uuid + "." + extension;
 
-            File destFile = new File(uploadPath + File.separator, uploadFolder + File.separator + "/community/" + savingFileName);
+            File destFile = new File(uploadPath, uploadFolder + File.separator + "board" + File.separator + savingFileName);
 
             try{
                 file.transferTo(destFile);
@@ -137,21 +147,19 @@ public class BoardServiceImpl implements BoardService{
                 e.printStackTrace();
             }
 
-            recordFileUrl = uploadPath + "/" + uploadFolder + "/" + savingFileName;
+            recordFileUrl = "board" + File.separator + savingFileName;
             boardImgList.add(boardImgService.boardImgCreate(board, recordFileUrl));
         }
 
         return boardImgList;
     }
 
-    private void boardImgDelete(Board board) {
+    private void boardImgDelete(String boardImg) {
         try {
-            for (BoardImg boardImg : board.getBoardImgs()) {
-                File oldFile = new File("/images" + File.separator + boardImg);
-                oldFile.delete();
+            File oldFile = new File("/images" + File.separator + boardImg);
+            oldFile.delete();
 
-                boardImgService.boardImgDelete(boardImg.getBoardImgId());
-            }
+            boardImgService.boardImgDelete(boardImgService.findByBoardImg(boardImg).getBoardImgId());
         } catch (Exception e){
             e.printStackTrace();
         }

@@ -16,7 +16,8 @@ const apiClient = axios.create({
   baseURL: baseURL,
   headers:{
     "Content-type": "application/json",
-    'Authorization':`Bearer ${token}`
+    // 'Authorization':`Bearer ${token}`
+    'token': `${token}`,
   }
 })
 
@@ -62,7 +63,7 @@ export const postSignUp = async (password: string, userEmail: string, userNick: 
 }
 
 export const getNickcheck =async (userNick: string) => {
-  const response = await apiClient.get<any>(
+  const response = await apiNoneTokenClient.get<any>(
     '/user/nickcheck',
   )
   console.log('닉네임 중복확인')
@@ -77,17 +78,17 @@ export const getEmailcheck =async (userEmail: string) => {
   return response.data
 }
 
-export const getUserInfo =async (jwtToken: string, userEmail: string) => {
+export const getUserInfo =async (userEmail: string) => {
   const response = await apiClient.get<any>(
     `/user/info?email=${userEmail}`,
   )
-  console.log('이메일 중복확인')
+  console.log('유저 정보 불러오기')
   return response.data
 }
 
 export const getKakaoLogin =async (code:any) => {
   const response = await apiNoneTokenClient.get<any>(
-    `/oauth/login?code=${code}`,
+    `https://xn--ok0by6qomhppbr9ieqr.com/api/oauth/login?code=${code}`,
   )
   console.log('카카오 로그인')
   return response.data

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import { detailitem } from './dummy';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { deleteLaundry, getLaundryDetail } from '../../store/api/laundry';
 
 const Wrapper = styled.article`
   width: 70vw;
@@ -75,7 +74,6 @@ const InfoBox = styled.div`
 const Info = styled.div`
   margin: auto;
   width: 80%;
-  
 `
 const LabelBox = styled.div`
   margin: auto;
@@ -101,40 +99,40 @@ const Label = styled.div`
     margin-top: 1px;
   }
   &:nth-child(1){
-    background-color: #91ff47;
+    background-color: #cffbb2;
   }
   &:nth-child(2){
-    background-color: #47ffe3;
+    background-color: #90fdec;
   }
   &:nth-child(3){
-    background-color: #e6fb5e;
+    background-color: #f4ffac;
   }
   &:nth-child(4){
-    background-color: #ff47ce;
+    background-color: #fea5e6;
   }
   &:nth-child(5){
-    background-color: #f9a93a;
+    background-color: #fdce8d;
   }
   &:nth-child(6){
-    background-color: #96b084;
+    background-color: #ccffa8;
   }
   &:nth-child(7){
-    background-color: #30a997;
+    background-color: #90faea;
   }
   &:nth-child(8){
-    background-color: #a2b434;
+    background-color: #eaf69d;
   }
   &:nth-child(9){
-    background-color: #b33090;
+    background-color: #fba7e5;
   }
   &:nth-child(10){
-    background-color: #a87226;
+    background-color: #ffd59b;
   }
 `
 const ButtonBox = styled.div`
   width: 70vw;
   margin: auto;
-  margin-top: 30px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-around;
   padding-bottom: 20px;
@@ -146,6 +144,8 @@ const ButtonBox = styled.div`
     height: 50px;
     font-size:1.1rem;
     cursor: pointer;
+    color: white;
+
   }
   @media screen and (max-width: 800px) { 
     button{
@@ -159,13 +159,37 @@ const ButtonBox = styled.div`
     margin-top: 10px;
     height: 30px;
     width: 100px;
+
     }
   }
   .updateBtn{
     background-color:${props => props.theme.activeBtnColor};
+    &:hover{
+      background-color: ${props=>props.theme.hoverActiveBtnColor};
+    }
   }
   .deleteBtn{
     background-color:${props => props.theme.inactiveBtnColor};
+    &:hover{
+      background-color: ${props=>props.theme.hoverInactiveBtnColor};
+    }
+  }
+`
+const Memo = styled.div`
+  .mtitle{
+    width: 45px;
+  }
+  margin: auto;
+  margin-top: 30px;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  .memo{
+    padding-left: 10px;
+    height: 70px;
+    width: 200px;
+    overflow-y: auto;
+    word-break:break-all;
   }
 `
 interface Istate{
@@ -176,18 +200,44 @@ interface Istate{
     laundryImg: string
     laundryOwnerNick: string
     laundryOwnerId: number
+    laundryMemo:string
   }
 }
 
 const LaundryDetail = () => {
-  const [laundry,setLaundry] = useState<Istate['laundry']>(detailitem)
+  const [laundry,setLaundry] = useState<Istate['laundry']>()
   const navigate = useNavigate()
+  const {laundryId} = useParams()
+  useEffect(()=>{
+    getLaundryDetail(Number(laundryId)).then((res)=>{
+      setLaundry(res.list)
+    })
+  },[])
+  const imageOnErrorHandler = (
+    // 사진이 오류날 시 기본 사진
+    event: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    event.currentTarget.src =
+      "https://www.pngplay.com/wp-content/uploads/12/Basic-Half-Sleeve-T-Shirt-PNG-Free-File-Download.png";
+  };
+  const goDelete =()=>{
+    deleteLaundry(Number(laundryId))
+    navigate(-1)
+  }
   return (
     <Wrapper>
+      {laundry !==undefined &&
       <DetailBox>
         <Top>
-          <img alt='옷사진' src={laundry.laundryImg}/>
+          <img onError={imageOnErrorHandler} alt='옷사진' src={`/images/${laundry.laundryImg}`} />
           <InfoBox>
+            <LabelBox>
+              <div className='title'>세탁 주의 사항</div>
+              <div className='careLabel'>
+              {laundry.careLabel.map((label,idx)=>{
+                return(<Label key={idx} className='label'> {label}</Label>)})}
+              </div>
+            </LabelBox>
             <Info>
               <div className='title'>제품 설명 태그</div>
               <div className='inform'>
@@ -198,20 +248,21 @@ const LaundryDetail = () => {
                 })}
               </div>
             </Info>
-            <LabelBox>
-              <div className='title'>세탁 주의 사항</div>
-              <div className='careLabel'>
-              {laundry.careLabel.map((label,idx)=>{
-                return(<Label key={idx} className='label'> {label}</Label>)})}
+            <Memo>
+              <div className='mtitle'>메모 : </div>
+              <div className='memo'>
+                {laundry.laundryMemo}
               </div>
-            </LabelBox>
+            </Memo>
           </InfoBox>
         </Top>
         <ButtonBox>
-          <button className='updateBtn'>수정하기</button>
-          <button className='deleteBtn'>삭제하기</button>
+          <button className='updateBtn' onClick={()=>{navigate(`/laundry/${laundryId}/update`)}}>수정하기</button>
+          <button className='deleteBtn' 
+          onClick={()=>{ goDelete()}}>삭제하기</button>
         </ButtonBox>
       </DetailBox>
+      }
     </Wrapper>
   );
 };

@@ -1,10 +1,12 @@
 package com.ssafy.wiselaundry.domain.board.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "comments")
 @ApiModel(value = "Comments", description = "댓글")
 public class Comments {
@@ -22,10 +25,12 @@ public class Comments {
     @Column(name = "comment_id")
     private int commentId;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;

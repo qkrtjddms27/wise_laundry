@@ -3,6 +3,7 @@ package com.ssafy.wiselaundry.domain.laundry.service;
 import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryAll;
 import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryDetail;
 import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryDetails;
+import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryModifys;
 import com.ssafy.wiselaundry.domain.laundry.db.entity.*;
 import com.ssafy.wiselaundry.domain.laundry.db.repository.*;
 import com.ssafy.wiselaundry.domain.laundry.request.LaundryModifyPostRep;
@@ -91,6 +92,7 @@ public class LaundryServiceImpl implements LaundryService{
                 .laundryOwnerNick(laundry.getUser().getUserNick())
                 .careLabel(findCareLabelDetail(laundry.getLaundryId()))
                 .laundryInfo(findInfoDetail(laundry.getLaundryId()))
+                .laundryMemo(laundry.getLaundryMemo())
                 .build();
 
     }
@@ -149,6 +151,12 @@ public class LaundryServiceImpl implements LaundryService{
             String careLabel = userLaundryRegisterPostReq.getCareLabelName()[i];
             CareLabels findCareLabel = careLabelsRepository.findByCareLabelName(careLabel);
 
+            if(findCareLabel == null){
+                findCareLabel = CareLabels.builder().careLabel(careLabel).careLabelName(careLabel).build();
+                careLabelsRepository.save(findCareLabel);
+
+            }
+
             laundryCareLabelsRepository.save(LaundryCareLabels.builder()
                     .careLabel(findCareLabel)
                     .laundry(laundry)
@@ -206,7 +214,7 @@ public class LaundryServiceImpl implements LaundryService{
 
     //내 옷 수정
     @Override
-    public LaundryDetails modifyLaundryDetails(LaundryModifyPostRep laundryModifyPostRep,MultipartHttpServletRequest request) {
+    public LaundryModifys modifyLaundryDetails(LaundryModifyPostRep laundryModifyPostRep, MultipartHttpServletRequest request) {
         Laundry laundry = laundryRepository.findByLaundryId(laundryModifyPostRep.getLaundryId());
         if(laundry == null){
             return null;
@@ -272,6 +280,12 @@ public class LaundryServiceImpl implements LaundryService{
             String careLabel = laundryModifyPostRep.getCareLabelName()[i];
             CareLabels findCareLabel = careLabelsRepository.findByCareLabelName(careLabel);
 
+            if(findCareLabel == null){
+                findCareLabel = CareLabels.builder().careLabel(careLabel).careLabelName(careLabel).build();
+                careLabelsRepository.save(findCareLabel);
+
+            }
+
             laundryCareLabelsRepository.save(LaundryCareLabels.builder()
                     .careLabel(findCareLabel)
                     .laundry(laundry)
@@ -292,7 +306,12 @@ public class LaundryServiceImpl implements LaundryService{
                     .build());
         }
 
-        return findLaundryDetails(laundryModifyPostRep.getLaundryId());
+        return LaundryModifys.builder()
+                .laundryId(findLaundryDetails(laundryModifyPostRep.getLaundryId()).getLaundryId())
+                .careLabel(findLaundryDetails(laundryModifyPostRep.getLaundryId()).getCareLabel())
+                .laundryInfo(findLaundryDetails(laundryModifyPostRep.getLaundryId()).getLaundryInfo())
+                .laundryMemo(findLaundryDetails(laundryModifyPostRep.getLaundryId()).getLaundryMemo())
+                .build();
 
     }
 }

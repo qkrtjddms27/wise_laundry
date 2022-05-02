@@ -48,13 +48,53 @@ const Label = styled.div`
   p{
     margin-top: 1px;
   }
+  &:nth-child(1){
+    background-color: #cffbb2;
+  }
+  &:nth-child(2){
+    background-color: #90fdec;
+  }
+  &:nth-child(3){
+    background-color: #f4ffac;
+  }
+  &:nth-child(4){
+    background-color: #fea5e6;
+  }
+  &:nth-child(5){
+    background-color: #fdce8d;
+  }
+  &:nth-child(6){
+    background-color: #ccffa8;
+  }
+  &:nth-child(7){
+    background-color: #90faea;
+  }
+  &:nth-child(8){
+    background-color: #eaf69d;
+  }
+  &:nth-child(9){
+    background-color: #fba7e5;
+  }
+  &:nth-child(10){
+    background-color: #ffd59b;
+  }
 `
+const imageOnErrorHandler = (
+  // 사진이 오류날 시 기본 사진
+  event: React.SyntheticEvent<HTMLImageElement, Event>
+) => {
+  event.currentTarget.src =
+    "https://www.pngplay.com/wp-content/uploads/12/Basic-Half-Sleeve-T-Shirt-PNG-Free-File-Download.png";
+};
+
 
 const LaundryCard:React.FC<Iprops>= ({laundry}) => {
   const navigate = useNavigate()
+  const src = `/images/${laundry.laundryImg}`
+  // console.log(`/images/${laundry.laundryImg}`)
   return (
     <Wrapper onClick={()=>{navigate(`${laundry.laundryId}`)}}>
-      <img src={laundry.laundryImg} alt='사진' />
+      <img src={src} alt='사진' onError={imageOnErrorHandler}/>
       <LabelBox>
         {laundry.careLabel.map(((label,idx)=>{
           return(

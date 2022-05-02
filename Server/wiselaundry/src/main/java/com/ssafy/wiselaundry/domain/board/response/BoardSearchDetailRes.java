@@ -45,7 +45,7 @@ public class BoardSearchDetailRes extends BaseResponseBody {
     private LocalDateTime boardDate;
 
     @ApiModelProperty(value = "댓글 정보 리스트", required = true)
-    private static List<CommentDetailRes> comments;
+    private List<CommentDetailRes> comments;
 
     @Builder
     public BoardSearchDetailRes(int boardId, int userId, String userNick, String userImg, String boardName,
@@ -69,6 +69,7 @@ public class BoardSearchDetailRes extends BaseResponseBody {
         return BoardSearchDetailRes.builder()
                 .userId(body.getUserId())
                 .userNick(body.getUserNick())
+                .userImg(body.getUserImg())
                 .boardId(body.getBoardId())
                 .boardName(body.getBoardName())
                 .boardImgs(body.getBoardImgs())
