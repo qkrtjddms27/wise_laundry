@@ -3,8 +3,10 @@ package com.ssafy.wiselaundry.domain.laundry.controller;
 import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryAll;
 import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryDetails;
 import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryModifys;
+import com.ssafy.wiselaundry.domain.laundry.db.entity.CareLabels;
 import com.ssafy.wiselaundry.domain.laundry.request.LaundryModifyPostRep;
 import com.ssafy.wiselaundry.domain.laundry.request.UserLaundryRegisterPostReq;
+import com.ssafy.wiselaundry.domain.laundry.response.CareLabelsAllRes;
 import com.ssafy.wiselaundry.domain.laundry.response.LaundryAllRes;
 import com.ssafy.wiselaundry.domain.laundry.response.LaundryDetailsRes;
 import com.ssafy.wiselaundry.domain.laundry.response.LaundryModifysRes;
@@ -118,4 +120,17 @@ public class LaundryController {
         }
     }
 
+    @GetMapping("/carelabel")
+    @ApiOperation(value = "케어라벨 전체 목록")
+    public ResponseEntity<CareLabelsAllRes> CareLabelAll () {
+        log.info("CareLabelAll - Call");
+        List<CareLabels> list = laundryService.findCareLabelsAll();
+
+        if(list != null && !list.isEmpty()) {
+            return ResponseEntity.status(200).body(CareLabelsAllRes.of(200, "Success", list));
+        }else {
+            log.error("cloth doesn't exist");
+            return ResponseEntity.status(403).body(CareLabelsAllRes.of(403, "cloth doesn't exist", null));
+        }
+    }
 }

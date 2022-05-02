@@ -314,4 +314,9 @@ public class LaundryServiceImpl implements LaundryService{
                 .build();
 
     }
+
+    @Override
+    public List<CareLabels> findCareLabelsAll() {
+        return careLabelsRepository.findAll();
+    }
 }
