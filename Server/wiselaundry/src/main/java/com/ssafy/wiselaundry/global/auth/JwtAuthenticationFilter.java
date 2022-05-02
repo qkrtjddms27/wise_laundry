@@ -6,6 +6,7 @@ import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
 import com.ssafy.wiselaundry.global.util.JwtTokenUtil;
 import com.ssafy.wiselaundry.global.util.ResponseBodyWriteUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,8 @@ import java.io.IOException;
  * 요청 헤더에 jwt 토큰이 있는 경우, 토큰 검증 및 인증 처리 로직 정의.
  */
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
+
+    @Autowired
     private UserService userService;
 	
 	public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
