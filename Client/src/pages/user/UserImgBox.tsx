@@ -1,43 +1,59 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import profile from './images/profile-image.png';
+// import camera from './images/camera-free-icon-font.png';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 const Wrapper = styled.div`
-  label{
+
+  img {
+    width: 10vw;
+    aspect-ratio: 1/1;
+    border-radius: 100vh;
+    /* border: none; */
     cursor: pointer;
-    img{
-      height: 400px;
-      width: 30vw;
-      margin-left: 3vw;
-      margin-top: 5vh;
-    }
-    @media screen and (max-width: 800px) {
-      img{
-        height: 250px;
-        width: 90%;
-        margin-top: 2vh;
-        margin-left: 5vw;
-      }
-    }
-    .input-box{
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
   }
+
+  .ProfileImg {
+    width: 10vw;
+    border-radius: 100vh;
+    border: 2px solid #333333;
+    cursor: pointer;
+  }
+
+  svg {
+    font-size: 2rem;
+    color: ${props => props.theme.activeBtnColor};
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 800px) {
+
+    .ProfileImg {
+      width: 25vw;
+      margin-left: 5vw;
+    }
+
+    svg {
+      font-size: 1.3rem;
+    }
+}
 
   input{
     display: none;
   }
+  
+
 `
 
 interface IProps {
   file:any
   setFile:React.Dispatch<any>
-  laundryImg:string
+  userImg:string
 }
 
-const ImgBox:React.FC<IProps>= ({file,setFile,laundryImg}) => {
-  const [fileSrc, setFileSrc] = useState<string>(laundryImg);
+const UserImgBox:React.FC<IProps>= ({file, setFile, userImg}) => {
+  const [fileSrc, setFileSrc] = useState<string>(userImg);
   const encodeMainFileToBasek64 = (fileBlob: any) => {
     const reader: any = new FileReader();
     if (fileBlob) {
@@ -62,13 +78,14 @@ const ImgBox:React.FC<IProps>= ({file,setFile,laundryImg}) => {
     event: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
     event.currentTarget.src =
-      "https://www.pngplay.com/wp-content/uploads/12/Basic-Half-Sleeve-T-Shirt-PNG-Free-File-Download.png";
+      profile;
   };
   return (
     <Wrapper>
       <section className='input-box'>
-        <label  htmlFor="chooseFile">
-         <img alt='옷' onError={imageOnErrorHandler} src={fileSrc}/>
+        <label htmlFor="chooseFile">
+          <img className='ProfileImg' onError={imageOnErrorHandler} src={fileSrc} alt="프로필 이미지" />
+          <PhotoCameraIcon />
         </label>
         <input
           className="file"
@@ -80,4 +97,4 @@ const ImgBox:React.FC<IProps>= ({file,setFile,laundryImg}) => {
   )
 }
 
-export default ImgBox
+export default UserImgBox;

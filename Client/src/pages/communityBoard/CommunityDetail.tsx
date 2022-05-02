@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import { userState } from '../../store/state/user';
 import { themeState } from '../../store/state/theme';
 import { getCommunityDetail, postComment, delComment, delBoard } from '../../store/api/community';
 import defaultImg from './images/ironing.png'
@@ -34,6 +35,7 @@ interface Istate {
 const CommunityDetail = () => {
   const { boardId } = useParams()
   const navigate = useNavigate()
+  const [user, setUser] = useRecoilState(userState)
   const [theme, setTheme] = useRecoilState(themeState)
   const [inputText, setInputText] = useState('')
   const [board, setBoard] = useState<Istate['board']>({
@@ -76,10 +78,12 @@ const CommunityDetail = () => {
   }
   const createComment = () => {
     const data = {
-      userId: 15,
+      userId: 75,
+      // userId: user.userId,
       boardId: boardId,
       commentContent: inputText
     }
+    console.log('comment data: 🎲', data);
     postComment(data)
     .then(res => {
       setBoard({...board, comments: [...board.comments, res]})
@@ -112,12 +116,6 @@ const CommunityDetail = () => {
     getCommunityDetail(Number(boardId))
     .then(res => {
       setBoard(res)
-      // setBoard({...res, boardImgs: [
-      //   'https://img.freepik.com/free-vector/cute-koala-with-cub-cartoon-icon-illustration_138676-2839.jpg?w=2000',
-      //   'https://img.freepik.com/free-vector/cute-rabbit-with-duck-working-laptop-cartoon-illustration_56104-471.jpg?w=2000',
-      //   'https://cdn.custom-cursor.com/cursors/pack2069.png',
-      //   'https://i.ytimg.com/vi/nGIYtetr2u0/maxresdefault.jpg'
-      // ]})
       console.log('🎲getCommunityDetail: ', res);
     })
     .catch(err => {
@@ -143,7 +141,7 @@ const CommunityDetail = () => {
           }
           <div className='middle'>
             <div className='user'>
-              <img src={board.userImg || defaultImg} alt='프로필' />
+              <img src={board.userImg ? `/images/${board.userImg}` :  defaultImg} alt='프로필' />
               <p>{board.userNick}</p>
             </div>
             <p className='date'>작성일 : {board.boardDate[0]}.{board.boardDate[1]}.{board.boardDate[2]}</p>
@@ -160,7 +158,7 @@ const CommunityDetail = () => {
         <Comments>
           {board.comments.map((comment, i) => (
             <div className='comment' key={i}>
-              <img src={comment.userImg || defaultImg} alt='프로필' />
+              <img src={comment.userImg ? `/images/${comment.userImg}` : defaultImg} alt='프로필' />
               <p className='nick' title={comment.userNick}>{comment.userNick}</p>
               <div className='content' style={{backgroundColor: `${theme.listBgColor[i%3]}`}}>
                 <p>{comment.commentContent}</p>
@@ -182,6 +180,7 @@ const CommunityDetail = () => {
       <Btns>
         <button className='active' onClick={() => navigate('/community')}>목록</button>
         {board.userId === 10 && <>
+        {/* {board.userId === user.userId && <> */}
         <button className='active' onClick={() => navigate(`/board/${board.boardId}`)}>수정</button>
         <button className='inactive' onClick={() => deleteBoard()}>삭제</button>
         </>}
