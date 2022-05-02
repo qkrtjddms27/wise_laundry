@@ -2,7 +2,6 @@ package com.ssafy.wiselaundry.domain.laundry.service;
 
 import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryAll;
 import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryDetails;
-import com.ssafy.wiselaundry.domain.laundry.db.bean.LaundryModifys;
 import com.ssafy.wiselaundry.domain.laundry.db.entity.CareLabels;
 import com.ssafy.wiselaundry.domain.laundry.request.LaundryModifyPostRep;
 import com.ssafy.wiselaundry.domain.laundry.request.UserLaundryRegisterPostReq;
@@ -18,6 +17,6 @@ public interface LaundryService {
     int laundryRegisterByUser(UserLaundryRegisterPostReq userLaundryRegisterPostReq, MultipartHttpServletRequest request);
     int deleteLaundry(int laundryId);
     List<LaundryAll> findLaundryAll();
-    LaundryModifys modifyLaundryDetails(LaundryModifyPostRep laundryModifyPostRep, MultipartHttpServletRequest request);
+    int modifyLaundryDetails(LaundryModifyPostRep laundryModifyPostRep, MultipartHttpServletRequest request);
     List<CareLabels> findCareLabelsAll();
 }
