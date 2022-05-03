@@ -84,8 +84,7 @@ const CommunityDetail = () => {
   }
   const createComment = () => {
     const data = {
-      userId: 75,
-      // userId: user.userId,
+      userId: user.userId,
       boardId: boardId,
       commentContent: inputText
     }
@@ -176,7 +175,7 @@ const CommunityDetail = () => {
               <p className='nick' title={comment.userNick}>{comment.userNick}</p>
               <div className='content' style={{backgroundColor: `${theme.listBgColor[i%3]}`}}>
                 <p>{comment.commentContent}</p>
-                {comment.userId === 10 && 
+                {comment.userId === user.userId && 
                 <RemoveCircleOutlineIcon onClick={() => deleteComment(comment.commentId)} />
                 }
               </div>
@@ -195,8 +194,7 @@ const CommunityDetail = () => {
       </Board>
       <Btns>
         <button className='active' onClick={() => navigate('/community')}><span />목록</button>
-        {board.userId === 10 && <>
-        {/* {board.userId === user.userId && <> */}
+        {board.userId === user.userId && <>
         <button className='active' onClick={() => navigate(`/board/${board.boardId}`)}><span />수정</button>
         <button className='inactive' onClick={() => deleteBoard()}><span />삭제</button>
         </>}

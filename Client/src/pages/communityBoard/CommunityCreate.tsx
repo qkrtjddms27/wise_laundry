@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../store/state/user';
 import { postBoard } from '../../store/api/community';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
@@ -15,6 +17,7 @@ interface Istate {
 }
 
 const CommunityCreate = () => {
+  const [user, setUser] = useRecoilState(userState)
   const [board, setBoard] = useState<Istate['board']>({
     boardName: '',
     boardContent: '',
@@ -43,7 +46,7 @@ const CommunityCreate = () => {
     let formData = new FormData()
     const newData = {
       ...board,
-      userId: 36
+      userId: user.userId
     }
     formData.append(
       "body",

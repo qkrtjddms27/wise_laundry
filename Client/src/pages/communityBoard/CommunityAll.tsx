@@ -33,7 +33,6 @@ const CommunityAll = () => {
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       console.log(inputText, '검색요청 보냅니다아🎷')
-      setInputText('')
     }
   }
   const imageOnErrorHandler = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
