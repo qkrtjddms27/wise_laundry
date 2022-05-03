@@ -2,8 +2,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
-import { userState } from '../../store/state/user';
 import { postBoard } from '../../store/api/community';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
@@ -17,7 +15,6 @@ interface Istate {
 }
 
 const CommunityCreate = () => {
-  const [user, setUser] = useRecoilState(userState)
   const [board, setBoard] = useState<Istate['board']>({
     boardName: '',
     boardContent: '',
@@ -44,22 +41,26 @@ const CommunityCreate = () => {
   }
   const makeFormData = () => {
     let formData = new FormData()
-    const newData = {
-      ...board,
-      userId: user.userId
+    const tmp = sessionStorage.getItem('userInfo')
+    if (!!tmp) {
+      const { userId } = JSON.parse(tmp)
+      const newData = {
+        ...board,
+        userId
+      }
+      formData.append(
+        "body",
+        new Blob([JSON.stringify(newData)], {type: "application/json"})
+      )
+      if (fileList != null) {
+        Array.from(fileList).forEach((f, i) => {
+          if (i < 5) {
+            formData.append("file", f)
+          }
+        })
+      }
+      return formData
     }
-    formData.append(
-      "body",
-      new Blob([JSON.stringify(newData)], {type: "application/json"})
-    )
-    if (fileList != null) {
-      Array.from(fileList).forEach((f, i) => {
-        if (i < 5) {
-          formData.append("file", f)
-        }
-      })
-    }
-    return formData
   }
   const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()

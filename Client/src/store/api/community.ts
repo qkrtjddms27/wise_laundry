@@ -35,9 +35,11 @@ apiImageClient.interceptors.request.use(
 )
 
 // 🌼🌼🌼게시글 전체 => Infinite Scroll 수정 필요
+// export const getCommunityAll = async (boardId: number) => {
 export const getCommunityAll = async () => {
   const { data } = await apiClient.get<any>(
     '/community/all', 
+    // `/community/all/${10}/${boardId}`, 
   )
   console.log('🌼getCommunityAll: ', data)
   return data
@@ -55,6 +57,14 @@ export const getCommunityDetail = async (boardId: number) => {
   delete res.statusCode
   // console.log('🌼res: ', res);
   return res
+}
+
+// 🌼🌼🌼검색⭕
+export const getSearch = async (word: string) => {
+  const response = await apiClient.get<any>(
+    `/community/search/${word}`
+    )
+  console.log('🌼getSearch: ', response);
 }
 
 // 🌼🌼🌼게시글 작성⭕
