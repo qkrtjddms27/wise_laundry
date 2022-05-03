@@ -1,22 +1,38 @@
 import axios from "axios"
 
 const baseURL = process.env.REACT_APP_BASEURL
-const token = sessionStorage.getItem('token')
 
 const apiClient = axios.create({
   baseURL: baseURL,
   headers: {
     "Content-type": "application/json",
-    'Authorization': `Bearer ${token}`
   },
 })
 const apiImageClient = axios.create({
   baseURL: baseURL,
   headers: {
     "Content-type": "multipart/form-data",
-    'Authorization': `Bearer ${token}`
   },
 })
+
+apiClient.interceptors.request.use(
+  function CustomInterceptorRequest(config){
+    return {...config,
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+      }
+    }
+  }
+)
+apiImageClient.interceptors.request.use(
+  function CustomInterceptorRequest(config){
+    return {...config,
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+      }
+    }
+  }
+)
 
 // 🌼🌼🌼게시글 전체 => Infinite Scroll 수정 필요
 export const getCommunityAll = async () => {
