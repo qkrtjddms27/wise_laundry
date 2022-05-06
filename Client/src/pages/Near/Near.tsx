@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import myMark from './images/marker.png'
-import markerdata from './data.json'
+import datas from './data'
 const {kakao} = window
 
 const Wrapper = styled.section`
@@ -11,23 +11,34 @@ const MapWrapper = styled.div`
   width: 100vw; 
   height: 100vh;
 `
-
+interface IState{
+  data:{
+    "": number
+    "상호명": string
+    "도로명": string
+    "위도": number
+    "경도": number
+  }
+}
 
 const Near =() =>{
   const [lat,setLat] = useState(37.624915253753194)
   const [long,setLong]= useState(127.15122688059974)
+  const [markdata,setMarkdata] = useState<IState['data'][]>([])
+
   useEffect(() => {
-    getLocation();
+    getLocation()
   }, []);
   useEffect(()=>{
     mapscript();
   },[lat,long])
   
-  const getLocation = ()=>{ // 내 위치 찾기 ✨
+  const getLocation = async()=>{ // 내 위치 찾기 ✨
     if (navigator.geolocation) { // GPS를 지원하면
       navigator.geolocation.getCurrentPosition(function(position) {
           setLat(position.coords.latitude) // 경도 위도 정해주기
           setLong(position.coords.longitude)
+          nearLocation(position.coords.latitude,position.coords.longitude)
       }, function(error) {console.error(error);}, {
           enableHighAccuracy: false,
           maximumAge: 0,
@@ -38,7 +49,15 @@ const Near =() =>{
         return;
     }
   }
-
+  const nearLocation = (x:any,y:any)=>{
+    let tmp:IState['data'][] = []
+    datas.map((el)=>{
+      if(Math.abs(el.위도-x)<=0.02 && Math.abs(el.경도-y)<=0.02 ){
+        tmp.push(el)
+      }
+    })
+    setMarkdata(tmp)
+  }
   const mapscript = () => {
     var imageSrc = "https://cdn-icons-png.flaticon.com/512/2094/2094357.png"; 
     let container = document.getElementById("map");
@@ -50,7 +69,7 @@ const Near =() =>{
     //map
     const map = new kakao.maps.Map(container, options);
     var imageSize = new kakao.maps.Size(32, 35); 
-    markerdata.forEach((el) => { // 위치 찍기
+    markdata.forEach((el) => { // 위치 찍기
       var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);   
       new kakao.maps.Marker({
         map: map,//마커가 표시 될 지도
