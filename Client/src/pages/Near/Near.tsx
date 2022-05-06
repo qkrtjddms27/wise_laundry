@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import myMark from './images/marker.png'
 import datas from './data'
+
 const {kakao} = window
 
 const Wrapper = styled.section`
@@ -10,7 +11,22 @@ const Wrapper = styled.section`
 const MapWrapper = styled.div`
   width: 100vw; 
   height: 100vh;
+  .content{
+    position:relative;
+    bottom:85px;
+    border-radius:6px;
+    border: 1px solid #ccc;
+    border-bottom:2px solid #ddd;
+    float:left;
+  }
+  .label {margin-bottom: 35px;}
+  .label * {display: inline-block;vertical-align: top;}
+  .label .left {background: url("https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_l.png") no-repeat;display: inline-block;height: 24px;overflow: hidden;vertical-align: top;width: 7px;}
+  .label .center {background: url(https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_bg.png) repeat-x;display: inline-block;height: 24px;font-size: 12px;line-height: 24px;}
+  .label .right {background: url("https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_r.png") -1px 0  no-repeat;display: inline-block;height: 24px;overflow: hidden;width: 6px;}
 `
+
+
 interface IState{
   data:{
     "": number
@@ -77,16 +93,25 @@ const Near =() =>{
         title: el.상호명,//마커에 hover시 나타날 title
         image : markerImage, // 마커 이미지 ,
       });
+
+      var content =
+      `<div class ="label"><span class="left"></span><span class="center">${el.상호명}</span><span class="right"></span></div>`
+      var position = new kakao.maps.LatLng(el.위도, el.경도);
+
+      new kakao.maps.CustomOverlay({
+        map: map,
+        position: position,
+        content: content,
+        yAnchor: 1 
+      });
     });
-
-
     var myMarker = new kakao.maps.Marker({
       position:new kakao.maps.LatLng(lat, long),
       image:new kakao.maps.MarkerImage(myMark, new kakao.maps.Size(50, 50)),
     });
     myMarker.setMap(map);
-
-  };
+  }
+    
 
   return (
   <Wrapper >
