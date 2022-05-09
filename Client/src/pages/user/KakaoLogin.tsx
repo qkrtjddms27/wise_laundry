@@ -3,6 +3,7 @@ import { getKakaoLogin, getUserInfo } from '../../store/api/user';
 import { useRecoilState } from 'recoil';
 import { loginState, userState } from '../../store/state/user';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'
 
 const KakaoLogin = () => {
   // 인가코드
@@ -21,48 +22,77 @@ const KakaoLogin = () => {
       
       // sessionStorage.setItem('newPage', 'true')
       getKakaoLogin(code)
-      .then((res) => {
-        console.log('로그인 성공')
+        .then((res) => {
+          console.log('카카오 로그인 성공')
+          
+          sessionStorage.setItem('kakao', 'false')
+          const token = res.accessToken;
+          sessionStorage.setItem("token", `${token}`);
+          console.log(token, '🎆토큰 1')
+
+          Swal.fire({
+            icon: 'success',
+            text: '로그인 되었습니다',
+            showConfirmButton: false,
+            timer: 1000
+          })
         
-        sessionStorage.setItem('kakao', 'false')
-        const token = res.accessToken;
-        sessionStorage.setItem("token", `${token}`);
-        // console.log(token, 'jwt 토큰 확인')
-        navigate('/home')
-      })
+        
+          getUserInfo()
+            .then((res) => {
+              console.log(res, '💐카카오 유저정보💐')
+              const userInfo = {...res};
+              delete userInfo.message
+              delete userInfo.statusCode
+              sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+              setUser(userInfo)
+              navigate('/home')
+              
+              
+              window.location.reload();
+            })
+            .catch((err) => {
+              console.log(err)
+              console.log('정보 가져오기 에러')
+            })
+        })
   
-      .catch((err) => {
-        console.log(err)
-        sessionStorage.setItem('kakao', 'false')
-      })
-      setIsLogin(true)
+        .catch((err) => {
+          console.log(err)
+          sessionStorage.setItem('kakao', 'false')
+          console.log('카카오 로그인 실패')
+          
+          // window.location.replace("/login")
+        })
+        setIsLogin(true)
       // navigate('/home')
     } else {
       sessionStorage.setItem('kakao', 'true')
-      window.location.replace("/")
+      console.log('카카오')
+      
+      window.location.reload();
     }
   }, []);
 
-  useEffect(() => {
-    if (isLogin) {
-      console.log(isLogin, '여기 확인')
-      // sessionStorage
-      // console.log(, '토큰 확인')
-      getUserInfo()
-        .then((res) => {
-          console.log(res, '😱카카오 유저정보')
-          setUser(res.user)
-          navigate('/home')
-        })
-    }
-  },[isLogin])
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     console.log(isLogin, '카카오로그인에서 확인')
 
-  // 로그인 후 로그인 페이지로 뒤로가기 방지
-  useEffect(() => {
-    if (isLogin) {
-      navigate('/home')
-    }
-  },[isLogin])
+  //     getUserInfo()
+  //       .then((res) => {
+  //         console.log(res, '🍫유저정보 카카오 222🍫')
+  //         const userInfo = {...res};
+  //         delete userInfo.message
+  //         delete userInfo.statusCode
+  //         sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+  //         setUser(userInfo)
+  //         navigate('/home')
+  //       })
+  //       .catch((err) => {
+  //         console.log(err)
+  //       })
+  //   }
+  // },[isLogin])
   
 
   return (

@@ -8,6 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../store/state/user';
 import { AltRouteTwoTone } from '@mui/icons-material';
+import defaultImg from './images/profile-image.png'
+import Swal from 'sweetalert2'
+
 
 
 const Wrapper = styled.div `
@@ -38,7 +41,7 @@ const ImgBox = styled.div `
   justify-content: center;
   flex-wrap: nowrap;
   align-items: baseline;
-  margin-bottom: 80px;
+  margin-bottom: 5vh;
 `
 
 const SmallBox = styled.div `
@@ -247,10 +250,12 @@ const InputForm = styled.section`
 
 const Profile = () => {
   const [user, setUser] = useRecoilState(userState)
+  // const [user, setUser] = useState<Istate['user']>({})
+
   const navigate = useNavigate();
 
-  const [nickname, setNickname] = useState(user.userNick)
-  const [usingNickname, setUsingNickname] = useState(user.userNick)
+  const [nickname, setNickname] = useState('')
+  const [usingNickname, setUsingNickname] = useState('')
   const [nickChecked, setNickChecked] = useState(true)
 
   const [profileImg, setProfileImg] = useState('')
@@ -262,21 +267,6 @@ const Profile = () => {
   const [editCheck, setEditCheck] = useState(false)
 
   // const [kakaoProfileImg, setKakaoProfileImg] = useState('')
-
-  useEffect(() => {
-    if (user.kakaoImg !== null) {
-      if (user.userImg !== null) {
-        setProfileImg(`/images/${user.userImg}`)
-      } else {
-        setProfileImg(user.kakaoImg)
-      }
-    } else {
-      setProfileImg('')
-    }
-  },[])
-
-  
-
 
   const passwordChangeModal = () => {
     setModalOn(true);
@@ -294,9 +284,9 @@ const Profile = () => {
       formdata.append('userUpdateInfo',
         new Blob([
           JSON.stringify({
-            'userEmail': null,
+            'userEmail': user.userEmail,
             'userNick': nickname,
-            'password': null,
+            'password': '',
           })
         ],{type:'application/json'})
       )
@@ -307,7 +297,27 @@ const Profile = () => {
       putUpdateUserInfo(formdata)
       .then(() => {
         console.log('닉네임 수정 성공')
-        setEditCheck(true)
+
+        Swal.fire({
+          icon: 'success',
+          text: '변경 되었습니다',
+          showConfirmButton: false,
+          timer: 1000
+        })
+        // setEditCheck(true)
+        getUserInfo()
+          .then((res) => {
+            console.log(res, '프로필 유저정보')
+            const userInfo = {...res};
+            delete userInfo.message
+            delete userInfo.statusCode
+            sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+            setUser(userInfo)
+            // navigate('/home')
+          })
+          .catch((err) => {
+            console.log(err)
+          })
         // navigate('/login')
         }
       )
@@ -316,19 +326,13 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    if (editCheck) {
-      getUserInfo()
-      .then((res) => {
-        console.log(res, '💐프로필 유저정보💐')
-        const userInfo = res.user;
-        sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
-        setUser(res.user)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    }
-  },[editCheck])
+    const Uuser =JSON.parse(sessionStorage.getItem('userInfo')|| "" )
+    setUser(Uuser)
+    setNickname(Uuser.userNick)
+    let profileImg2 = Uuser.userImg ? `/images/${Uuser.userImg}` : Uuser.kakaoImg
+    profileImg2 = profileImg2 || defaultImg
+    setProfileImg(profileImg2)
+  },[])
 
   const onHandelNick = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value)
@@ -368,14 +372,17 @@ const Profile = () => {
   }
 
   const onLogout = () => {
-    console.log('로그아웃!!')
+    // console.log('로그아웃!!')
     sessionStorage.clear()
-    alert('로그아웃 되었습니다')
+    Swal.fire({
+      icon: 'success',
+      text: '로그아웃 되었습니다',
+      showConfirmButton: false,
+      // confirmButtonColor: 'red',
+      timer: 1000
+    })
     navigate('/home')
   }
-
-  // let userSrc = profile ? `/images/${profile}` : `/images/${kakaoProfileImg}`
-  // userSrc = userSrc || defaultImg
 
   return (
     <Wrapper>
@@ -385,8 +392,6 @@ const Profile = () => {
       <SmallBox>
         <EditForm>
           <h1>EDIT</h1>
-    
-          {/* <img src={`/images/${profile}`} alt="프로필이미지" /> */}
           <ImgBox>
             <UserImgBox userImg={profileImg} file={file} setFile={setFile} />
           </ImgBox>

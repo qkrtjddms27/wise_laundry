@@ -7,6 +7,7 @@ import { postSignUp, getEmailcheck, getNicknamecheck } from '../../store/api/use
 import { userState } from '../../store/state/user';
 import { useRecoilState } from 'recoil';
 import UserImgBox from './UserImgBox';  
+import Swal from 'sweetalert2'
 
 
 const Wrapper = styled.div `
@@ -58,7 +59,7 @@ const SmallBox = styled.div `
 
   @media screen and (max-width: 800px) {
     position: relative;
-    bottom: 13vh;
+    bottom: 5vh;
 
     .ConfirmBtn {
     border: none;
@@ -193,7 +194,7 @@ const ImgBox = styled.div `
   justify-content: center;
   flex-wrap: nowrap;
   align-items: baseline;
-  margin-bottom: 80px;
+  margin-bottom: 5vh;
 `
 
 const FormBox = styled.div `
@@ -345,18 +346,6 @@ const FormBox = styled.div `
   }
 `
 
-// interface Istate{
-//   user:{
-//     kakaoImg: string|null,
-//     password: string|null,
-//     userEmail: string,
-//     userId: number,
-//     userImg: string|null,
-//     userNick: string,
-//   },
-//   isLogin: boolean,
-// }
-
 
 const Signup = () => {
   const [email, setEmail] = useState('')
@@ -378,11 +367,6 @@ const Signup = () => {
   
   const navigate = useNavigate();
 
-  
-
-  // 이메일, 닉네임 확인하는거
-  // 체크는했는데 이메일을 또 바꾸는 걸 방지하기
-  // 바꾸면 확인했던거 다시 false로 바꾸면 됨
 
   const isValid = () => {
     var check = false
@@ -437,6 +421,12 @@ const Signup = () => {
     postSignUp(formdata)
     .then(() => {
       console.log('회원가입성공')
+      Swal.fire({
+        icon: 'success',
+        text: '👕 가입되었습니다 🩳',
+        showConfirmButton: false,
+        timer: 1000
+      })
       navigate('/login')
       }
     )

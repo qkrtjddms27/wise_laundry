@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -30,25 +31,96 @@ const CommunityAll = () => {
   const [inputText, setInputText] = useState('')
   const [boards, setBoards] = useState<Istate["board"][]>([])
   const [lastBoardId, setLastBoardId] = useState(-1)
-  const [endflag, setEndFlag] = useState(false)
+  const [endFlag, setEndFlag] = useState(false)
+  const [fetching, setFetching] = useState(false)
+
+  const getBoard = async (first: boolean, lastId: number, keyword: string) => {
+    setFetching(true)
+    if (!!keyword) {
+      getSearch(keyword, lastBoardId)
+      .then(res => {
+        if (first) {
+          console.log('🎲getSearch: ', res);
+          setBoards(res.list)
+          setEndFlag(res.endFlag)
+        } else {
+          console.log('🎲More getSearch: ', res);
+          const newBoard = [...boards].concat(res.list)
+          setBoards(newBoard)
+          setEndFlag(res.endFlag)
+        }
+        if (!!!res.endFlag) {
+          const lastIdx = res.list.length - 1
+          setLastBoardId(res.list[lastIdx].boardId)
+        } else {
+          setLastBoardId(-1)
+        }
+      })
+      .catch(err => console.log('More getSearch err:💧 ', err))
+    } else {
+      getCommunityAll(lastBoardId)
+      .then(res => {
+        if (first) {
+          console.log('🎲getCommunityAll: ', res);
+          setBoards(res.list)
+          setEndFlag(res.endFlag)
+        } else {
+          console.log('🎲More getCommunityAll: ', res);
+          const newBoard = [...boards].concat(res.list)
+          setBoards(newBoard)
+          setEndFlag(res.endFlag)
+        }
+        if (!!!res.endFlag) {
+          const lastIdx = res.list.length - 1
+          setLastBoardId(res.list[lastIdx].boardId)
+        } else {
+          setLastBoardId(-1)
+        }
+      })
+      .catch(err => console.log('More getCommunityAll err:💧 ', err))
+    }
+    setFetching(false)
+  }
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      console.log(inputText, '검색요청 보냅니다아🎷')
-      // getSearch(inputText)
+      if (!!inputText.trim()) {
+        getBoard(true, -1, inputText)
+      } else {
+        setInputText('')
+      }
     }
+  }
+
+  const onClickCancel = () => {
+    setInputText('')
+    setLastBoardId(-1)
+    getBoard(true, -1, '')
   }
 
   const imageOnErrorHandler = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = defaultImg;
-  };
+  }
+
+  const handleScroll = () => {
+    const veiw = document.documentElement
+    const scrollHeight = veiw.scrollHeight
+    const scrollTop  = veiw.scrollTop 
+    const clientHeight  = veiw.clientHeight
+    if (!endFlag && scrollTop + clientHeight >= scrollHeight && !fetching) {
+      getBoard(false, lastBoardId, inputText)
+    }
+  }
 
   useEffect(() => {
-    getCommunityAll()
-    .then(res => {
-      setBoards(res.list)
-    })
-    .catch(err => console.log('getCommunityAll err:💧 ', err))
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  })
+
+  useEffect(() => {
+    getBoard(true, -1, '')
   }, [])
 
   return (
@@ -63,9 +135,10 @@ const CommunityAll = () => {
         <div />
         <input value={inputText} placeholder='Search title, and Press Enter' id='search'
           onChange={e => setInputText(e.target.value)} onKeyUp={e => handleKeyUp(e)} />
-        <CancelIcon onClick={() => setInputText('')} style={{color: '#cccccc', cursor: 'pointer'}} />
+        <CancelIcon onClick={() => onClickCancel()} style={{color: '#cccccc', cursor: 'pointer'}} />
       </SearchBar>
-      <section>
+      {!!boards.length
+      ? <section>
         {boards.map((board, i) => {
           let boardSrc = board.userImg ? `/images/${board.userImg}` : board.kakaoImg
           boardSrc = boardSrc || defaultImg
@@ -77,12 +150,18 @@ const CommunityAll = () => {
                 <div className='name'>{board.boardName}</div>
                 <p className='comment'><ChatBubbleOutlineIcon /><span>{board.commentCnt}</span></p>
               </div>
+              {/* {!!board.boardDate && */}
               <p className='date'>{board.boardDate[0]}.{board.boardDate[1]}.{board.boardDate[2]}</p>
+              {/* } */}
             </EachBoard>
           )
         }
         )}
       </section>
+      : <section className='no-boards'>
+          게시글이 없습니다❌
+      </section>
+      }
     </Wrapper>
   );
 };
@@ -129,6 +208,9 @@ const Wrapper = styled.article`
   section {
     padding: 0.8rem;
     margin-top: 1.5rem;
+    &.no-boards {
+      text-align: center;
+    }
   }
   @media screen and (max-width: 800px) {
     padding-top: 5rem;

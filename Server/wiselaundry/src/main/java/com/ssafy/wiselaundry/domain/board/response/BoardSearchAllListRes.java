@@ -15,11 +15,16 @@ public class BoardSearchAllListRes extends BaseResponseBody {
     @ApiModelProperty(value = "list 형태로 반환")
     List<BoardSearchAllRes> list;
 
-    public static BoardSearchAllListRes of(Integer statusCode, String message, List<BoardSearchAllRes> list){
+    @ApiModelProperty(value = "마지막인지 구분하는 boolean")
+    boolean endFlag;
+
+    public static BoardSearchAllListRes of(Integer statusCode, String message, List<BoardSearchAllRes> list,
+                                           boolean endFlag){
         BoardSearchAllListRes res = new BoardSearchAllListRes();
         res.setMessage(message);
         res.setStatusCode(statusCode);
         res.list = list;
+        res.endFlag = endFlag;
         return res;
     }
 }

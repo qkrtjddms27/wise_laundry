@@ -13,6 +13,7 @@ import defaultImg from './images/ironing.png'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
+
 interface Istate {
   board: {
     boardId: number,
@@ -74,7 +75,11 @@ const CommunityDetail = () => {
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      createComment()
+      if (inputText.trim()) {
+        createComment()
+      } else {
+        setInputText('')
+      }
     }
   }
 
@@ -107,6 +112,7 @@ const CommunityDetail = () => {
     }
     postComment(data)
     .then(res => {
+      console.log('🎲postComment: ', res);
       setBoard({...board, comments: [...board.comments, res]})
     })
     .catch(err => console.log('createComment error:💧', err))
@@ -148,8 +154,14 @@ const CommunityDetail = () => {
   useEffect(() => {
     getCommunityDetail(Number(boardId))
     .then(res => {
-      // console.log('🎲getCommunityDetail: ', res);
-      setBoard(res)
+      console.log('🎲getCommunityDetail: ', res);
+      const testImgs = [
+        'https://i1.sndcdn.com/artworks-W7SabP4lUpcuE7G5-TIxM7Q-t500x500.jpg',
+        'https://images.coplusk.net/project_images/208626/image/2019-11-27-210127-burger.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf7WOLBD7t1VG3rkJq4CuLa8LDfuvcsUXutZ3hbV33SGPaW7_aFgN9S_IZITCsIGr9EiM&usqp=CAU'
+      ]
+      setBoard({...res, boardImgs: testImgs})
+      // setBoard(res)
     })
     .catch(err => console.log('getCommunityDetail err:💧', err))
   }, [boardId])
@@ -160,6 +172,7 @@ const CommunityDetail = () => {
         <BoardContent>
           {board.boardImgs.length > 0 ?
           <div className='top'>
+            <p className='img-page'>{`${imgIdx+1} / ${board.boardImgs.length}`}</p>
             <img src={board.boardImgs[imgIdx]} alt={`사진${imgIdx+1}`} />
             {board.boardImgs.length > 1 && <>
             <ArrowBackIosNewIcon className='left' onClick={() => changeIdx(-1)} />
@@ -285,14 +298,23 @@ const BoardContent = styled.div`
     svg {
       cursor: pointer;
       position: absolute;
-      top: 50%;
+      height: 100%;
       font-size: 1.5rem;
       &.left {
-        left: -2rem;
+        left: 0;
+        padding-left: .3rem;
       }
       &.right {
-        right: -2rem;
+        right: 0;
+        padding-right: .3rem;
       }
+      &:hover{
+        transition: .5s;
+        transform: scale(2);
+      }
+    }
+    .img-page {
+      text-align: center;
     }
   }
   .middle {
