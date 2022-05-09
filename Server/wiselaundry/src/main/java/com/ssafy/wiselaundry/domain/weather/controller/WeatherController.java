@@ -27,7 +27,8 @@ public class WeatherController {
                                            @RequestParam @ApiParam(value="예보지점 Y", required = true, defaultValue = "127") int ny) throws IOException, ParseException {
         /*세탁 지수= (-0.603*현지기압) + (0.729*최고기온) - (0.056*풍속) - (2.156*일사량) + 83.423 [실험오차계수]*/
         JSONObject weatherInfo = weatherService.weatherInfo(nx, ny);
-        return ResponseEntity.status(200).body(WeatherRes.of(200, "Success!", weatherInfo.toString()));
+        return ResponseEntity.status(200).body(WeatherRes.of(200, "Success!", weatherInfo));
     }
+
 
 }
