@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../store/state/user';
 import { themeState } from '../../store/state/theme';
-import { getCommunityDetail, postComment, delComment, delBoard } from '../../store/api/community';
+import { getCommunityDetail, postComment, delComment, delBoard, putView } from '../../store/api/community';
 import defaultImg from './images/ironing.png'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -162,6 +162,9 @@ const CommunityDetail = () => {
       ]
       setBoard({...res, boardImgs: testImgs})
       // setBoard(res)
+    })
+    .then(() => {
+      putView(Number(boardId))
     })
     .catch(err => console.log('getCommunityDetail err:💧', err))
   }, [boardId])

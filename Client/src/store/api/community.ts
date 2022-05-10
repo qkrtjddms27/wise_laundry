@@ -134,20 +134,18 @@ export const delComment = async (commentId: number) => {
 // 🌼🌼🌼조회순 조회
 export const getView = async (lastBoardId: number) => {
   const { data } = await apiClient.get<any>(
-    `/community/sotred/${10}/${lastBoardId}`, 
+    `/community/${10}/${lastBoardId}`, 
   )
-  console.log('🌼getView: ', data)
+  // console.log('🌼getView: ', data)
   return data
 }
 
 // 🌼🌼🌼조회수 증가
-// export const postView = async (lastBoardId: number) => {
-export const putView = async (putData: any) => {
-  const { data } = await apiClient.get<any>(
-    '/community/view',
-    putData
+export const putView = async (boardId: number) => {
+  const { data } = await apiClient.put<any>(
+    `/community/${boardId}`
   )
-  console.log('🌼getView: ', data)
+  // console.log('🌼getView: ', data)
   return data
 }
 

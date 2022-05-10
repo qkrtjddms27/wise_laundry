@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { themeState } from '../../store/state/theme';
@@ -13,13 +14,14 @@ import defaultImg from './images/ironing.png'
 
 interface Istate {
   board: {
-    boardId: number,
     userId: number,
     userNick: string,
     userImg: string,
     kakaoImg: string,
+    boardId: number,
+    view: number,
     boardName: string,
-    boardDate: string,
+    boardDate: number[],
     commentCnt: number
   }
 }
@@ -153,7 +155,7 @@ const CommunityAll = () => {
     <Wrapper>
       <p className='title'>
         <span>게시판</span>
-        <TopBtn className='left' onClick={() => console.log('조회순 조회')}><span />조회순</TopBtn>
+        <TopBtn className='left' onClick={() => getBoard(true, -1, '', true)}><span />조회순</TopBtn>
         <TopBtn className='right' onClick={() => navigate('/board')}><span />질문하기</TopBtn>
       </p>
       <SearchBar>
@@ -176,7 +178,10 @@ const CommunityAll = () => {
               <p className='nick'>{board.userNick}</p>
               <div className='board' onClick={() => navigate(`/community/${board.boardId}`)} style={{ backgroundColor: `${theme.listBgColor[i%3]}`}}>
                 <div className='name'>{board.boardName}</div>
-                <p className='comment'><ChatBubbleOutlineIcon /><span>{board.commentCnt}</span></p>
+                <p>
+                  <span className='comment'><ChatBubbleOutlineIcon /><span> {board.commentCnt}</span></span>
+                  <span className='view'><RemoveRedEyeIcon /><span> {board.view}</span></span>
+                </p>
               </div>
               <p className='date'>{board.boardDate[0]}.{board.boardDate[1]}.{board.boardDate[2]}</p>
             </EachBoard>
@@ -302,6 +307,9 @@ const EachBoard = styled.div`
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
+    }
+    .view {
+      margin-left: .5rem;
     }
     svg {
       font-size: 0.8rem;
