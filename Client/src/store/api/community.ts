@@ -131,6 +131,28 @@ export const delComment = async (commentId: number) => {
   return data
 }
 
+// 🌼🌼🌼조회순 조회
+export const getView = async (lastBoardId: number) => {
+  const { data } = await apiClient.get<any>(
+    `/community/sotred/${10}/${lastBoardId}`, 
+  )
+  console.log('🌼getView: ', data)
+  return data
+}
+
+// 🌼🌼🌼조회수 증가
+// export const postView = async (lastBoardId: number) => {
+export const putView = async (putData: any) => {
+  const { data } = await apiClient.get<any>(
+    '/community/view',
+    putData
+  )
+  console.log('🌼getView: ', data)
+  return data
+}
+
+
+
 apiClient.interceptors.response.use(
   (res) => res,
   (err) => {

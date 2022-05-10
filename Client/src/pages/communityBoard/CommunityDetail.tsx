@@ -188,7 +188,7 @@ const CommunityDetail = () => {
               <img src={boardSrc} onError={imageOnErrorHandler} alt='프로필' />
               <p>{board.userNick}</p>
             </div>
-            <p className='date'>작성일 : {board.boardDate[0]}.{board.boardDate[1]}.{board.boardDate[2]}</p>
+            <p className='date'><span>작성일 : </span>{String(board.boardDate[0]).slice(-2)}.{board.boardDate[1]}.{board.boardDate[2]}</p>
           </div>
           <hr />
           <div className='bottom'>
@@ -289,11 +289,15 @@ const BoardContent = styled.div`
   .top {
     width: 80%;
     margin: auto;
-    padding-top: 1rem;
     position: relative;
+    p {
+      position: absolute;
+      right: 45%;
+      bottom: -1em;
+      margin: 0;
+    }
     img {
       width: 100%;
-      /* aspect-ratio: 1/1; */
     }
     svg {
       cursor: pointer;
@@ -342,6 +346,15 @@ const BoardContent = styled.div`
   @media screen and (max-width: 800px) {
     .top {
       width: 100%;
+      p {
+        font-size: .5rem;
+      }
+      svg:hover {
+        transform: none;
+      }
+    }
+    .middle .date span {
+      display: none;
     }
   }
 `
@@ -402,6 +415,10 @@ const CreateComment = styled.div`
   button {
     font-size: 1rem;
     width: 15%;
+  }
+  @media screen and (max-width: 800px) {
+    input {width: 70%;}
+    button {width: 20%;}
   }
 `
 const Btns = styled.section`
