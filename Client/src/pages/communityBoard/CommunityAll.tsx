@@ -155,7 +155,8 @@ const CommunityAll = () => {
     <Wrapper>
       <p className='title'>
         <span>게시판</span>
-        <TopBtn className='left' onClick={() => getBoard(true, -1, '', true)}><span />조회순</TopBtn>
+        <TopBtn className='left' onClick={() => console.log('조회순으로 조회')}><span />조회순</TopBtn>
+        {/* <TopBtn className='left' onClick={() => getBoard(true, -1, '', true)}><span />조회순</TopBtn> */}
         <TopBtn className='right' onClick={() => navigate('/board')}><span />질문하기</TopBtn>
       </p>
       <SearchBar>
@@ -286,9 +287,10 @@ const EachBoard = styled.div`
     border-radius: 50%;
     margin: 0 1rem;
   }
-  .nick,
-  .date {
-    width: 5rem;
+  .nick {
+    width: 7rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .board {
     cursor: pointer;
@@ -322,6 +324,7 @@ const EachBoard = styled.div`
     }
     .board {
       height: 150%;
+      margin-left: 0;
       flex-direction: column;
       justify-content: space-evenly;
       align-items: flex-start;
