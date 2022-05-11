@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import okay1 from './images/okay1.png'
 import okay2 from './images/okay2.png'
@@ -6,6 +7,7 @@ import okay3 from './images/okay3.png'
 import okay4 from './images/okay4.png'
 
 const OkayLaundry = () => {
+  const navigate = useNavigate()
   const [step,setStep] = useState(1)
   return (
     <Wrapper>
@@ -15,7 +17,7 @@ const OkayLaundry = () => {
           <div className='big'><div>슬기로운  세탁 생활</div> <div>시작하기</div></div>
           <div  className='small'>지금부터 당신의 빨래를 관리하세요 </div>
         </div>
-        <div className='btnbox'><Button>start</Button></div>
+        <div className='btnbox'><Button onClick={() => navigate('/okay')}>start</Button></div>
       </Title>
       <Navbar>
         <div id={step===1?'step':''} onClick={()=>{setStep(1)}}>1. 촬영하기</div>

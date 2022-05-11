@@ -43,14 +43,12 @@ const Header = () => {
   return (
     <Wrapper>
       <HeaderNav>
-        {/* <Link to='/okaylaundry'>OKAY LAUNDRY</Link> */}
         <Link to='/laundry'>MY LAUNDRY</Link>
         <Link to='/weather'>WHEATHER</Link>
         <Link to='/community'>COMMUNITY</Link>
         <Link to='/home'><img src={themeCheck ? LogoW : LogoB} alt='logo'/></Link>
         <Link to='/near'>NEAR</Link>
         <Link to='/profile'>{user.userNick}님</Link>
-        {/* <Link to='/profile'>LOGOUT</Link> */}
         <ToggleTop className='toggle' ><ToggleSwitch themeCheck={themeCheck} setThemeCheck={setThemeCheck} /></ToggleTop>
       </HeaderNav>
       <HamburgerNav>
