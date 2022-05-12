@@ -41,7 +41,7 @@ const CommunityUpdate = () => {
   const onChangeFiles= (e: React.ChangeEvent<HTMLInputElement>) => {
     const { target: { files } } = e
     if (files != null) {
-      if (files.length + newImgs.length + originImgs.length < 5) {
+      if (files.length + newImgs.length + originImgs.length < 6) {
         setFileList(files)
         const nowImageUrlList = [...newImgs]
         Array.from(files).map((file: File) => {
@@ -97,7 +97,7 @@ const CommunityUpdate = () => {
           showConfirmButton: false,
           timer: 1500
         })
-        console.log('🎲putBoard: ', res);
+        // console.log('🎲putBoard: ', res);
         navigate(`/community/${boardId}`)
       })
       .catch(err => console.log('postBoard err:💧', err))
@@ -128,15 +128,15 @@ const CommunityUpdate = () => {
         <input type='file' id='image' accept="image/jpg, image/png, image/jpeg"
           onChange={e => onChangeFiles(e)} style={{display: 'none'}} multiple
         />
-        <TitleInput htmlFor='title'>
+        <TitleBox htmlFor='title'>
           <p>제목</p>
           <input value={board.boardName} id='title'
             onChange={e => setBoard({...board, boardName: e.target.value})}
           />
-        </TitleInput>
-        <ImgInput>
+        </TitleBox>
+        <ImgBox>
           <p>이미지</p>
-          <ImgBox>
+          <ImgViewBox>
             <label htmlFor='image' className='imgbtn'>
               <CameraAltIcon />
               <p className='imgcnt'>{originImgs.length + newImgs.length}/5</p>
@@ -153,14 +153,14 @@ const CommunityUpdate = () => {
               <RemoveCircleIcon onClick={() => throwNewImg(idx)} />
             </div>
             )}
-          </ImgBox>
-        </ImgInput>
-        <ContentInput htmlFor='content'>
+          </ImgViewBox>
+        </ImgBox>
+        <ContentBox htmlFor='content'>
           <p>내용</p>
           <textarea value={board.boardContent} id='content'
             onChange={e => setBoard({...board, boardContent: e.target.value})}
           />
-        </ContentInput>
+        </ContentBox>
       </form>
       <Buttons>
         <button className='active' onClick={(e) => handleSubmit(e)}><span />수정</button>
@@ -202,11 +202,10 @@ const Wrapper = styled.article`
     }
   }
   @media screen and (max-width: 800px) {
-    margin-top: 0;
-    padding-top: 5rem;
+    margin: 4vh 1rem;
   }
 `
-const TitleInput = styled.label`
+const TitleBox = styled.label`
   line-height: 5vh;
   display: flex;
   padding: 1rem 10vw;
@@ -230,7 +229,7 @@ const TitleInput = styled.label`
     }
   }
 `
-const ImgInput = styled.div`
+const ImgBox = styled.div`
   height: 10rem;
   line-height: 10rem;
   display: flex;
@@ -244,20 +243,13 @@ const ImgInput = styled.div`
     p {width: 20%;}
   }
 `
-const ImgBox = styled.label`
+const ImgViewBox = styled.label`
   width: 90%;
   display: flex;
   align-items: center;
 
   overflow-x: scroll;
   overflow-y: hidden;
-  &::-webkit-scrollbar {
-    height: .5rem;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #D8D8D8;
-    border-radius: 10px;
-  }
 
   .imgbtn {
     cursor: pointer;
@@ -296,7 +288,7 @@ const ImgBox = styled.label`
     }
   }
 `
-const ContentInput = styled.label`
+const ContentBox = styled.label`
   display: flex;
   height: 30vh;
   line-height: 30vh;
@@ -327,7 +319,7 @@ const Buttons = styled.div`
   justify-content: center;
   padding: .5rem 0;
   button {
-    width: 15vw;
+    width: 20vw;
     height: 5vh;
     margin: 1rem;
     &.inactive {
@@ -335,6 +327,13 @@ const Buttons = styled.div`
       span {
         background-color: ${props => props.theme.hoverInactiveBtnColor};
       }
+    }
+  }
+  @media screen and (max-width: 800px) {
+    justify-content: space-between;
+    button {
+      margin: 1rem 0;
+      width: 42vw;
     }
   }
 `

@@ -7,12 +7,14 @@ import { useRecoilState } from 'recoil';
 import { userState } from '../../store/state/user';
 
 const Wrapper = styled.article`
-  width: 70vw;
+  width: 80vw;
   max-width: 1200px;
   min-width: 280px;
   margin: auto;
   margin-top: 1vh;
   background-color: ${props => props.theme.bgColor};
+  overflow-x: hidden;
+
   svg{
     margin: 30px 0;
     font-size: 4vh;
@@ -26,9 +28,9 @@ const Wrapper = styled.article`
 `
 const DetailBox = styled.section`
   background-color: ${props => props.theme.containerColor};
-  height: 600px;
+  height: 700px;
   box-shadow: ${props => props.theme.boxShadowBox} ;
-  border-radius: 10px;
+  /* border-radius: 50px 0 50px 0; */
   margin-top: 10vh;
   @media screen and (max-width: 800px) {
     height: auto;
@@ -38,10 +40,10 @@ const DetailBox = styled.section`
 const Top = styled.div`
   display: flex;
   img{
-    height: 400px;
-    width: 35vw;
+    height: 500px;
+    width: 50vw;
     margin-left: 3vw;
-    margin-top: 5vh;
+    margin-top: 10vh;
   }
   @media screen and (max-width: 800px) {
     display: inline;
@@ -59,15 +61,24 @@ const InfoBox = styled.div`
   .inform{
     display: flex;
     flex-wrap: wrap;
-    margin-top: 40px;
+    margin-top: 20px;
     justify-content: center;
     padding-right: 20px;
+    height: 100px;
+    overflow-y: auto;
+    @media screen and (max-width: 800px) { 
+    height: auto;
+    }
   }
   .title{
     text-align: center;
+    margin: auto;
     margin-top: 40px;
     font-size: 1.2rem;
-    color : ${props => props.theme.activeBtnColor}
+    width: 200px;
+    color : ${props => props.theme.titleColor};
+    padding-bottom: 15px;
+    border-bottom: 2px solid #275788;
   }
   .content{
     margin-top: 10px;
@@ -77,13 +88,17 @@ const InfoBox = styled.div`
 `
 const Info = styled.div`
   margin: auto;
-  width: 80%;
+  width: 60%;
+  @media screen and (max-width: 800px) { 
+    height: auto;
+    width: 90%;
+  }
 `
 const LabelBox = styled.div`
   margin: auto;
   margin-top: 20px;
-  width: 80%;
-  height: 180px;
+  width: 60%;
+  height: 220px;
   overflow-y: auto;
   .careLabel{
     display: flex;
@@ -93,6 +108,7 @@ const LabelBox = styled.div`
   }
   @media screen and (max-width: 800px) { 
     height: auto;
+    width: 90%;
 
   }
 `
@@ -100,47 +116,63 @@ const Label = styled.div`
   color: black;
   height:1rem;
   margin: 10px 5px 0 5px;
-  padding: 2px 5px 2px 5px;
-  border-radius: 10px;
+  padding: 5px 5px 3px 5px;
+  border-radius:5px 0 5px 0;
   font-size: 0.8rem;
-  background-color: #b3eaef;
+  background-color: #e9f9fb;
   align-items: center;
   p{
     margin-top: 1px;
   }
-  &:nth-child(1){
-    background-color: #cffbb2;
+  
+  &#label1{
+    background-color: #82d64a;
   }
-  &:nth-child(2){
-    background-color: #90fdec;
+  &#label2{
+    background-color: #f2be70;
   }
-  &:nth-child(3){
+  &#label3{
     background-color: #f4ffac;
   }
-  &:nth-child(4){
+  &#label4{
     background-color: #fea5e6;
   }
-  &:nth-child(5){
+  &#label5{
     background-color: #fdce8d;
   }
-  &:nth-child(6){
+  &#label6{
     background-color: #ccffa8;
   }
-  &:nth-child(7){
-    background-color: #90faea;
+  &#label7{
+    background-color: #5bc9b9;
   }
-  &:nth-child(8){
+  &#label8{
     background-color: #eaf69d;
   }
-  &:nth-child(9){
+  &#label9{
     background-color: #fba7e5;
   }
-  &:nth-child(10){
-    background-color: #ffd59b;
+  &#label10{
+    background-color: #fc6ce4;
+  }
+  &#label11{
+    background-color: #e3a44c;
+  }
+  &#label12{
+    background-color: #cccfa3;
+  }
+  &#label13{
+    background-color: #5fbe7a;
+  }
+  &#label14{
+    background-color: #b49bff;
+  }
+  &#label15{
+    background-color: #7346fd;
   }
 `
 const ButtonBox = styled.div`
-  width: 70vw;
+  width: 60vw;
   margin: auto;
   margin-top: 20px;
   display: flex;
@@ -149,27 +181,18 @@ const ButtonBox = styled.div`
   button{
     width: 300px;
     border: none;
-    border-radius: 10px;
-    margin-top: 50px;
+    border-radius: 2px;
+    margin-top: 20px;
     height: 50px;
     font-size:1.1rem;
     cursor: pointer;
     color: white;
-
   }
   @media screen and (max-width: 800px) { 
     button{
     margin-top: 10px;
     height: 30px;
     width: 150px;
-    }
-  }
-  @media screen and (max-width: 800px) { 
-    button{
-    margin-top: 10px;
-    height: 30px;
-    width: 100px;
-
     }
   }
   .updateBtn{
@@ -179,27 +202,38 @@ const ButtonBox = styled.div`
     }
   }
   .deleteBtn{
-    background-color:${props => props.theme.inactiveBtnColor};
+    background-color:#f17388;
     &:hover{
-      background-color: ${props=>props.theme.hoverInactiveBtnColor};
+      background-color: #f45872;
     }
   }
 `
 const Memo = styled.div`
+  margin-top: 50px;
+    text-align: center;
   .mtitle{
-    width: 45px;
+    text-align: center;
+    margin: auto;
+    font-size: 1.2rem;
+    width: 200px;
+    color : ${props => props.theme.titleColor};
+    padding-bottom: 15px;
+    border-bottom: 2px solid #275788;
   }
-  margin: auto;
-  margin-top: 30px;
-  width: 90%;
-  display: flex;
-  justify-content: center;
   .memo{
     padding-left: 10px;
-    height: 70px;
-    width: 200px;
+    height: 50px;
+    width: 18vw;
     overflow-y: auto;
     word-break:break-all;
+    margin: auto;
+    margin-top: 30px;
+    justify-content: center;
+    padding-bottom: 5vh;
+    @media screen and (max-width: 800px) { 
+    height: auto;
+    width: 60%;
+    }
   }
 `
 interface Istate{
@@ -237,8 +271,8 @@ const LaundryDetail = () => {
       text: "지우면 복구하실 수 없습니다.",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#e66a6a',
+      cancelButtonColor: '#5ca4e8',
       confirmButtonText: '네 지울래요!',
       cancelButtonText:'돌아가기',
     }).then((result) => {
@@ -268,7 +302,7 @@ const LaundryDetail = () => {
               <div className='title'>세탁 주의 사항</div>
               <div className='careLabel'>
               {laundry.careLabels.map((label,idx)=>{
-                return(<Label key={idx} className='label'> {label.careLabel}</Label>)})}
+                return(<Label id={`label${String(label.careLabelId)}`} key={idx} className='label'> {label.careLabel}</Label>)})}
               </div>
             </LabelBox>
             <Info>
@@ -282,22 +316,22 @@ const LaundryDetail = () => {
               </div>
             </Info>
             <Memo>
-              <div className='mtitle'>메모 : </div>
+              <div className='mtitle'>메모 </div>
               <div className='memo'>
                 {laundry.laundryMemo}
               </div>
             </Memo>
           </InfoBox>
         </Top>
-        {user.userId ===laundry.laundryOwnerId &&
-        <ButtonBox>
-          <button className='updateBtn' onClick={()=>{navigate(`/laundry/${laundryId}/update`)}}>수정하기</button>
-          <button className='deleteBtn' 
-          onClick={()=>{ goDelete()}}>
-            삭제하기</button>
-        </ButtonBox>}
       </DetailBox>
       }
+      {laundry !==undefined &&user.userId ===laundry.laundryOwnerId &&
+      <ButtonBox>
+        <button className='updateBtn' onClick={()=>{navigate(`/laundry/${laundryId}/update`)}}>수정하기</button>
+        <button className='deleteBtn' 
+        onClick={()=>{ goDelete()}}>
+          삭제하기</button>
+      </ButtonBox>}
     </Wrapper>
   );
 };

@@ -10,6 +10,8 @@ import { userState } from '../../store/state/user';
 import { AltRouteTwoTone } from '@mui/icons-material';
 import defaultImg from './images/profile-image.png'
 import Swal from 'sweetalert2'
+import { userInfo } from 'os';
+import KakaoLogin from './KakaoLogin';
 
 
 
@@ -269,8 +271,17 @@ const Profile = () => {
   // const [kakaoProfileImg, setKakaoProfileImg] = useState('')
 
   const passwordChangeModal = () => {
-    setModalOn(true);
-    console.log(modalOn,' 모달 열기')
+    if (sessionStorage.getItem('kakao') !== null) {
+      Swal.fire({
+        icon: 'error',
+        text: '카카오 계정은 비밀번호를 변경할 수 없습니다',
+        confirmButtonText: '확인',
+        confirmButtonColor: 'red',
+      })
+      setModalOn(false);
+    } else {
+      setModalOn(true);
+    }
   }
 
 
@@ -279,7 +290,6 @@ const Profile = () => {
     if (!nickChecked) {
       alert('변경할 닉네임을 입력해주세요')
     } else {
-      console.log('정보 변경 실행')
       const formdata = new FormData()
       formdata.append('userUpdateInfo',
         new Blob([
@@ -296,8 +306,6 @@ const Profile = () => {
 
       putUpdateUserInfo(formdata)
       .then(() => {
-        console.log('닉네임 수정 성공')
-
         Swal.fire({
           icon: 'success',
           text: '변경 되었습니다',
@@ -307,7 +315,6 @@ const Profile = () => {
         // setEditCheck(true)
         getUserInfo()
           .then((res) => {
-            console.log(res, '프로필 유저정보')
             const userInfo = {...res};
             delete userInfo.message
             delete userInfo.statusCode
@@ -381,7 +388,8 @@ const Profile = () => {
       // confirmButtonColor: 'red',
       timer: 1000
     })
-    navigate('/home')
+    navigate('/login')
+    window.location.reload();
   }
 
   return (

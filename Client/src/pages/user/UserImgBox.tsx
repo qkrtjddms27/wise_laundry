@@ -7,17 +7,21 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 const Wrapper = styled.div`
 
   img {
-    width: 11vw;
+    width: 10vw;
     aspect-ratio: 1/1;
-    border-radius: 100vh;
-    /* border: none; */
+    border-radius: 99vh;
+    object-fit: cover;
+    /* border: 2px solid #818080; */
     cursor: pointer;
   }
 
   .ProfileImg {
     width: 10vw;
     border-radius: 100vh;
-    border: 2px solid #818080;
+    object-fit: cover;
+    /* -webkit-box-shadow: 0px 0px 4px 2px #818080;
+    -moz-box-shadow: 0px 0px 4px 2px #818080;
+    box-shadow: 0px 0px 4px 2px #818080; */
     margin-left: 2vh;
     cursor: pointer;
   }
@@ -79,7 +83,6 @@ const UserImgBox:React.FC<IProps>= ({file, setFile, userImg}) => {
 
   useEffect(() => {
     setFileSrc(userImg)
-    console.log(fileSrc, '여기 프로필 이미지')
   },[userImg])
 
 

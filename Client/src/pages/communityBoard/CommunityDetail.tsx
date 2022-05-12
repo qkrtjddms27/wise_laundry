@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../store/state/user';
 import { themeState } from '../../store/state/theme';
-import { getCommunityDetail, postComment, delComment, delBoard } from '../../store/api/community';
+import { getCommunityDetail, postComment, delComment, delBoard, putView } from '../../store/api/community';
 import defaultImg from './images/ironing.png'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -112,7 +112,7 @@ const CommunityDetail = () => {
     }
     postComment(data)
     .then(res => {
-      console.log('🎲postComment: ', res);
+      // console.log('🎲postComment: ', res);
       setBoard({...board, comments: [...board.comments, res]})
     })
     .catch(err => console.log('createComment error:💧', err))
@@ -154,14 +154,17 @@ const CommunityDetail = () => {
   useEffect(() => {
     getCommunityDetail(Number(boardId))
     .then(res => {
-      console.log('🎲getCommunityDetail: ', res);
-      const testImgs = [
-        'https://i1.sndcdn.com/artworks-W7SabP4lUpcuE7G5-TIxM7Q-t500x500.jpg',
-        'https://images.coplusk.net/project_images/208626/image/2019-11-27-210127-burger.jpg',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf7WOLBD7t1VG3rkJq4CuLa8LDfuvcsUXutZ3hbV33SGPaW7_aFgN9S_IZITCsIGr9EiM&usqp=CAU'
-      ]
-      setBoard({...res, boardImgs: testImgs})
-      // setBoard(res)
+      // console.log('🎲getCommunityDetail: ', res);
+      // const testImgs = [
+      //   'https://i1.sndcdn.com/artworks-W7SabP4lUpcuE7G5-TIxM7Q-t500x500.jpg',
+      //   'https://images.coplusk.net/project_images/208626/image/2019-11-27-210127-burger.jpg',
+      //   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf7WOLBD7t1VG3rkJq4CuLa8LDfuvcsUXutZ3hbV33SGPaW7_aFgN9S_IZITCsIGr9EiM&usqp=CAU'
+      // ]
+      // setBoard({...res, boardImgs: testImgs})
+      setBoard(res)
+    })
+    .then(() => {
+      putView(Number(boardId))
     })
     .catch(err => console.log('getCommunityDetail err:💧', err))
   }, [boardId])
@@ -188,7 +191,7 @@ const CommunityDetail = () => {
               <img src={boardSrc} onError={imageOnErrorHandler} alt='프로필' />
               <p>{board.userNick}</p>
             </div>
-            <p className='date'>작성일 : {board.boardDate[0]}.{board.boardDate[1]}.{board.boardDate[2]}</p>
+            <p className='date'><span>작성일 : </span>{String(board.boardDate[0]).slice(-2)}.{board.boardDate[1]}.{board.boardDate[2]}</p>
           </div>
           <hr />
           <div className='bottom'>
@@ -239,8 +242,7 @@ const CommunityDetail = () => {
 
 const Wrapper = styled.article`
   width: 50vw;
-  margin: auto;
-  padding: 3rem 0;
+  margin: 3rem auto;
   button {
     user-select: none;
     position: relative;
@@ -271,8 +273,6 @@ const Wrapper = styled.article`
   }
   @media screen and (max-width: 800px) {
     width: 80vw;
-    padding: 0;
-    padding-top: 5rem;
   }
   `
 const Board = styled.section`
@@ -289,11 +289,15 @@ const BoardContent = styled.div`
   .top {
     width: 80%;
     margin: auto;
-    padding-top: 1rem;
     position: relative;
+    p {
+      position: absolute;
+      right: 45%;
+      bottom: -1em;
+      margin: 0;
+    }
     img {
       width: 100%;
-      /* aspect-ratio: 1/1; */
     }
     svg {
       cursor: pointer;
@@ -342,6 +346,15 @@ const BoardContent = styled.div`
   @media screen and (max-width: 800px) {
     .top {
       width: 100%;
+      p {
+        font-size: .5rem;
+      }
+      svg:hover {
+        transform: none;
+      }
+    }
+    .middle .date span {
+      display: none;
     }
   }
 `
@@ -403,6 +416,10 @@ const CreateComment = styled.div`
     font-size: 1rem;
     width: 15%;
   }
+  @media screen and (max-width: 800px) {
+    input {width: 70%;}
+    button {width: 20%;}
+  }
 `
 const Btns = styled.section`
   display: flex;
@@ -419,7 +436,6 @@ const Btns = styled.section`
     }
   }
   @media screen and (max-width: 800px) {
-    padding-bottom: 70px;
     button {
       height: 4vh;
     }

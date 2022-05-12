@@ -5,14 +5,15 @@ import styled from 'styled-components';
 import { getProductAll, getProductMine } from '../../store/api/laundry';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../store/state/user';
+
 interface Istate{
   laundry:{
     laundryId: number
-    careLabel: string[]
     laundryImg: string
+    careLabel: {careLabelId: number, careLabelName:string, careLabel:string}[]
+    laundryInfo: string[]
   }
 }
-
 const Wrapper = styled.section`
   padding-bottom: 10vh;
 `
@@ -131,31 +132,116 @@ const LaundryBox = styled.section`
 
 
 const LaundryAll = () => {
+  const [allRaw,setAllRaw] = useState<Istate['laundry'][]>([])
+  const [myRaw,setMyRaw] = useState<Istate['laundry'][]>([])
+
   const [allLaundries,setAllLaundries] = useState<Istate['laundry'][]>([])
   const [myLaundries,setMyLaundries] = useState<Istate['laundry'][]>([])
+
+
   const [filter,setFilter] = useState('all') // my <=> all
   const [inputText,setInputText] = useState('')
+  
   const handleEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.code === "Enter") {
-      // submit
+    if (e.code === "Enter"){
+      search()
     }
-  };
-  const [user,getUser] = useRecoilState(userState)
-
+  }
   useEffect(()=>{
-    getProductAll().then((res)=>{
-      setAllLaundries(res.list)
+    const userId = JSON.parse(sessionStorage.getItem('userInfo')||"").userId
+    getProductMine(userId).then((res)=>{
+      if(res.list===null){
+        setMyLaundries([])
+        setMyRaw([])
+      }
+      else{
+        setMyLaundries(res.list)
+        setMyRaw(res.list)
+      }
     })
-    getProductMine(user.userId).then((res)=>{
-      setMyLaundries(res.list)
+    getProductAll().then((res)=>{
+      if(res.list===null){
+        setAllLaundries([])
+        setAllRaw([])
+      }
+      else{
+        setAllLaundries(res.list)
+      setAllRaw(res.list)
+      }
     })
   },[])
 
+  const search = ()=>{
+    if (inputText===""){ // 검색창이 비었고
+      if (filter==='all'){ // 전체 목록이라면
+        if(allRaw!==[])
+          setAllLaundries(allRaw)
+          else
+            setAllLaundries([])
+      }
+      else{ 
+        if(myRaw!==[])
+          setMyLaundries(myRaw)
+        else setMyLaundries([])
+      }
+    }
+    else{ // 인풋창이 차있고
+      if (filter==='all') { // all 일때
+        var newlist:Istate['laundry'][] =[]
+        if(allRaw!==[]){
+          allRaw.map((each)=>{
+          each.laundryInfo.map(info=>{
+            if ( info.includes(inputText)){
+              if(!newlist.includes(each)){
+                newlist.push(each)
+              }
+            }
+          })
+        })}
+        setAllLaundries(newlist)
+        }
+
+    if (filter==='my'){
+      var newlist:Istate['laundry'][] =[]
+      if(myRaw!==[]){
+        myRaw.map((each)=>{
+        each.careLabel.map(info=>{
+          if ( info.careLabel.includes(inputText)){
+            if(!newlist.includes(each)){
+              newlist.push(each)
+            }
+          }
+        })
+      })}
+      setMyLaundries(newlist)
+      }
+    }
+  }
+  
+
+  useEffect(()=>{
+    if(filter==='all'){
+      if(allRaw===[])
+        setAllLaundries([])
+      else
+        setAllLaundries(allRaw)
+      }
+    else{
+      if(myRaw===[]){
+        setMyLaundries([])    
+      }
+      else
+        setMyLaundries(myRaw)
+    }
+  },[filter])
+  useEffect(()=>{
+    console.log(myLaundries)
+  },[])
   return (
     <Wrapper>
       <Header>
         <Title>
-          <div id={filter==='all'?'filter':''}onClick={()=>{setFilter('all')}} className='box'>
+          <div id={filter==='all'?'filter':''} onClick={()=>{setFilter('all')}} className='box'>
           <p>모두의</p>
           <p>옷장</p>
           </div>
@@ -172,20 +258,22 @@ const LaundryAll = () => {
               onChange={e => setInputText(e.target.value)} 
               onKeyUp={e => handleEnter(e)} />
           </SearchBar>
-          <SubmitBtn onClick={()=>{}}><SearchIcon/></SubmitBtn>
+          <SubmitBtn onClick={()=>{search()}}><SearchIcon/></SubmitBtn>
         </SearchBox>
 
       </Header>
       <LaundryBox>
-        {filter==='my' ? 
-          (myLaundries!==null?
-          myLaundries.map((laundry,idx)=>{return(<section key={laundry.laundryId}><LaundryCard  laundry={laundry}/></section>)}):
-          <p className='no'>아직 등록된 옷이 없어요</p> )
-          :
-          (allLaundries!==null?
-          allLaundries.map((laundry,idx)=>{return(<section key={laundry.laundryId}><LaundryCard  laundry={laundry}/></section>)})
-          :
-          <p className='no'>아직 등록된 옷이 없어요</p>)
+        {filter==='my' &&
+          (myLaundries.length===0?
+            <p className='no'>아직 등록된 옷이 없어요</p> :
+            myLaundries.map((laundry,idx)=>{return(<LaundryCard filter={filter} key={laundry.laundryId}  laundry={laundry}/>)})
+        )}
+        
+        {filter==='all'&&
+          (allLaundries.length===0?
+            <p className='no'>아직 등록된 옷이 없어요</p>
+            :
+            allLaundries.map((laundry,idx)=>{return(<LaundryCard key={laundry.laundryId} filter={filter}   laundry={laundry}/>)}))
         }
       </LaundryBox>
     </Wrapper>
