@@ -23,7 +23,7 @@ const Wrapper = styled.div `
   height: 70vh;
   background-color: ${props => props.theme.activeBtnColor};
   background: ${props => props.theme.weatherColor};
-  /* background:linear-gradient(230deg, #12123e , #194159 , #2f2f76 , #133b41 );//홍 */
+  /* background:linear-gradient(230deg, #3b3b85 , #1b6491 , #137694 , #0d7f96 );//홍 */
   background-size: 400% 400%;
   animation : backgoundChange 5s ease-in infinite;
   box-shadow: ${props=>props.theme.boxShadowBox};
@@ -292,7 +292,7 @@ const WeatherBox:React.FC<IProps>= ({data}) => {
       <Wrapper >
         {data.weather==='partly_cloudy' &&<PartlyCloud/>}
         {data.weather==='sunny' &&<Sun/>}
-        {data.weather==='cloudy' &&<><Cloud/><Cloud2/></>}
+        {data.weather==='cloudy' &&<><Cloud2/><Cloud/></>}
         {data.weather==='rain' &&<Rain/>}
           <LeftPart>
             <div className='weatherTime'>{changeDate(String(data.time))} </div>
@@ -313,7 +313,7 @@ const WeatherBox:React.FC<IProps>= ({data}) => {
             <ScorePart>
               <progress id="progress2" value={data.wind} max="15"/>
               <img className='Img' src={wind} alt="" />
-              <div className='info' >바람 : {data.wind}</div>
+              <div className='info' >바람 : {data.wind.toFixed(1)}</div>
             </ScorePart>
             <ScorePart>
               <progress id="progress3" value={data.chanceOfRain} max="100"/>

@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   position: absolute;
   overflow-y: hidden;
   overflow-x: hidden;
-  width: 100%;
+  width: 150%;
   height: 100%;
 	z-index: 2;
 ` 
