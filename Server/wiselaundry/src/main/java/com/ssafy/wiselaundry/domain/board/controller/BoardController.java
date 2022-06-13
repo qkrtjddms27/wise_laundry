@@ -23,8 +23,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/community")
 public class BoardController {
+    private final BoardService boardService;
+
     @Autowired
-    BoardService boardService;
+    BoardController(BoardService boardService){
+        this.boardService = boardService;
+    }
 
     @ApiOperation(value = "기본 게시글 조회", notes = "기본 게시글을 가져다 준다.")
     @ApiResponses({
