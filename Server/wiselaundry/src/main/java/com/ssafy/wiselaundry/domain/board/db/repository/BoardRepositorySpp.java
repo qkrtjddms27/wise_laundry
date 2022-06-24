@@ -72,4 +72,11 @@ public class BoardRepositorySpp {
                 .orderBy(board.boardId.asc())
                 .fetchFirst();
     }
+
+    public List<Board> boardSearchAll() {
+        return queryFactory
+                .select(board)
+                .from(board)
+                .fetch();
+    }
 }

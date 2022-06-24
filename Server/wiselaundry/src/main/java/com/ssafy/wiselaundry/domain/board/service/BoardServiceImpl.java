@@ -26,17 +26,20 @@ import java.util.UUID;
 
 @Service
 public class BoardServiceImpl implements BoardService{
-    @Autowired
-    BoardRepository boardRepository;
+
+    private final BoardRepository boardRepository;
+    private final BoardRepositorySpp boardRepositorySpp;
+    private final BoardImgService boardImgService;
+    private final UserService userService;
 
     @Autowired
-    BoardRepositorySpp boardRepositorySpp;
-
-    @Autowired
-    BoardImgService boardImgService;
-
-    @Autowired
-    UserService userService;
+    BoardServiceImpl(BoardRepository boardRepository, BoardRepositorySpp boardRepositorySpp,
+                     BoardImgService boardImgService, UserService userService) {
+        this.boardRepository = boardRepository;
+        this.boardRepositorySpp = boardRepositorySpp;
+        this.boardImgService = boardImgService;
+        this.userService = userService;
+    }
 
     @Value("${app.fileupload.uploadDir}")
     private String uploadFolder;
@@ -46,8 +49,11 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public List<Board> boardSearchAll(int size, int boardId) {
-        return boardRepositorySpp.boardPagination(size, boardId);
+//        return boardRepositorySpp.boardPagination(size, boardId);
+//        return boardRepositorySpp.boardSearchAll();
+        return boardRepository.findAll();
     }
+
 
     @Override
     public List<Board> boardOrderByViewDesc(int size, int boardId) {
