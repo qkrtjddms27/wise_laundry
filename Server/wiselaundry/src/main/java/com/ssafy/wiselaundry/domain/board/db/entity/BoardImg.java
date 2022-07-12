@@ -3,6 +3,7 @@ package com.ssafy.wiselaundry.domain.board.db.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,7 +33,8 @@ public class BoardImg {
     @Column(name = "board_img")
     private String boardImg;
 
-    public BoardImg(Board board, String boardImg) {
+    @Builder
+    BoardImg(Board board, String boardImg) {
         this.board = board;
         this.boardImg = boardImg;
     }
