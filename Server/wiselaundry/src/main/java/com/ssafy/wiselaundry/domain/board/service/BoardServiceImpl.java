@@ -8,6 +8,7 @@ import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,21 +26,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
     private final BoardRepositorySpp boardRepositorySpp;
     private final BoardImgService boardImgService;
     private final UserService userService;
-
-    @Autowired
-    BoardServiceImpl(BoardRepository boardRepository, BoardRepositorySpp boardRepositorySpp,
-                     BoardImgService boardImgService, UserService userService) {
-        this.boardRepository = boardRepository;
-        this.boardRepositorySpp = boardRepositorySpp;
-        this.boardImgService = boardImgService;
-        this.userService = userService;
-    }
 
     @Value("${app.fileupload.uploadDir}")
     private String uploadFolder;
@@ -76,7 +69,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public Board boardSearchById(int boardId) {
+    public Board boardFindById(int boardId) {
         return boardRepository.findById(boardId).get();
     }
 
@@ -85,12 +78,7 @@ public class BoardServiceImpl implements BoardService{
     public int boardCreate(BoardCreateReq body, MultipartHttpServletRequest request) {
         User user = userService.findByUserId(body.getUserId());
 
-        Board board = Board.builder()
-                .boardContent(body.getBoardContent())
-                .boardName(body.getBoardName())
-                .user(user)
-                .boardDate(LocalDateTime.now())
-                .build();
+        Board board = toBoard(body, user);
 
         boardRepository.save(board);
 
@@ -102,6 +90,16 @@ public class BoardServiceImpl implements BoardService{
         boardRepository.save(board);
 
         return board.getBoardId();
+    }
+
+    public Board toBoard(BoardCreateReq body, User user) {
+        Board board = Board.builder()
+                .boardContent(body.getBoardContent())
+                .boardName(body.getBoardName())
+                .user(user)
+                .boardDate(LocalDateTime.now())
+                .build();
+        return board;
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.List;
 public interface BoardService {
     Board searchLast();
     Board searchByKeywordLast(String keyword);
-    Board boardSearchById(int boardId);
+    Board boardFindById(int boardId);
     Board boardOrderByViewDescLast();
 
     int boardCreate(BoardCreateReq body, MultipartHttpServletRequest request);

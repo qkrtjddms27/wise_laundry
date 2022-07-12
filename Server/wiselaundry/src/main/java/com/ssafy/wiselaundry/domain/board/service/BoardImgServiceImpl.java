@@ -3,16 +3,17 @@ package com.ssafy.wiselaundry.domain.board.service;
 import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import com.ssafy.wiselaundry.domain.board.db.entity.BoardImg;
 import com.ssafy.wiselaundry.domain.board.db.repository.BoardImgRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class BoardImgServiceImpl implements BoardImgService {
 
-    @Autowired
-    BoardImgRepository boardImgRepository;
+    private final BoardImgRepository boardImgRepository;
 
     @Override
     public List<BoardImg> boardImgSearchAll() {

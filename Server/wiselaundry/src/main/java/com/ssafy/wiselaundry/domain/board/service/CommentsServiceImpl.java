@@ -5,26 +5,19 @@ import com.ssafy.wiselaundry.domain.board.db.entity.Comments;
 import com.ssafy.wiselaundry.domain.board.db.repository.CommentsRepository;
 import com.ssafy.wiselaundry.domain.board.request.CommentCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.CommentUpdateReq;
-import com.ssafy.wiselaundry.domain.board.response.CommentDetailRes;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
-import com.ssafy.wiselaundry.domain.user.db.repository.UserRepository;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
-import java.util.List;
-
 @Service
+@RequiredArgsConstructor
 public class CommentsServiceImpl implements CommentsService{
-    @Autowired
-    CommentsRepository commentsRepository;
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    BoardService boardService;
+    private final CommentsRepository commentsRepository;
+    private final UserService userService;
+    private final BoardService boardService;
 
     @Override
     public Comments commentSearchById(int commentId) {
@@ -34,7 +27,7 @@ public class CommentsServiceImpl implements CommentsService{
     @Override
     public Comments commentCreate(CommentCreateReq body) {
         User user = userService.findByUserId(body.getUserId());
-        Board board = boardService.boardSearchById(body.getBoardId());
+        Board board = boardService.boardFindById(body.getBoardId());
 
         Comments comments = body.toEntity(body,user,board);
         commentsRepository.save(comments);

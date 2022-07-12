@@ -8,6 +8,7 @@ import com.ssafy.wiselaundry.domain.board.response.*;
 import com.ssafy.wiselaundry.domain.board.service.BoardService;
 import com.ssafy.wiselaundry.global.model.response.BaseResponseBody;
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,14 +22,11 @@ import java.util.List;
 @Api("유저 API")
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/community")
 public class BoardController {
-    private final BoardService boardService;
 
-    @Autowired
-    BoardController(BoardService boardService){
-        this.boardService = boardService;
-    }
+    private final BoardService boardService;
 
     @ApiOperation(value = "기본 게시글 조회", notes = "기본 게시글을 가져다 준다.")
     @ApiResponses({
@@ -105,7 +103,7 @@ public class BoardController {
     })
     @GetMapping("/{boardId}")
     public ResponseEntity<? extends BaseResponseBody> boardSearchDetail(@ApiParam(value = "게시판 번호") @PathVariable("boardId") int boardId) {
-        Board board = boardService.boardSearchById(boardId);
+        Board board = boardService.boardFindById(boardId);
         List<CommentDetailRes> commentDetailResList = new ArrayList<>();
 
         for (Comments comment : board.getComments()) {
