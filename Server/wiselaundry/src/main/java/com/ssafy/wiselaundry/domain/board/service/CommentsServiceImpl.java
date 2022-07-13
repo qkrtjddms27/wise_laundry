@@ -4,11 +4,9 @@ import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import com.ssafy.wiselaundry.domain.board.db.entity.Comments;
 import com.ssafy.wiselaundry.domain.board.db.repository.CommentsRepository;
 import com.ssafy.wiselaundry.domain.board.request.CommentCreateReq;
-import com.ssafy.wiselaundry.domain.board.request.CommentUpdateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
