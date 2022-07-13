@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
  *  만일을 대비해서 수정을 따로 만들어줌
  */
 @Getter
+@ToString
 @ApiModel("게시판 수정 res")
 public class BoardUpdateRes extends BaseResponseBody {
     @ApiModelProperty(value = "게시글 id", required = true, example = "게시글 id")

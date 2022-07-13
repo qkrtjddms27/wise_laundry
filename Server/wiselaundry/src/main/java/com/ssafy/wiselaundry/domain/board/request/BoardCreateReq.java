@@ -5,8 +5,10 @@ import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class BoardCreateReq {
     @ApiModelProperty(value = "유저 ID", required = true, example = "유저 ID")
     private int userId;

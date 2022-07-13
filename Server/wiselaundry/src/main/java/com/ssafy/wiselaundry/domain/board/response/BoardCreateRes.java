@@ -5,9 +5,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @ApiModel("생성된 게시판 ID 리턴")
 public class BoardCreateRes extends BaseResponseBody {
     @ApiModelProperty(value = "게시판 ID", required = true)

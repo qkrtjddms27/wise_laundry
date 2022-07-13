@@ -5,11 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ToString
 public class BoardSearchAllRes {
     @ApiModelProperty(value = "유저 ID", required = true, example = "122333")
     private int userId;

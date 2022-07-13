@@ -4,10 +4,7 @@ import com.ssafy.wiselaundry.domain.board.db.entity.BoardImg;
 import com.ssafy.wiselaundry.global.model.response.BaseResponseBody;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 @ApiModel("게시글 상세 res")
 public class BoardSearchDetailRes extends BaseResponseBody {
 //    @Autowired

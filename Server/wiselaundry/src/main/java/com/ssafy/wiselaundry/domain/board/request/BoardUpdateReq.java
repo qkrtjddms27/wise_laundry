@@ -4,11 +4,13 @@ import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import com.ssafy.wiselaundry.domain.board.db.entity.BoardImg;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@ToString
 public class BoardUpdateReq {
     @ApiModelProperty(value = "게시판 ID", required = true)
     private int boardId;

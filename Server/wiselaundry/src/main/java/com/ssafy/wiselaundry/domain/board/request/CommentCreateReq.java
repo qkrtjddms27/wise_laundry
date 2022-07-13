@@ -8,12 +8,14 @@ import com.ssafy.wiselaundry.domain.user.service.UserService;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ToString
 public class CommentCreateReq {
     @ApiModelProperty(name = "user id", required = true, example = "38")
     private int userId;

@@ -7,11 +7,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ToString
 @ApiModel("댓글 res")
 public class CommentDetailRes extends BaseResponseBody{
     @ApiModelProperty(value = "유저 아이디", required = true, example = "pse1234")
