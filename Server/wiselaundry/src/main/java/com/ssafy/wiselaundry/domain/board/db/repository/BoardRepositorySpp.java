@@ -2,6 +2,7 @@ package com.ssafy.wiselaundry.domain.board.db.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.wiselaundry.domain.board.db.entity.Board;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -10,10 +11,10 @@ import java.util.List;
 import static com.ssafy.wiselaundry.domain.board.db.entity.QBoard.board;
 
 @Repository
+@RequiredArgsConstructor
 public class BoardRepositorySpp {
 
-    @Autowired
-    private JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
     public List<Board> boardPagination(int size, int boardId) {
         return queryFactory
