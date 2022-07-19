@@ -9,6 +9,7 @@ import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService{
 
@@ -116,10 +118,16 @@ public class BoardServiceImpl implements BoardService{
 
 //        삭제 이미지
         for (String boardImgName : body.getDeleteImgs()) {
-            BoardImg boardImg = boardImgService.findByBoardImg(boardImgName);
-            boardImgService.boardImgDelete(boardImg.getBoardImgId());
-            
-//         매핑 된 리스트에서 삭제
+            BoardImg boardImg;
+
+            try {
+                boardImg = boardImgService.findById(Integer.parseInt(boardImgName));
+                boardImgService.boardImgDelete(boardImg.getBoardImgId());
+            } catch (Exception e){
+                log.error(e.getMessage());
+                continue;
+            }
+
             board.getBoardImgs().remove(boardImg);
         }
 
@@ -199,9 +207,16 @@ public class BoardServiceImpl implements BoardService{
             File oldFile = new File("/images" + File.separator + boardImg);
             oldFile.delete();
 
-            boardImgService.boardImgDelete(boardImgService.findByBoardImg(boardImg).getBoardImgId());
-        } catch (Exception e){
+            boardImgService.boardImgDelete(boardImgService.findById(Integer.parseInt(boardImg)).getBoardImgId());
+        } catch (SecurityException e) {
             e.printStackTrace();
+            log.error("");
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("");
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("");
         }
     }
 }
