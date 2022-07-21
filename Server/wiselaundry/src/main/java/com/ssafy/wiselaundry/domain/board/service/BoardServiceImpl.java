@@ -8,8 +8,10 @@ import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
+import com.ssafy.wiselaundry.global.model.Exception.NotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -105,9 +107,11 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void boardUpdate(BoardUpdateReq body, MultipartHttpServletRequest request) {
+    public int boardUpdate(BoardUpdateReq body, MultipartHttpServletRequest request) throws NotExistException {
 //        수정할 board 객체 가져오기
-        Board board = boardRepository.findById(body.getBoardId()).get();
+        Board board = boardRepository.findById(body.getBoardId()).orElseThrow(
+                () -> new NotExistException("")
+        );
 
 //        boardImg 다루는 곳 새롭게 추가.
         List<BoardImg> addBoardImgList = fileRequestToBoardImg(request, board);
@@ -124,6 +128,10 @@ public class BoardServiceImpl implements BoardService{
                 boardImg = boardImgService.findById(Integer.parseInt(boardImgName));
                 boardImgService.boardImgDelete(boardImg.getBoardImgId());
             } catch (Exception e){
+                /**
+                 * boardImgServiceImpl.findById는 해당하는 객체가 null일 경우 Exception을 던진다.
+                 * message 내용 : "해당 boardId 와 일치하는 ["+boardImgId+"] 이미지를 찾을 수 없습니다."
+                 */
                 log.error(e.getMessage());
                 continue;
             }
@@ -136,19 +144,25 @@ public class BoardServiceImpl implements BoardService{
         board.setBoardName(body.getBoardName());
 
         boardRepository.save(board);
+
+        return 1;
     }
 
     @Override
-    public void boardDelete(int boardId) {
-        Board deleteBoard = boardRepository.findById(boardId).get();
+    public int boardDelete(int boardId) throws NotExistException {
+        Board deleteBoard = boardRepository.findById(boardId).orElseThrow(
+                () -> new NotExistException("")
+        );
         boardRepository.delete(deleteBoard);
+        return 1;
     }
 
     @Override
     @Transactional
-    public void boardViewIncrement(int boardId) {
-        Board board = boardRepository.findById(boardId).get();
+    public int boardViewIncrement(int boardId) throws NotExistException {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotExistException(""));
         board.setView(board.getView() + 1);
+        return 1;
     }
 
     @Override
@@ -202,21 +216,17 @@ public class BoardServiceImpl implements BoardService{
         return boardImgList;
     }
 
-    private void boardImgDelete(String boardImg) {
+    private int boardImgDelete(String boardImg) {
         try {
             File oldFile = new File("/images" + File.separator + boardImg);
             oldFile.delete();
 
             boardImgService.boardImgDelete(boardImgService.findById(Integer.parseInt(boardImg)).getBoardImgId());
-        } catch (SecurityException e) {
-            e.printStackTrace();
-            log.error("");
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.error("");
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("");
+        } catch (NotExistException e) {
+            log.error(e.getMessage());
+            return 0;
         }
+
+        return 1;
     }
 }

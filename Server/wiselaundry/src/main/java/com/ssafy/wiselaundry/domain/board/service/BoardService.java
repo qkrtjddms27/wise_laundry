@@ -3,6 +3,7 @@ package com.ssafy.wiselaundry.domain.board.service;
 import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
+import com.ssafy.wiselaundry.global.model.Exception.NotExistException;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
@@ -15,9 +16,9 @@ public interface BoardService {
 
     int boardCreate(BoardCreateReq body, MultipartHttpServletRequest request);
 
-    void boardUpdate(BoardUpdateReq body, MultipartHttpServletRequest request);
-    void boardDelete(int boardId);
-    void boardViewIncrement(int boardId);
+    int boardUpdate(BoardUpdateReq body, MultipartHttpServletRequest request) throws NotExistException;
+    int boardDelete(int boardId) throws NotExistException;
+    int boardViewIncrement(int boardId) throws NotExistException;
 
     List<Board> boardSearchAll(int size, int boardId);
     List<Board> boardOrderByViewDesc(int size, int offset);
