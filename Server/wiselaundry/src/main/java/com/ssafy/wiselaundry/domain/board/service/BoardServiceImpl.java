@@ -8,17 +8,15 @@ import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
-import com.ssafy.wiselaundry.global.model.Exception.NotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.persistence.EntityNotFoundException;
 import javax.swing.filechooser.FileSystemView;
 import javax.transaction.Transactional;
 import java.io.File;
@@ -31,11 +29,11 @@ import java.util.UUID;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class BoardServiceImpl implements BoardService{
+public class BoardServiceImpl {
 
     private final BoardRepository boardRepository;
     private final BoardRepositorySpp boardRepositorySpp;
-    private final BoardImgService boardImgService;
+    private final BoardImgServiceImpl boardImgService;
     private final UserService userService;
 
     @Value("${app.fileupload.uploadDir}")
@@ -44,7 +42,6 @@ public class BoardServiceImpl implements BoardService{
     @Value("${app.fileupload.uploadPath}")
     private String uploadPath;
 
-    @Override
     public List<Board> boardSearchAll(int size, int boardId) {
 //        return boardRepositorySpp.boardPagination(size, boardId);
 //        return boardRepositorySpp.boardSearchAll();
@@ -52,33 +49,27 @@ public class BoardServiceImpl implements BoardService{
     }
 
 
-    @Override
     public List<Board> boardOrderByViewDesc(int size, int boardId) {
         return boardRepositorySpp.boardViewOrderByDesc(size, boardId);
     }
 
-    @Override
     public Board boardOrderByViewDescLast() {
         return boardRepositorySpp.boardViewOrderByDescLast();
     }
 
-    @Override
     public Board searchLast() {
         return boardRepositorySpp.boardSearchLast();
     }
 
-    @Override
     public Board searchByKeywordLast(String keyword) {
         return boardRepositorySpp.boardSearchByKeywordLast(keyword);
     }
 
-    @Override
     public Board boardFindById(int boardId) {
         return boardRepository.findById(boardId).get();
     }
 
 
-    @Override
     public int boardCreate(BoardCreateReq body, MultipartHttpServletRequest request) {
         User user = userService.findByUserId(body.getUserId());
 
@@ -106,11 +97,10 @@ public class BoardServiceImpl implements BoardService{
         return board;
     }
 
-    @Override
-    public int boardUpdate(BoardUpdateReq body, MultipartHttpServletRequest request) throws NotExistException {
+    public int boardUpdate(BoardUpdateReq body, MultipartHttpServletRequest request) {
 //        수정할 board 객체 가져오기
         Board board = boardRepository.findById(body.getBoardId()).orElseThrow(
-                () -> new NotExistException("")
+                () -> new EntityNotFoundException("존재하지 않는 게시글 ID입니다.")
         );
 
 //        boardImg 다루는 곳 새롭게 추가.
@@ -138,7 +128,6 @@ public class BoardServiceImpl implements BoardService{
 
             board.getBoardImgs().remove(boardImg);
         }
-
 //       내용 수정.
         board.setBoardContent(body.getBoardContent());
         board.setBoardName(body.getBoardName());
@@ -148,24 +137,23 @@ public class BoardServiceImpl implements BoardService{
         return 1;
     }
 
-    @Override
-    public int boardDelete(int boardId) throws NotExistException {
+    public int boardDelete(int boardId) throws EntityNotFoundException {
         Board deleteBoard = boardRepository.findById(boardId).orElseThrow(
-                () -> new NotExistException("")
+                () -> new EntityNotFoundException("")
         );
         boardRepository.delete(deleteBoard);
         return 1;
     }
 
-    @Override
     @Transactional
-    public int boardViewIncrement(int boardId) throws NotExistException {
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotExistException(""));
+    public int boardViewIncrement(int boardId) throws EntityNotFoundException {
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new EntityNotFoundException("")
+        );
         board.setView(board.getView() + 1);
         return 1;
     }
 
-    @Override
     public List<Board> boardSearchKeyword(String keyword, int size, int boardId) {
 
         return boardRepositorySpp.boardSearchByKeyword(keyword, size, boardId);
@@ -216,16 +204,8 @@ public class BoardServiceImpl implements BoardService{
         return boardImgList;
     }
 
-    private int boardImgDelete(String boardImg) {
-        try {
-            File oldFile = new File("/images" + File.separator + boardImg);
-            oldFile.delete();
-
-            boardImgService.boardImgDelete(boardImgService.findById(Integer.parseInt(boardImg)).getBoardImgId());
-        } catch (NotExistException e) {
-            log.error(e.getMessage());
-            return 0;
-        }
+    private int boardImgDelete(String boardImg) throws EntityNotFoundException {
+        boardImgService.boardImgDelete(boardImgService.findById(Integer.parseInt(boardImg)).getBoardImgId());
 
         return 1;
     }

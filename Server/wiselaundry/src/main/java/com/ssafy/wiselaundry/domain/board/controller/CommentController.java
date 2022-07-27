@@ -4,17 +4,13 @@ import com.ssafy.wiselaundry.domain.board.db.entity.Comments;
 import com.ssafy.wiselaundry.domain.board.request.CommentCreateReq;
 import com.ssafy.wiselaundry.domain.board.response.BoardSearchDetailRes;
 import com.ssafy.wiselaundry.domain.board.response.CommentDetailRes;
-import com.ssafy.wiselaundry.domain.board.service.CommentsService;
+import com.ssafy.wiselaundry.domain.board.service.CommentsServiceImpl;
 import com.ssafy.wiselaundry.global.model.response.BaseResponseBody;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Api("유저 API")
@@ -24,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final CommentsService commentService;
+    private final CommentsServiceImpl commentService;
 
     @ApiOperation(value = "댓글 생성", notes = "댓글 생성")
     @ApiResponses({

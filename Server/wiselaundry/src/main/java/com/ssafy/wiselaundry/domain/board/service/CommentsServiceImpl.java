@@ -6,27 +6,33 @@ import com.ssafy.wiselaundry.domain.board.db.repository.CommentsRepository;
 import com.ssafy.wiselaundry.domain.board.request.CommentCreateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
-import com.ssafy.wiselaundry.global.model.Exception.NotExistException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
-public class CommentsServiceImpl implements CommentsService{
+@Slf4j
+public class CommentsServiceImpl {
 
     private final CommentsRepository commentsRepository;
     private final UserService userService;
-    private final BoardService boardService;
+    private final BoardServiceImpl boardService;
 
-    @Override
-    public Comments commentSearchById(int commentId) throws NotExistException {
-        return commentsRepository.findById(commentId).orElseThrow(
-                () -> new NotExistException("[commentDelete]commentId:"+commentId+"가 존재하지 않습니다.")
+    public Comments commentSearchById(int commentId) {
+        Comments comments;
+
+        comments = commentsRepository.findById(commentId).orElseThrow(
+                EntityNotFoundException::new
         );
+
+        return comments;
     }
 
-    @Override
-    public Comments commentCreate(CommentCreateReq body) {
+    public Comments commentCreate(CommentCreateReq body) throws EntityExistsException {
         User user = userService.findByUserId(body.getUserId());
         Board board = boardService.boardFindById(body.getBoardId());
 
@@ -35,11 +41,13 @@ public class CommentsServiceImpl implements CommentsService{
         return comments;
     }
 
-    @Override
-    public int commentDelete(int commentId) throws NotExistException {
-        Comments deleteComments = commentsRepository.findById(commentId).orElseThrow(
-                () -> new NotExistException("[commentDelete]commentId:"+commentId+"가 존재하지 않습니다.")
+    public int commentDelete(int commentId) {
+        Comments deleteComments;
+
+        deleteComments = commentsRepository.findById(commentId).orElseThrow(
+                EntityNotFoundException::new
         );
+
         commentsRepository.delete(deleteComments);
 
         return 1;

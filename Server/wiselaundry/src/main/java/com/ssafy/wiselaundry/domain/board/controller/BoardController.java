@@ -5,12 +5,11 @@ import com.ssafy.wiselaundry.domain.board.db.entity.Comments;
 import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
 import com.ssafy.wiselaundry.domain.board.response.*;
-import com.ssafy.wiselaundry.domain.board.service.BoardService;
+import com.ssafy.wiselaundry.domain.board.service.BoardServiceImpl;
 import com.ssafy.wiselaundry.global.model.response.BaseResponseBody;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ import java.util.List;
 @RequestMapping("/api/community")
 public class BoardController {
 
-    private final BoardService boardService;
+    private final BoardServiceImpl boardService;
 
     @ApiOperation(value = "기본 게시글 조회", notes = "모든 게시글 조회, 인피니티 스크롤로 구현되어 있기 때문에 특정 부분만 반환하게됨.")
     @ApiResponses({
@@ -36,7 +35,7 @@ public class BoardController {
 
     @GetMapping("/all/{size}/{boardId}")
     public ResponseEntity<? extends BaseResponseBody> boardSearchAll(@PathVariable("size") int size, @PathVariable("boardId") int boardId) {
-        log.info("boardSearchAll / size :" + size + "boardId :" + boardId );
+        log.info("[boardSearchAll] size :" + size + "boardId :" + boardId );
 
         if (boardId == -1) boardId = Integer.MAX_VALUE;
 
@@ -61,7 +60,7 @@ public class BoardController {
                                                                          @ApiParam @PathVariable("size")int size,
                                                                          @ApiParam @PathVariable("boardId")int boardId) {
 
-        log.info("boardSearchKeyword / keyword :" + keyword + " size :" + size + " boardId " + boardId);
+        log.info("[boardSearchKeyword] keyword : " + keyword + " size : " + size + " boardId : " + boardId);
 
         if (boardId == -1) boardId = Integer.MAX_VALUE;
 
@@ -86,7 +85,7 @@ public class BoardController {
     @GetMapping("/{size}/{offset}")
     public ResponseEntity<? extends BaseResponseBody> boardSortViewDesc(@ApiParam @PathVariable("size") int size,
                                                                         @ApiParam @PathVariable("offset") int offset) {
-        log.info("boardSearchKeyword / " + "size :" + size + " offset " + offset);
+        log.info("[boardSearchKeyword]" + "size :" + size + " offset " + offset);
 
         boolean endFlag = true;
 
@@ -111,7 +110,7 @@ public class BoardController {
     })
     @GetMapping("/{boardId}")
     public ResponseEntity<? extends BaseResponseBody> boardSearchDetail(@ApiParam(value = "게시판 번호") @PathVariable("boardId") int boardId) {
-        log.info("boardSearchDetail / " + "boardId : " + boardId );
+        log.info("[boardSearchDetail]" + "boardId : " + boardId );
 
         Board board = boardService.boardFindById(boardId);
         List<CommentDetailRes> commentDetailResList = new ArrayList<>();
@@ -154,9 +153,10 @@ public class BoardController {
     @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<? extends BaseResponseBody> boardCreate(@RequestPart BoardCreateReq body,
                                                                   MultipartHttpServletRequest file) {
-        log.info("boardCreate / " + " BaordCreateReq :" + body.toString());
+        log.info("[boardCreate]" + " BaordCreateReq :" + body.toString());
 
         int boardId = boardService.boardCreate(body, file);
+
         return ResponseEntity.status(201).body(BoardCreateRes.of(201, "Success", boardId));
     }
 
@@ -169,8 +169,9 @@ public class BoardController {
     @PutMapping(value = "/update", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<? extends BaseResponseBody> boardUpdate(@RequestPart BoardUpdateReq body,
                                                                   MultipartHttpServletRequest file) {
-        log.info("boardUpdate-call");
+        log.info("[boardUpdate]");
         boardService.boardUpdate(body, file);
+
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "수정 완료"));
     }
 
@@ -181,8 +182,9 @@ public class BoardController {
     })
     @PutMapping("/{boardId}")
     public ResponseEntity<? extends BaseResponseBody> boardViewIncrement(@ApiParam @PathVariable("boardId") int boardId) {
-        log.info("boardViewIncrement / " + " boardId :" + boardId);
+        log.info("[boardViewIncrement]" + " boardId :" + boardId);
         boardService.boardViewIncrement(boardId);
+
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "증가 완료"));
     }
 
@@ -193,8 +195,9 @@ public class BoardController {
     })
     @DeleteMapping("/{boardId}")
     public ResponseEntity<? extends BaseResponseBody> boardDelete(@ApiParam @PathVariable("boardId") int boardId) {
-        log.info("boardId / " + " boardId : " + boardId);
+        log.info("[boardDelete]" + " boardId : " + boardId);
         boardService.boardDelete(boardId);
+
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "삭제 완료"));
     }
 }

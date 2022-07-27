@@ -2,14 +2,11 @@ package com.ssafy.wiselaundry.domain.board.request;
 
 import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import com.ssafy.wiselaundry.domain.board.db.entity.Comments;
-import com.ssafy.wiselaundry.domain.board.service.BoardService;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
-import com.ssafy.wiselaundry.domain.user.service.UserService;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 

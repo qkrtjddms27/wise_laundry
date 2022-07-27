@@ -3,34 +3,35 @@ package com.ssafy.wiselaundry.domain.board.service;
 import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import com.ssafy.wiselaundry.domain.board.db.entity.BoardImg;
 import com.ssafy.wiselaundry.domain.board.db.repository.BoardImgRepository;
-import com.ssafy.wiselaundry.global.model.Exception.NotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
+import javax.persistence.RollbackException;
 import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class BoardImgServiceImpl implements BoardImgService {
+public class BoardImgServiceImpl {
 
     private final BoardImgRepository boardImgRepository;
 
-    @Override
     public List<BoardImg> boardImgSearchAll() {
         return boardImgRepository.findAll();
     }
 
-    @Override
-    public BoardImg findById(int boardImgId) throws NotExistException {
+    public BoardImg findById(int boardImgId) throws NoResultException {
         return boardImgRepository.findById(boardImgId).orElseThrow(
-                () -> new NotExistException("해당 boardId 와 일치하는 ["+boardImgId+"] 이미지를 찾을 수 없습니다.")
+                NoResultException::new
         );
     }
 
-    @Override
-    public BoardImg boardImgCreate(Board board, String boardImg) {
+    @Transactional(rollbackFor = {EntityExistsException.class, RollbackException.class})
+    public BoardImg boardImgCreate(Board board, String boardImg) throws EntityExistsException, RollbackException {
         BoardImg img = BoardImg.builder()
                 .board(board)
                 .boardImg(boardImg)
@@ -40,17 +41,11 @@ public class BoardImgServiceImpl implements BoardImgService {
         return img;
     }
 
-    @Override
-    public int boardImgDelete(int boardImgId) {
-        try {
-            BoardImg boardImg = findById(boardImgId);
-            boardImgRepository.delete(boardImg);
-        } catch (NotExistException e) {
-            log.error(e.getMessage());
-            return 0;
-        }
+    public int boardImgDelete(int boardImgId) throws NoResultException {
+       BoardImg boardImg = findById(boardImgId);
+       boardImgRepository.delete(boardImg);
 
-        return 1;
+       return 1;
     }
 
 }
