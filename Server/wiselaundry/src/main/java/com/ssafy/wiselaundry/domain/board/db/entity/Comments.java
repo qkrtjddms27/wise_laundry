@@ -2,10 +2,7 @@ package com.ssafy.wiselaundry.domain.board.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,12 +11,14 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "comments")
 public class Comments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private int commentId;
+    private Long commentId;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,14 +35,5 @@ public class Comments {
 
     @Column(name = "comment_dt")
     private LocalDateTime commentDate;
-
-    @Builder
-    Comments(int commentId, User user, Board board, String commentContent, LocalDateTime commentDate) {
-        this.commentId = commentId;
-        this.user = user;
-        this.board = board;
-        this.commentContent = commentContent;
-        this.commentDate = commentDate;
-    }
 
 }

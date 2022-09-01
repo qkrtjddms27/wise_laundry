@@ -21,7 +21,7 @@ public class BoardUpdateReq {
     private String boardName;
 
     @ApiModelProperty(value = "삭제할 이미지")
-    private List<String> deleteImgs = new ArrayList<>();
+    private List<String> deleteImgs;
 
     @ApiModelProperty(value = "게시판 내용", required = true)
     private String boardContent;

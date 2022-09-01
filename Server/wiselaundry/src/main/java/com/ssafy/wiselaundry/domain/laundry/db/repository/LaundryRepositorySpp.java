@@ -20,7 +20,7 @@ public class LaundryRepositorySpp {
     QInfo qInfo = QInfo.info;
     QLaundryInfo qLaundryInfo = QLaundryInfo.laundryInfo1;
     //사용자 전체 옷 조회
-    public List<LaundryDetail> laundryDetailByUserId(int userId){
+    public List<LaundryDetail> laundryDetailByUserId(long userId){
         return jpaQueryFactory.select(Projections.constructor(LaundryDetail.class, qLaundry.laundryId.as("laundryId"), qLaundry.laundryImg.as("laundryImg")))
                 .from(qLaundry).where(qLaundry.user.userId.eq(userId)).fetch();
     }
@@ -31,7 +31,7 @@ public class LaundryRepositorySpp {
     }
 
     //옷 디테일 조회
-    public List<String> careLabelDetailsByLaundryId(int laundryId){
+    public List<String> careLabelDetailsByLaundryId(long laundryId){
         return jpaQueryFactory.select(qCareLabels.careLabel)
                 .from(qLaundryCareLabels)
                 .leftJoin(qCareLabels).on(qCareLabels.careLabelId.eq(qLaundryCareLabels.careLabel.careLabelId))
@@ -40,7 +40,7 @@ public class LaundryRepositorySpp {
     }
 
     //옷 디테일 조회
-    public List<CareLabels> careLabelsByLaundryId(int laundryId){
+    public List<CareLabels> careLabelsByLaundryId(long laundryId){
         return jpaQueryFactory.select(qCareLabels)
                 .from(qLaundryCareLabels)
                 .leftJoin(qCareLabels).on(qCareLabels.careLabelId.eq(qLaundryCareLabels.careLabel.careLabelId))
@@ -49,7 +49,7 @@ public class LaundryRepositorySpp {
     }
 
     //옷 설명 조회
-    public List<String> infoDetailsByLaundryId(int laundryId){
+    public List<String> infoDetailsByLaundryId(long laundryId){
         return jpaQueryFactory.select(qInfo.laundryInfo)
                 .from(qLaundryInfo)
                 .leftJoin(qInfo).on(qInfo.laundryInfoId.eq(qLaundryInfo.laundryInfo.laundryInfoId))

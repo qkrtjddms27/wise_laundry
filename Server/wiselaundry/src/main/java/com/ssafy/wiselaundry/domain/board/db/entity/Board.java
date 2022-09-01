@@ -1,6 +1,7 @@
 package com.ssafy.wiselaundry.domain.board.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class Board{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
-    private int boardId;
+    private Long boardId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -48,7 +49,7 @@ public class Board{
     private List<BoardImg> boardImgs = new ArrayList<BoardImg>();
 
     @Builder
-    Board(int boardId, User user, String boardName, List<BoardImg> boardImgs, List<Comments> comments,
+    Board(long boardId, User user, String boardName, List<BoardImg> boardImgs, List<Comments> comments,
           LocalDateTime boardDate, String boardContent) {
         this.boardId = boardId;
         this.user = user;
@@ -57,5 +58,15 @@ public class Board{
         this.comments = comments;
         this.boardDate = boardDate;
         this.boardContent = boardContent;
+    }
+
+    public static Board toEntity(BoardCreateReq body, User user) {
+        Board board = Board.builder()
+                .boardContent(body.getBoardContent())
+                .boardName(body.getBoardName())
+                .user(user)
+                .boardDate(LocalDateTime.now())
+                .build();
+        return board;
     }
 }

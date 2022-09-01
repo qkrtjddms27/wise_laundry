@@ -7,6 +7,7 @@ import com.ssafy.wiselaundry.domain.board.db.repository.BoardRepositorySpp;
 import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
+import com.ssafy.wiselaundry.domain.user.db.repository.UserRepository;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class BoardServiceImpl {
     private final BoardRepository boardRepository;
     private final BoardRepositorySpp boardRepositorySpp;
     private final BoardImgServiceImpl boardImgService;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Value("${app.fileupload.uploadDir}")
     private String uploadFolder;
@@ -43,8 +44,6 @@ public class BoardServiceImpl {
     private String uploadPath;
 
     public List<Board> boardSearchAll(int size, int boardId) {
-//        return boardRepositorySpp.boardPagination(size, boardId);
-//        return boardRepositorySpp.boardSearchAll();
         return boardRepository.findAll();
     }
 
@@ -70,10 +69,10 @@ public class BoardServiceImpl {
     }
 
 
-    public int boardCreate(BoardCreateReq body, MultipartHttpServletRequest request) {
-        User user = userService.findByUserId(body.getUserId());
+    public long boardCreate(BoardCreateReq body, MultipartHttpServletRequest request) {
+        User user = userRepository.findByUserId(body.getUserId());
 
-        Board board = toBoard(body, user);
+        Board board = Board.toEntity(body, user);
 
         boardRepository.save(board);
 
@@ -87,15 +86,7 @@ public class BoardServiceImpl {
         return board.getBoardId();
     }
 
-    public Board toBoard(BoardCreateReq body, User user) {
-        Board board = Board.builder()
-                .boardContent(body.getBoardContent())
-                .boardName(body.getBoardName())
-                .user(user)
-                .boardDate(LocalDateTime.now())
-                .build();
-        return board;
-    }
+
 
     public int boardUpdate(BoardUpdateReq body, MultipartHttpServletRequest request) {
 //        수정할 board 객체 가져오기

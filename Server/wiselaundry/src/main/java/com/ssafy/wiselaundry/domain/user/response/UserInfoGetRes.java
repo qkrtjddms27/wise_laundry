@@ -13,7 +13,7 @@ import lombok.Setter;
 public class UserInfoGetRes extends BaseResponseBody {
 
     @ApiModelProperty(name = "회원 번호", example = "486")
-    int userId;
+    Long userId;
 
     @ApiModelProperty(name = "회원 이메일", example = "ssafy@ssafy.com")
     String userEmail;

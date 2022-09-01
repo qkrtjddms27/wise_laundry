@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 
 @Repository
-public interface LaundryRepository extends JpaRepository<Laundry, Integer> {
-    Laundry findByLaundryId(int laundryId);
+public interface LaundryRepository extends JpaRepository<Laundry, Long> {
+    Laundry findByLaundryId(long laundryId);
 
     @Transactional
-    void deleteByLaundryId(int laundryId);
+    void deleteByLaundryId(long laundryId);
 }

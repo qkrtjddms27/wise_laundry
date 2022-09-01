@@ -13,9 +13,9 @@ import lombok.ToString;
 @ApiModel("생성된 게시판 ID 리턴")
 public class BoardCreateRes extends BaseResponseBody {
     @ApiModelProperty(value = "게시판 ID", required = true)
-    private int boardId;
+    private long boardId;
 
-    public static BoardCreateRes of (Integer statusCode, String message, Integer boardId){
+    public static BoardCreateRes of (Integer statusCode, String message, long boardId){
         BoardCreateRes res = new BoardCreateRes();
         res.setStatusCode(statusCode);
         res.setMessage(message);

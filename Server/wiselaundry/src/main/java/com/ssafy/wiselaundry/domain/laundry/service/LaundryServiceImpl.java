@@ -9,6 +9,7 @@ import com.ssafy.wiselaundry.domain.laundry.request.LaundryModifyPostRep;
 import com.ssafy.wiselaundry.domain.laundry.request.UserLaundryRegisterPostReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,29 +25,16 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class LaundryServiceImpl implements LaundryService{
-    @Autowired
-    LaundryRepository laundryRepository;
+@RequiredArgsConstructor
+public class LaundryServiceImpl{
+    private final LaundryRepository laundryRepository;
+    private final LaundryRepositorySpp laundryRepositorySpp;
+    private final UserService userService;
+    private final CareLabelsRepository careLabelsRepository;
+    private final LaundryCareLabelsRepository laundryCareLabelsRepository;
+    private final InfoRepository infoRepository;
+    private final LaundryInfoRepository laundryInfoRepository;
 
-    @Autowired
-    LaundryRepositorySpp laundryRepositorySpp;
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    CareLabelsRepository careLabelsRepository;
-
-    @Autowired
-    LaundryCareLabelsRepository laundryCareLabelsRepository;
-
-    @Autowired
-    InfoRepository infoRepository;
-
-    @Autowired
-    LaundryInfoRepository laundryInfoRepository;
-
-    @Override
     public List<String> findCareLabelDetail(int laundryId) {
         return laundryRepositorySpp.careLabelDetailsByLaundryId(laundryId);
     }
@@ -57,13 +45,11 @@ public class LaundryServiceImpl implements LaundryService{
     @Value("${app.fileupload.uploadPath}")
     private String uploadPath;
 
-    @Override
-    public List<String> findInfoDetail(int laundryId) {
+    public List<String> findInfoDetail(long laundryId) {
         return laundryRepositorySpp.infoDetailsByLaundryId(laundryId);
     }
 
     //내 옷장 전체 검색
-    @Override
     public List<LaundryAll> findUserLaundryAll(int userId) {
         List<LaundryDetail> list = laundryRepositorySpp.laundryDetailByUserId(userId);
         List<LaundryAll> userLaundryAlls = new ArrayList<>();
@@ -79,12 +65,12 @@ public class LaundryServiceImpl implements LaundryService{
     }
 
     //옷 detail 조회
-    @Override
-    public LaundryDetails findLaundryDetails(int laundryId) {
+    public LaundryDetails findLaundryDetails(long laundryId) {
         Laundry laundry = laundryRepository.findByLaundryId(laundryId);
         if(laundry == null){
             return null;
         }
+
         return LaundryDetails.builder().laundryId(laundry.getLaundryId())
                 .laundryImg(laundry.getLaundryImg())
                 .laundryOwnerId(laundry.getUser().getUserId())
@@ -97,7 +83,6 @@ public class LaundryServiceImpl implements LaundryService{
     }
 
     //내 옷 등록
-    @Override
     public int laundryRegisterByUser(UserLaundryRegisterPostReq userLaundryRegisterPostReq, MultipartHttpServletRequest request) {
         User user = userService.findByUserId(userLaundryRegisterPostReq.getUserId());
 
@@ -180,7 +165,6 @@ public class LaundryServiceImpl implements LaundryService{
     }
 
     //옷 삭제
-    @Override
     public int deleteLaundry(int laundryId) {
 
         Laundry laundry = laundryRepository.findByLaundryId(laundryId);
@@ -197,7 +181,6 @@ public class LaundryServiceImpl implements LaundryService{
     }
 
     //모든 옷장 전체 목록
-    @Override
     public List<LaundryAll> findLaundryAll() {
         List<LaundryDetail> list = laundryRepositorySpp.laundryDetail();
         List<LaundryAll> userLaundryAlls = new ArrayList<>();
@@ -213,7 +196,6 @@ public class LaundryServiceImpl implements LaundryService{
     }
 
     //내 옷 수정
-    @Override
     public int modifyLaundryDetails(LaundryModifyPostRep laundryModifyPostRep, MultipartHttpServletRequest request) {
         Laundry laundry = laundryRepository.findByLaundryId(laundryModifyPostRep.getLaundryId());
         if(laundry == null){
@@ -310,7 +292,6 @@ public class LaundryServiceImpl implements LaundryService{
 
     }
 
-    @Override
     public List<CareLabels> findCareLabelsAll() {
         return careLabelsRepository.findAll();
     }

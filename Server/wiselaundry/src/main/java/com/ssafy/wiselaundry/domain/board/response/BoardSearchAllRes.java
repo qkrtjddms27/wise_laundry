@@ -2,19 +2,19 @@ package com.ssafy.wiselaundry.domain.board.response;
 
 import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoardSearchAllRes {
     @ApiModelProperty(value = "유저 ID", required = true, example = "122333")
-    private int userId;
+    private Long userId;
 
     @ApiModelProperty(value = "유저 닉네임", required = true, example = "게시글 작성자 닉네임입니다.")
     private String userNick;
@@ -26,10 +26,10 @@ public class BoardSearchAllRes {
     private String kakaoImg;
 
     @ApiModelProperty(value = "게시글 ID", required = true, example = "게시글 ID")
-    private int boardId;
+    private Long boardId;
 
     @ApiModelProperty(value = "조회수", required = true, example = "게시글 조회수")
-    private int view;
+    private long view;
 
     @ApiModelProperty(value = "게시글 제목", required = true, example = "게시글 제목입니다.")
     private String boardName;
@@ -38,21 +38,7 @@ public class BoardSearchAllRes {
     private LocalDateTime boardDate;
 
     @ApiModelProperty(value = "댓글 갯수", required = true, example = "3")
-    private int commentCnt;
-
-    @Builder
-    public BoardSearchAllRes(int userId, String userNick, int boardId, String boardName, LocalDateTime boardDate,
-                             int view, String userImg, int commentCnt, String kakaoImg, String message, Integer statusCode) {
-        this.userId = userId;
-        this.userNick = userNick;
-        this.userImg = userImg;
-        this.boardId =  boardId;
-        this.boardName = boardName;
-        this.boardDate = boardDate;
-        this.commentCnt = commentCnt;
-        this.view = view;
-        this.kakaoImg = kakaoImg;
-    }
+    private long commentCnt;
 
     public static BoardSearchAllRes boardToBoardSearchAllRes(Board board){
 
@@ -69,3 +55,4 @@ public class BoardSearchAllRes {
                 .build();
     }
 }
+

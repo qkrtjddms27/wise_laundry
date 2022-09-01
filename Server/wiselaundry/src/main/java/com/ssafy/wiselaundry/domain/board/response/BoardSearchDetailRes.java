@@ -19,10 +19,10 @@ public class BoardSearchDetailRes extends BaseResponseBody {
 //    CommentsService commentsService;
 
     @ApiModelProperty(value = "게시글 id", required = true, example = "게시글 id")
-    private int boardId;
+    private long boardId;
 
     @ApiModelProperty(value = "유저 id", required = true, example = "게시글 작성자 ID 입니다.")
-    private int userId;
+    private long userId;
 
     @ApiModelProperty(value = "유저 닉네임", required = true, example = "게시글 작성자 닉네임입니다.")
     private String userNick;
@@ -49,7 +49,7 @@ public class BoardSearchDetailRes extends BaseResponseBody {
     private List<CommentDetailRes> comments;
 
     @Builder
-    public BoardSearchDetailRes(int boardId, int userId, String userNick, String userImg, String boardName,
+    public BoardSearchDetailRes(long boardId, long userId, String userNick, String userImg, String boardName,
                                 List<BoardImg> boardImgs, String boardContent, LocalDateTime boardDate,
                                 List<CommentDetailRes> comments, String kakaoImg,Integer statusCode, String message) {
         this.boardId = boardId;

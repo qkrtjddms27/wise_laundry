@@ -26,7 +26,7 @@ public class BoardImgServiceImpl {
 
     public BoardImg findById(int boardImgId) throws NoResultException {
         return boardImgRepository.findById(boardImgId).orElseThrow(
-                NoResultException::new
+                () -> new IllegalArgumentException("")
         );
     }
 

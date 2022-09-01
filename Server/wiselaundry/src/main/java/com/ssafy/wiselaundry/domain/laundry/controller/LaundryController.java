@@ -8,7 +8,7 @@ import com.ssafy.wiselaundry.domain.laundry.request.UserLaundryRegisterPostReq;
 import com.ssafy.wiselaundry.domain.laundry.response.CareLabelsAllRes;
 import com.ssafy.wiselaundry.domain.laundry.response.LaundryAllRes;
 import com.ssafy.wiselaundry.domain.laundry.response.LaundryDetailsRes;
-import com.ssafy.wiselaundry.domain.laundry.service.LaundryService;
+import com.ssafy.wiselaundry.domain.laundry.service.LaundryServiceImpl;
 import com.ssafy.wiselaundry.global.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/api/laundry")
 public class LaundryController {
     @Autowired
-    LaundryService laundryService;
+    LaundryServiceImpl laundryService;
 
     @GetMapping("/{userId}/all")
     @ApiOperation(value = "내 옷장 전체 목록")

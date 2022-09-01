@@ -15,9 +15,10 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @ApiModel("댓글 res")
+@Builder
 public class CommentDetailRes extends BaseResponseBody{
     @ApiModelProperty(value = "유저 아이디", required = true, example = "pse1234")
-    private int userId;
+    private Long userId;
 
     @ApiModelProperty(value = "유저 이미지", required = true )
     private String userImg;
@@ -29,27 +30,13 @@ public class CommentDetailRes extends BaseResponseBody{
     private String userNick;
 
     @ApiModelProperty(value = "댓글 아이디", required = true, example = "123")
-    private int commentId;
+    private Long commentId;
 
     @ApiModelProperty(value = "댓글 내용", required = true, example = "댓글 내용입니다.")
     private String commentContent;
 
     @ApiModelProperty(value = "댓글 등록 날짜", required = true)
     private LocalDateTime commentDate;
-
-    @Builder
-    public CommentDetailRes(int userId, String userImg, String userNick, int commentId, String commentContent,
-                            LocalDateTime commentDate,String kakaoImg ,Integer statusCode, String message){
-        this.userId = userId;
-        this.userImg = userImg;
-        this.userNick = userNick;
-        this.commentId = commentId;
-        this.commentContent = commentContent;
-        this.commentDate = commentDate;
-        this.kakaoImg = kakaoImg;
-        this.setStatusCode(statusCode);
-        this.setMessage(message);
-    }
 
     public static CommentDetailRes of(CommentDetailRes body){
         return CommentDetailRes.builder()
@@ -63,8 +50,8 @@ public class CommentDetailRes extends BaseResponseBody{
                 .build();
     }
 
-    public static CommentDetailRes of(Integer statusCode, String message, CommentDetailRes body){
-        return CommentDetailRes.builder()
+    public static CommentDetailRes of(int statusCode, String message, CommentDetailRes body){
+        CommentDetailRes res = CommentDetailRes.builder()
                 .userId(body.getUserId())
                 .userImg(body.getUserImg())
                 .userNick(body.getUserNick())
@@ -72,8 +59,11 @@ public class CommentDetailRes extends BaseResponseBody{
                 .commentDate(body.getCommentDate())
                 .commentId(body.getCommentId())
                 .kakaoImg(body.getKakaoImg())
-                .statusCode(statusCode)
-                .message(message)
                 .build();
+
+        res.setStatusCode(statusCode);
+        res.setMessage(message);
+
+        return res;
     }
 }

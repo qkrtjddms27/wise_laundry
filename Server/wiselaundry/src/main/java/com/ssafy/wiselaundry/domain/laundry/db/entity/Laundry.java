@@ -4,10 +4,7 @@ package com.ssafy.wiselaundry.domain.laundry.db.entity;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -15,7 +12,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "laundry")
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @ApiModel(value = "Laundry", description = "세탁물")
 public class Laundry {
 
@@ -23,7 +22,7 @@ public class Laundry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "laundry_id")
-    private int laundryId;
+    private Long laundryId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -38,12 +37,4 @@ public class Laundry {
     @Column(name = "laundry_memo")
     private String laundryMemo;
 
-
-    @Builder
-    Laundry(int laundryId, User user, String laundryImg, String laundryMemo) {
-        this.laundryId = laundryId;
-        this.user = user;
-        this.laundryImg = laundryImg;
-        this.laundryMemo = laundryMemo;
-    }
 }

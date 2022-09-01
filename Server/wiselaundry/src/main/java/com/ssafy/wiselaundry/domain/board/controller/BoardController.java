@@ -32,7 +32,6 @@ public class BoardController {
             @ApiResponse(code = 200, message = "성공", response = List.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-
     @GetMapping("/all/{size}/{boardId}")
     public ResponseEntity<? extends BaseResponseBody> boardSearchAll(@PathVariable("size") int size, @PathVariable("boardId") int boardId) {
         log.info("[boardSearchAll] size :" + size + "boardId :" + boardId );
@@ -152,10 +151,10 @@ public class BoardController {
     })
     @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<? extends BaseResponseBody> boardCreate(@RequestPart BoardCreateReq body,
-                                                                  MultipartHttpServletRequest file) {
+                                                                  @RequestPart MultipartHttpServletRequest file) {
         log.info("[boardCreate]" + " BaordCreateReq :" + body.toString());
 
-        int boardId = boardService.boardCreate(body, file);
+        long boardId = boardService.boardCreate(body, file);
 
         return ResponseEntity.status(201).body(BoardCreateRes.of(201, "Success", boardId));
     }

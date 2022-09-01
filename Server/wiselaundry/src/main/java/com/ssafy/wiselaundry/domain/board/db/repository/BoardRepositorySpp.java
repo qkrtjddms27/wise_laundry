@@ -3,7 +3,6 @@ package com.ssafy.wiselaundry.domain.board.db.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
