@@ -64,13 +64,15 @@ public class BoardServiceImpl {
         return boardRepositorySpp.boardSearchByKeywordLast(keyword);
     }
 
-    public Board boardFindById(int boardId) {
+    public Board boardFindById(Long boardId) {
         return boardRepository.findById(boardId).get();
     }
 
 
     public long boardCreate(BoardCreateReq body, MultipartHttpServletRequest request) {
-        User user = userRepository.findByUserId(body.getUserId());
+        User user = userRepository.findById(body.getUserId()).orElseThrow(
+                () -> new IllegalArgumentException("존재 하지 않는 회원 ID입니다. : " + body.getUserId())
+        );
 
         Board board = Board.toEntity(body, user);
 
@@ -91,7 +93,7 @@ public class BoardServiceImpl {
     public int boardUpdate(BoardUpdateReq body, MultipartHttpServletRequest request) {
 //        수정할 board 객체 가져오기
         Board board = boardRepository.findById(body.getBoardId()).orElseThrow(
-                () -> new EntityNotFoundException("존재하지 않는 게시글 ID입니다.")
+                () -> new IllegalArgumentException("존재 하지 않는 게시글 ID입니다. : " + body.getBoardId())
         );
 
 //        boardImg 다루는 곳 새롭게 추가.
@@ -128,18 +130,18 @@ public class BoardServiceImpl {
         return 1;
     }
 
-    public int boardDelete(int boardId) throws EntityNotFoundException {
+    public int boardDelete(Long boardId) {
         Board deleteBoard = boardRepository.findById(boardId).orElseThrow(
-                () -> new EntityNotFoundException("")
+                () -> new IllegalArgumentException("존재 하지 않는 게시글 ID입니다. : " + boardId)
         );
         boardRepository.delete(deleteBoard);
         return 1;
     }
 
     @Transactional
-    public int boardViewIncrement(int boardId) throws EntityNotFoundException {
+    public int boardViewIncrement(long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new EntityNotFoundException("")
+                () -> new IllegalArgumentException("존재 하지 않는 게시글 ID입니다. : " + boardId)
         );
         board.setView(board.getView() + 1);
         return 1;

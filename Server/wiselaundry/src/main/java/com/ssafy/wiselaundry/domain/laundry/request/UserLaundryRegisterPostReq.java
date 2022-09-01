@@ -14,7 +14,7 @@ import java.util.List;
 @ApiModel("UserLaundryRegisterPostReq")
 public class UserLaundryRegisterPostReq {
     @ApiModelProperty(name = "회원번호", example = "1")
-    int userId;
+    Long userId;
 
     @ApiModelProperty(name = "케어라벨")
     List<CareLabels> careLabels;

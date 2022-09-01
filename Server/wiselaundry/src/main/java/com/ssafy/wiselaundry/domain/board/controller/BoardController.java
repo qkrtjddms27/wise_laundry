@@ -108,7 +108,7 @@ public class BoardController {
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
     @GetMapping("/{boardId}")
-    public ResponseEntity<? extends BaseResponseBody> boardSearchDetail(@ApiParam(value = "게시판 번호") @PathVariable("boardId") int boardId) {
+    public ResponseEntity<? extends BaseResponseBody> boardSearchDetail(@ApiParam(value = "게시판 번호") @PathVariable("boardId") Long boardId) {
         log.info("[boardSearchDetail]" + "boardId : " + boardId );
 
         Board board = boardService.boardFindById(boardId);
@@ -180,7 +180,7 @@ public class BoardController {
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
     @PutMapping("/{boardId}")
-    public ResponseEntity<? extends BaseResponseBody> boardViewIncrement(@ApiParam @PathVariable("boardId") int boardId) {
+    public ResponseEntity<? extends BaseResponseBody> boardViewIncrement(@ApiParam @PathVariable("boardId") Long boardId) {
         log.info("[boardViewIncrement]" + " boardId :" + boardId);
         boardService.boardViewIncrement(boardId);
 
@@ -193,7 +193,7 @@ public class BoardController {
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<? extends BaseResponseBody> boardDelete(@ApiParam @PathVariable("boardId") int boardId) {
+    public ResponseEntity<? extends BaseResponseBody> boardDelete(@ApiParam @PathVariable("boardId") Long boardId) {
         log.info("[boardDelete]" + " boardId : " + boardId);
         boardService.boardDelete(boardId);
 

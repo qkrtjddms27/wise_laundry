@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 public class BoardUpdateReq {
     @ApiModelProperty(value = "게시판 ID", required = true)
-    private int boardId;
+    private Long boardId;
 
     @ApiModelProperty(value = "게시판 이름", required = true)
     private String boardName;

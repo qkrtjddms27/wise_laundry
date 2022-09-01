@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 @ToString
 public class CommentCreateReq {
     @ApiModelProperty(name = "user id", required = true, example = "38")
-    private int userId;
+    private Long userId;
 
     @ApiModelProperty(name = "게시판 id", required = true, example = "123")
-    private int boardId;
+    private Long boardId;
 
     @ApiModelProperty(name = "", required = true)
     private String commentContent;

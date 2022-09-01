@@ -16,7 +16,7 @@ public interface UserService {
 	User createUser(UserRegisterPostReq userRegisterInfo, MultipartHttpServletRequest img);
 	User createKakaoUser(HashMap info);
 	User updateUser(UserUpdatePostReq userUpdatePostReq, MultipartHttpServletRequest img);
-	User findByUserId(int userId);
+	User findByUserId(Long userId);
 	User findByUserEmail(String userEmail);
 	boolean emailCheck(String userEmail);
 	boolean nickCheck(String userNick);

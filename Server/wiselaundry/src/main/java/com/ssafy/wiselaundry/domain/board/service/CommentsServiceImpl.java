@@ -32,7 +32,7 @@ public class CommentsServiceImpl {
         return comments;
     }
 
-    public Comments commentCreate(CommentCreateReq body) throws EntityExistsException {
+    public Comments commentCreate(CommentCreateReq body){
         User user = userService.findByUserId(body.getUserId());
         Board board = boardService.boardFindById(body.getBoardId());
 

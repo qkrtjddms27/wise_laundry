@@ -2,7 +2,7 @@ package com.ssafy.wiselaundry.global.auth;
 
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.ssafy.wiselaundry.domain.laundry.service.LaundryService;
+import com.ssafy.wiselaundry.domain.laundry.service.LaundryServiceImpl;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
 import com.ssafy.wiselaundry.global.util.JwtTokenUtil;
@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     @Autowired
     private UserService userService;
-    private LaundryService laundryService;
+    private LaundryServiceImpl laundryService;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService) {
         super(authenticationManager);

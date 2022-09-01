@@ -1,13 +1,12 @@
 package com.ssafy.wiselaundry.global.config;
 
-import com.ssafy.wiselaundry.domain.laundry.service.LaundryService;
+import com.ssafy.wiselaundry.domain.laundry.service.LaundryServiceImpl;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
 import com.ssafy.wiselaundry.global.auth.JwtAuthenticationFilter;
 import com.ssafy.wiselaundry.global.auth.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -35,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
     @Autowired
-    private LaundryService laundryService;
+    private LaundryServiceImpl laundryService;
 
     @Autowired
     private UserDetailService ssafyUserDetailService;
