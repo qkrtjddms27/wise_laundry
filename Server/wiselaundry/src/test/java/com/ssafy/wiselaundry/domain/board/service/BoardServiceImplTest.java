@@ -4,115 +4,111 @@ import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import com.ssafy.wiselaundry.domain.board.db.repository.BoardRepository;
 import com.ssafy.wiselaundry.domain.board.db.repository.BoardRepositorySpp;
 import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
+import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
+import com.ssafy.wiselaundry.domain.user.db.repository.UserRepository;
 import com.ssafy.wiselaundry.domain.user.service.UserService;
-import org.junit.Before;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
+@Transactional(rollbackFor = Exception.class)
 class BoardServiceImplTest {
 
     @Mock
     BoardRepository boardRepository;
 
     @Mock
-    MultipartHttpServletRequest request;
-
-    @Mock
     BoardRepositorySpp boardRepositorySpp;
 
     @Mock
-    BoardImgService boardImgService;
+    MultipartHttpServletRequest request;
 
     @Mock
-    UserService userService;
+    UserRepository userRepository;
 
     @InjectMocks
     BoardServiceImpl boardService;
-//    BoardServiceImpl boardService = new BoardServiceImpl(boardRepository, boardRepositorySpp, boardImgService, userService);
 
     @Test
-    @DisplayName("request로 entity가 정상적으로 만들어지는지 테스트 ")
-    void boardCreate_1() {
+    @DisplayName("boardCreate 메서드가 정상적으로 성공하는지 테스트")
+    void boardCreateTest_1() {
         //given
         BoardCreateReq boardCreateReq = BoardCreateReq.builder()
                 .boardContent("1번 내용물 입니다.")
                 .boardName("1번 게시글 제목입니다.")
-                .userId(1)
+                .userId(1L)
                 .build();
 
         User user = User.builder()
-                .userId(1)
+                .userId(1L)
                 .userEmail("test@mail.com")
                 .userNick("NickName")
                 .build();
 
         Board board = Board.builder()
+                .boardId(1)
                 .boardContent("1번 내용물 입니다.")
                 .boardName("1번 게시글 제목입니다.")
                 .user(user)
                 .boardDate(LocalDateTime.now())
                 .build();
 
-        when(userService.findByUserId(any())).thenReturn(user);
+        //when
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        // when
-//        int boardId = boardService.boardCreate(boardCreateReq, request);
-        Board toBoard = boardService.toBoard(boardCreateReq, user);
         //then
-//        Assertions.assertEquals(boardId, 0);
-        Assertions.assertEquals(toBoard.getBoardContent(), board.getBoardContent());
-        Assertions.assertEquals(toBoard.getBoardName(), board.getBoardName());
+        assertEquals(boardService.boardCreate(boardCreateReq, request), 0);
     }
 
     @Test
-    @DisplayName("제대로 의존성 관계가 설정되었는지 확인하는 테스트")
-    void boardSearchAll() {
+    @DisplayName("요청 받은 Req의 UserId로 Entity가 존재하지 않을 경우 Illegal Exception을 던지는지 테스트")
+    void boardCreateTest_2() {
         //given
         BoardCreateReq boardCreateReq = BoardCreateReq.builder()
                 .boardContent("1번 내용물 입니다.")
                 .boardName("1번 게시글 제목입니다.")
-                .userId(1)
+                .userId(9999L)
                 .build();
 
-        BoardCreateReq boardCreateReq2 = BoardCreateReq.builder()
-                .boardContent("2번 내용물 입니다.")
-                .boardName("2번 게시글 제목입니다.")
-                .userId(1)
-                .build();
-
-        BoardCreateReq boardCreateReq3 = BoardCreateReq.builder()
-                .boardContent("3번 내용물 입니다.")
-                .boardName("3번 게시글 제목입니다.")
-                .userId(1)
-                .build();
-
-        boardService.boardCreate(boardCreateReq, request);
-        boardService.boardCreate(boardCreateReq2, request);
-        boardService.boardCreate(boardCreateReq3, request);
 
         // when
-        List<Board> boardList = boardService.boardSearchAll(3,999);
+        when(userRepository.findById(9999L)).thenReturn(Optional.empty());
 
         // then
-        Assertions.assertNotEquals(0, boardList.size());
+        assertThrows(IllegalArgumentException.class, () -> boardService.boardCreate(boardCreateReq, request));
     }
 
     @Test
-    void boardUpdate() {
+    @DisplayName("요청 받은 Req의 UserId로 Entity가 존재하지 않을 경우 Illegal Exception을 던지는지 테스트")
+    void boardUpdateTest_1() {
+        // given
+        BoardUpdateReq req = BoardUpdateReq.builder()
+                .boardContent("내용")
+                .boardName("변경될 제목")
+                .boardId(9999L)
+                .build();
+
+        // when
+        when(boardRepository.findById(9999L)).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(IllegalArgumentException.class, () -> boardService.boardUpdate(req, request));
     }
 
     @Test
@@ -121,6 +117,13 @@ class BoardServiceImplTest {
 
     @Test
     void boardViewIncrement() {
+        // given
+        long testId = Integer.MAX_VALUE;
+        // when
+        when(boardRepository.findById(testId)).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(IllegalArgumentException.class, () -> boardService.boardViewIncrement(testId));
     }
 
     @Test
