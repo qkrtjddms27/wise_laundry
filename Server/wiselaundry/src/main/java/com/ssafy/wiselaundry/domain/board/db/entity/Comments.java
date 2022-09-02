@@ -1,6 +1,7 @@
 package com.ssafy.wiselaundry.domain.board.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.ssafy.wiselaundry.domain.board.request.CommentCreateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import lombok.*;
 
@@ -35,5 +36,14 @@ public class Comments {
 
     @Column(name = "comment_dt")
     private LocalDateTime commentDate;
+
+    public static Comments toEntity(CommentCreateReq body, User user, Board board){
+        return Comments.builder()
+                .user(user)
+                .board(board)
+                .commentContent(body.getCommentContent())
+                .commentDate(LocalDateTime.now())
+                .build();
+    }
 
 }
