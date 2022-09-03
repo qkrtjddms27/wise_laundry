@@ -16,7 +16,6 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Getter
-@Setter
 @Table(name = "board")
 public class Board{
     @Id
@@ -44,17 +43,12 @@ public class Board{
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Comments> comments = new ArrayList<Comments>();
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<BoardImg> boardImgs = new ArrayList<BoardImg>();
-
     @Builder
     Board(long boardId, User user, String boardName, List<BoardImg> boardImgs, List<Comments> comments,
           LocalDateTime boardDate, String boardContent) {
         this.boardId = boardId;
         this.user = user;
         this.boardName = boardName;
-        this.boardImgs = boardImgs;
         this.comments = comments;
         this.boardDate = boardDate;
         this.boardContent = boardContent;
@@ -68,5 +62,18 @@ public class Board{
                 .boardDate(LocalDateTime.now())
                 .build();
         return board;
+    }
+
+    public Board updateNameAndContent(String updateName, String updateContent) {
+        this.boardContent = updateName;
+        this.boardName = updateContent;
+
+        return this;
+    }
+
+    public Board increaseView() {
+        this.view += 1;
+
+        return this;
     }
 }
