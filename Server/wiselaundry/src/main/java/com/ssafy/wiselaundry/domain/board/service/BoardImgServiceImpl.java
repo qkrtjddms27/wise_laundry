@@ -26,12 +26,12 @@ public class BoardImgServiceImpl {
 
     public BoardImg findById(int boardImgId) throws NoResultException {
         return boardImgRepository.findById(boardImgId).orElseThrow(
-                () -> new IllegalArgumentException("")
+                () -> new IllegalArgumentException("존재하지 않는 게시글 이미지 ID입니다.")
         );
     }
 
-    @Transactional(rollbackFor = {EntityExistsException.class, RollbackException.class})
-    public BoardImg boardImgCreate(Board board, String boardImg) throws EntityExistsException, RollbackException {
+    @Transactional(rollbackFor = {Exception.class})
+    public BoardImg boardImgCreate(Board board, String boardImg) {
         BoardImg img = BoardImg.builder()
                 .board(board)
                 .boardImg(boardImg)

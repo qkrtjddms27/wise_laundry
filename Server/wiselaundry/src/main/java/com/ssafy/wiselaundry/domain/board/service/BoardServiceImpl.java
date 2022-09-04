@@ -9,24 +9,16 @@ import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.db.repository.UserRepository;
-import com.ssafy.wiselaundry.domain.user.service.UserService;
+import com.ssafy.wiselaundry.global.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.persistence.EntityNotFoundException;
-import javax.swing.filechooser.FileSystemView;
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -37,17 +29,11 @@ public class BoardServiceImpl {
     private final BoardRepositorySpp boardRepositorySpp;
     private final BoardImgRepository boardImgRepository;
     private final UserRepository userRepository;
-
-    @Value("${app.fileupload.uploadDir}")
-    private String uploadFolder;
-
-    @Value("${app.fileupload.uploadPath}")
-    private String uploadPath;
+    private final FileUtil fileUtil;
 
     public List<Board> boardSearchAll(int size, int boardId) {
         return boardRepository.findAll();
     }
-
 
     public List<Board> boardOrderByViewDesc(int size, int boardId) {
         return boardRepositorySpp.boardViewOrderByDesc(size, boardId);
@@ -79,11 +65,8 @@ public class BoardServiceImpl {
 
         Board board = Board.toEntity(body, user);
 
-        boardRepository.save(board);
-
-        List<BoardImg> boardImgList = fileRequestToBoardImg(request, board);
-
-        boardRepository.save(board);
+        board = boardRepository.save(board);
+        boardFileUpload(request,board);
 
         return board.getBoardId();
     }
@@ -100,8 +83,7 @@ public class BoardServiceImpl {
 
 //        boardImg 다루는 곳 새롭게 추가.
 
-        List<BoardImg> addBoardImgList = fileRequestToBoardImg(request, board);
-
+        fileUtil.fileUpload(request, "board");
 //        삭제 이미지
         for (String boardImgName : body.getDeleteImgs()) {
             BoardImg boardImg;
@@ -147,41 +129,14 @@ public class BoardServiceImpl {
      * @param board
      * @return
      */
-    private List<BoardImg> fileRequestToBoardImg(MultipartHttpServletRequest fileRequest, Board board) {
-        List<BoardImg> boardImgList = new ArrayList<>();
+    private List<BoardImg> boardFileUpload(MultipartHttpServletRequest fileRequest, Board board) {
+        List<String> urlList = fileUtil.fileUpload(fileRequest, "board");
+        List<BoardImg>  boardImgList = new ArrayList<>();
 
-        List<MultipartFile> fileList = fileRequest.getFiles("file");
-        String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-        File uploadDir = new File(uploadPath + uploadFolder + File.separator + "board");
-
-        if (!uploadDir.exists()) uploadDir.mkdir();
-        String recordFileUrl = "";
-
-        for(MultipartFile file : fileList) {
-            if(file.isEmpty())
-                break;
-
-            String fileName = file.getOriginalFilename();
-
-            // 파일명 중복을 방지하기위해 난수화
-            UUID uuid = UUID.randomUUID();
-
-            // 파일 확장자
-            String extension = FilenameUtils.getExtension(fileName);
-
-            String savingFileName =  uuid + "." + extension;
-
-            File destFile = new File(uploadPath, uploadFolder + File.separator + "board" + File.separator + savingFileName);
-
-            try{
-                file.transferTo(destFile);
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-
-            recordFileUrl = "board" + File.separator + savingFileName;
+        for (String url : urlList) {
             boardImgList.add(boardImgRepository.save(BoardImg.builder()
-                    .boardImg(recordFileUrl)
+                    .board(board)
+                    .boardImg(url)
                     .build()));
         }
 
