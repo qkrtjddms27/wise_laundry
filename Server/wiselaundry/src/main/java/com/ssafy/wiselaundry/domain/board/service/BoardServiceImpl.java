@@ -5,6 +5,8 @@ import com.ssafy.wiselaundry.domain.board.db.entity.BoardImg;
 import com.ssafy.wiselaundry.domain.board.db.repository.BoardImgRepository;
 import com.ssafy.wiselaundry.domain.board.db.repository.BoardRepository;
 import com.ssafy.wiselaundry.domain.board.db.repository.BoardRepositorySpp;
+import com.ssafy.wiselaundry.domain.board.exception.BoardImgNotFoundException;
+import com.ssafy.wiselaundry.domain.board.exception.BoardNotFoundException;
 import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
@@ -12,7 +14,6 @@ import com.ssafy.wiselaundry.domain.user.db.repository.UserRepository;
 import com.ssafy.wiselaundry.global.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -53,7 +54,7 @@ public class BoardServiceImpl {
 
     public Board boardFindById(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("존재 하지 않는 게시글 ID입니다. : " + boardId)
+                () -> new BoardNotFoundException(boardId)
         );
     }
 
@@ -71,14 +72,12 @@ public class BoardServiceImpl {
         return board.getBoardId();
     }
 
-
-
     @Transactional(rollbackOn = Exception.class)
     public Board boardUpdate(BoardUpdateReq body, MultipartHttpServletRequest request) {
 //        수정할 board 객체 가져오기
 
         Board board = boardRepository.findById(body.getBoardId()).orElseThrow(
-                () -> new IllegalArgumentException("존재 하지 않는 게시글 ID입니다. : " + body.getBoardId())
+                () -> new BoardNotFoundException(body.getBoardId())
         );
 
 //        boardImg 다루는 곳 새롭게 추가.
@@ -89,7 +88,7 @@ public class BoardServiceImpl {
             BoardImg boardImg;
 
             boardImg = boardImgRepository.findByBoardImg(boardImgName).orElseThrow(
-                    () -> new IllegalArgumentException("존재 하지 않는 게시글 이미지 이름입니다. : " + body.getBoardId())
+                    () -> new BoardImgNotFoundException(boardImgName)
             );
 
             boardImgRepository.delete(boardImg);
@@ -101,7 +100,7 @@ public class BoardServiceImpl {
 
     public int boardDelete(Long boardId) {
         Board deleteBoard = boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("존재 하지 않는 게시글 ID입니다. : " + boardId)
+                () -> new BoardNotFoundException(boardId)
         );
 
         boardRepository.delete(deleteBoard);
@@ -112,7 +111,7 @@ public class BoardServiceImpl {
     @Transactional(rollbackOn = Exception.class)
     public Board boardViewIncrement(long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("존재 하지 않는 게시글 ID입니다. : " + boardId)
+                () -> new BoardNotFoundException(boardId)
         );
 
         return board.increaseView();
@@ -145,7 +144,7 @@ public class BoardServiceImpl {
 
     private int boardImgDelete(String imgUrl) {
         BoardImg boardImg = boardImgRepository.findByBoardImg(imgUrl).orElseThrow(
-                () -> new IllegalArgumentException("존재 하지 않는 게시글 이미지입니다. : " + imgUrl)
+                () -> new BoardImgNotFoundException(imgUrl)
         );
 
         boardImgRepository.delete(boardImg);

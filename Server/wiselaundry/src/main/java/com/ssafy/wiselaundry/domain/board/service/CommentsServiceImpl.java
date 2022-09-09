@@ -4,6 +4,7 @@ import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import com.ssafy.wiselaundry.domain.board.db.entity.Comments;
 import com.ssafy.wiselaundry.domain.board.db.repository.BoardRepository;
 import com.ssafy.wiselaundry.domain.board.db.repository.CommentsRepository;
+import com.ssafy.wiselaundry.domain.board.exception.BoardNotFoundException;
 import com.ssafy.wiselaundry.domain.board.request.CommentCreateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.db.repository.UserRepository;
@@ -38,7 +39,7 @@ public class CommentsServiceImpl {
         );
 
         Board board = boardRepository.findById(body.getBoardId()).orElseThrow(
-                () -> new IllegalArgumentException("존재 하지 않는 게시글 ID입니다. : " + body.getBoardId())
+                () -> new BoardNotFoundException(body.getBoardId())
         );
 
         Comments comments = Comments.toEntity(body,user,board);
