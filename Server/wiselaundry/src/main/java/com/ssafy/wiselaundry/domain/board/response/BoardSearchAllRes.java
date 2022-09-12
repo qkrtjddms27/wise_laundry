@@ -51,7 +51,7 @@ public class BoardSearchAllRes {
                 .boardName(board.getBoardName())
                 .boardDate(board.getBoardDate())
                 .view(board.getView())
-                .commentCnt(board.getComments().size())
+//                .commentCnt(board.getComments().size())
                 .build();
     }
 }

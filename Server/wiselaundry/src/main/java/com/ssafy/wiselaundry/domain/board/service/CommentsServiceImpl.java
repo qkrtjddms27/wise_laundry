@@ -4,15 +4,20 @@ import com.ssafy.wiselaundry.domain.board.db.entity.Board;
 import com.ssafy.wiselaundry.domain.board.db.entity.Comments;
 import com.ssafy.wiselaundry.domain.board.db.repository.BoardRepository;
 import com.ssafy.wiselaundry.domain.board.db.repository.CommentsRepository;
+import com.ssafy.wiselaundry.domain.board.db.repository.CommentsRepositorySpp;
 import com.ssafy.wiselaundry.domain.board.exception.BoardNotFoundException;
+import com.ssafy.wiselaundry.domain.board.exception.CommentsNotFoundException;
 import com.ssafy.wiselaundry.domain.board.request.CommentCreateReq;
 import com.ssafy.wiselaundry.domain.user.db.entity.User;
 import com.ssafy.wiselaundry.domain.user.db.repository.UserRepository;
+import com.ssafy.wiselaundry.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.xml.stream.events.Comment;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,7 @@ import javax.persistence.EntityNotFoundException;
 public class CommentsServiceImpl {
 
     private final CommentsRepository commentsRepository;
+    private final CommentsRepositorySpp commentsRepositorySpp;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
 
@@ -27,7 +33,7 @@ public class CommentsServiceImpl {
         Comments comments;
 
         comments = commentsRepository.findById(commentId).orElseThrow(
-                EntityNotFoundException::new
+                () -> new CommentsNotFoundException(commentId)
         );
 
         return comments;
@@ -35,7 +41,7 @@ public class CommentsServiceImpl {
 
     public Comments commentCreate(CommentCreateReq body){
         User user = userRepository.findById(body.getUserId()).orElseThrow(
-                () -> new IllegalArgumentException("존재 하지 않는 회원 ID입니다. : " + body.getUserId())
+                () -> new UserNotFoundException(body.getUserId())
         );
 
         Board board = boardRepository.findById(body.getBoardId()).orElseThrow(
@@ -56,5 +62,9 @@ public class CommentsServiceImpl {
         commentsRepository.delete(deleteComments);
 
         return 1;
+    }
+
+    public List<Comments> findByBoardId(long boardId) {
+        return commentsRepositorySpp.findByBoardId(boardId);
     }
 }

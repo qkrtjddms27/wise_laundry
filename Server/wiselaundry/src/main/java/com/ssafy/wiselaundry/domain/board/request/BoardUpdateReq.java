@@ -32,7 +32,6 @@ public class BoardUpdateReq {
                 .boardId(body.getBoardId())
                 .boardName(body.getBoardName())
                 .boardContent(body.getBoardContent())
-                .boardImgs(boardImgs)
                 .build();
     }
 }

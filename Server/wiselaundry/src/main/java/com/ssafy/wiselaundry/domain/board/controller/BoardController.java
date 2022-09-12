@@ -6,6 +6,7 @@ import com.ssafy.wiselaundry.domain.board.request.BoardCreateReq;
 import com.ssafy.wiselaundry.domain.board.request.BoardUpdateReq;
 import com.ssafy.wiselaundry.domain.board.response.*;
 import com.ssafy.wiselaundry.domain.board.service.BoardServiceImpl;
+import com.ssafy.wiselaundry.domain.board.service.CommentsServiceImpl;
 import com.ssafy.wiselaundry.global.model.response.BaseResponseBody;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardServiceImpl boardService;
+    private final CommentsServiceImpl commentsService;
 
     @ApiOperation(value = "기본 게시글 조회", notes = "모든 게시글 조회, 인피니티 스크롤로 구현되어 있기 때문에 특정 부분만 반환하게됨.")
     @ApiResponses({
@@ -112,9 +114,11 @@ public class BoardController {
         log.info("[boardSearchDetail]" + "boardId : " + boardId );
 
         Board board = boardService.boardFindById(boardId);
+        List<Comments> comments = commentsService.findByBoardId(boardId);
+
         List<CommentDetailRes> commentDetailResList = new ArrayList<>();
 
-        for (Comments comment : board.getComments()) {
+        for (Comments comment : comments) {
             commentDetailResList.add(CommentDetailRes.builder()
                             .commentContent(comment.getCommentContent())
                             .userId(comment.getUser().getUserId())
@@ -130,7 +134,6 @@ public class BoardController {
                 .boardContent(board.getBoardContent())
                 .boardDate(board.getBoardDate())
                 .boardId(board.getBoardId())
-                .boardImgs(board.getBoardImgs())
                 .boardName(board.getBoardName())
                 .userId(board.getUser().getUserId())
                 .userNick(board.getUser().getUserNick())

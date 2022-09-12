@@ -39,17 +39,15 @@ public class Board{
     @Column(name = "view", columnDefinition = "integer default 0")
     private int view;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Comments> comments = new ArrayList<Comments>();
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+//    private List<Comments> comments = new ArrayList<Comments>();
 
     @Builder
-    Board(long boardId, User user, String boardName, List<BoardImg> boardImgs, List<Comments> comments,
-          LocalDateTime boardDate, String boardContent) {
+    Board(long boardId, User user, String boardName, LocalDateTime boardDate, String boardContent) {
         this.boardId = boardId;
         this.user = user;
         this.boardName = boardName;
-        this.comments = comments;
         this.boardDate = boardDate;
         this.boardContent = boardContent;
     }
